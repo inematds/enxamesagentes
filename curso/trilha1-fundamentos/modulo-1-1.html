@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.1: O que e um Swarm de IA | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Modulo 1.1</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 1.1
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🐝 O que e um Swarm de IA</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Entenda por que equipes de IAs especializadas superam um unico modelo e como swarms funcionam na pratica.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">35</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Basico</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🤖 Uma IA faz TUDO: o problema</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O modelo tradicional de uso de IA coloca <strong class="text-emerald-400">um unico LLM</strong> para fazer tudo: planejar a arquitetura, escrever o codigo, revisar o que escreveu, documentar, testar e corrigir bugs — tudo na mesma conversa, no mesmo contexto. Parece eficiente, mas na pratica e como pedir a uma unica pessoa que seja simultaneamente chef, garcom, sommelier e caixa num restaurante lotado. O resultado? Sobrecarga, perda de qualidade e erros acumulados.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Quando voce envia uma tarefa complexa para um unico modelo, ele precisa manter na "memoria de trabalho" (a janela de contexto) todas as instrucoes, todo o codigo ja gerado, todos os resultados de testes e todas as decisoes tomadas. A cada nova etapa, o contexto cresce e o modelo comeca a "esquecer" detalhes das etapas anteriores. Em projetos reais, e comum que o LLM perca a consistencia apos 20-30 interacoes, gerando codigo que contradiz decisoes tomadas no inicio da conversa.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Fundamental
+        </h3>
+        <p class="text-neutral-300 mb-4">O problema nao e a inteligencia do modelo — e a sobrecarga. Um LLM e extremamente capaz em tarefas focadas, mas perde performance drasticamente quando precisa alternar entre muitos papeis diferentes na mesma sessao.</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Sobrecarga de contexto:</strong> A janela de tokens e finita (128k-1M). Quanto mais informacao acumulada, menor a atencao a cada parte</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Perda de foco:</strong> Alternar entre planejar, codar, revisar e testar degrada a qualidade em todas as funcoes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Limitacao de tokens:</strong> Modelos tem um teto de processamento — ultrapassar significa perder informacoes criticas do inicio da conversa</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Ausencia de verificacao cruzada:</strong> Quem escreve o codigo e o mesmo que revisa — nenhum "segundo par de olhos" detecta erros</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Degradacao mensuravel:</strong> Apos ~30k tokens de contexto acumulado, a acuracia em tarefas de raciocinio cai ate 40% em benchmarks independentes</li>
+          <li><strong>Custo oculto:</strong> Reprocessar contextos enormes a cada interacao multiplica custos de API exponencialmente</li>
+          <li><strong>Gargalo humano:</strong> O usuario precisa revisar tudo manualmente porque o modelo nao tem mecanismo de autocorrecao eficaz</li>
+          <li><strong>Resultado real:</strong> Projetos que tentam usar um unico agente para tudo frequentemente travam ou produzem codigo inconsistente apos a 15a iteracao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🐝 Swarm = Equipe especializada</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A solucao para o problema da IA sobrecarregada e simples e poderosa: <strong class="text-emerald-400">dividir o trabalho entre multiplos agentes especializados</strong>. Em vez de um unico LLM fazendo tudo, um <strong>orquestrador</strong> coordena uma equipe de <strong>subagentes</strong>, cada um focado em uma tarefa especifica. O agente de codigo so escreve codigo. O agente revisor so revisa. O agente de testes so testa. Cada um opera com um contexto limpo e focado, sem a poluicao de informacoes irrelevantes.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Este paradigma — chamado de <strong class="text-emerald-400">swarm</strong> ou sistema multiagente — nao e apenas uma moda. Em 2026, <strong>72% dos projetos enterprise de IA</strong> ja utilizam alguma forma de arquitetura multiagente. A razao e pragmatica: swarms produzem resultados mais consistentes, mais rapidos e mais faceis de depurar do que agentes monoliticos. Quando algo da errado, voce sabe exatamente qual agente falhou e pode corrigir apenas aquele componente.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Fundamental
+        </h3>
+        <p class="text-neutral-300 mb-4">Um swarm de IA e um conjunto de agentes especializados que colaboram sob a coordenacao de um orquestrador para atingir um objetivo complexo que nenhum deles conseguiria sozinho.</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Orquestrador:</strong> O agente central que recebe a tarefa, decompoe em subtarefas e delega para os subagentes corretos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Subagentes:</strong> Agentes especializados que executam uma funcao unica com excelencia — codigo, revisao, testes, documentacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Especializacao:</strong> Cada agente recebe um system prompt focado e ferramentas especificas para seu papel</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Coordenacao:</strong> Os agentes se comunicam via mensagens estruturadas, passando resultados de um para outro</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Numeros do mercado
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>72% dos projetos enterprise</strong> ja usam arquiteturas multiagentes em 2026</li>
+          <li><strong>Reducao de 60% em erros</strong> quando tarefas de revisao sao separadas de tarefas de criacao</li>
+          <li><strong>3x mais rapido:</strong> Swarms com execucao paralela completam projetos complexos em 1/3 do tempo</li>
+          <li><strong>Depuracao 5x mais eficiente:</strong> Isolar falhas em agentes especificos vs debugar uma conversa monolitica de 200 mensagens</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🍳 Analogia da cozinha profissional</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Imagine um restaurante com estrela Michelin. O <strong class="text-emerald-400">Chef Executivo</strong> nao cozinha todos os pratos sozinho — ele coordena uma brigada: o <strong>sous-chef</strong> prepara bases e molhos, o <strong>garde manger</strong> cuida de saladas e entradas frias, o <strong>patissier</strong> cria as sobremesas, o <strong>sommelier</strong> harmoniza vinhos e o <strong>maitre</strong> garante que o servico seja impecavel. Cada profissional e especialista no que faz, e o resultado e uma experiencia gastronomica que nenhum deles conseguiria sozinho.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um swarm de IA funciona exatamente assim. O <strong>orquestrador</strong> e o Chef Executivo: ele entende o pedido (a tarefa do usuario), divide em etapas logicas e delega cada etapa para o agente mais qualificado. O agente de planejamento (sous-chef) cria a estrategia. O agente de codigo (cozinheiro de linha) implementa. O agente de revisao (critico gastronomico) avalia a qualidade. O agente de testes (inspetor sanitario) garante que tudo funciona. O resultado final e muito superior ao que um unico "cozinheiro faz-tudo" produziria.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mapeamento Cozinha → Swarm
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada papel na cozinha tem um equivalente direto num sistema multiagente:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Chef Executivo → Orquestrador:</strong> Recebe o pedido, decide a estrategia, coordena a equipe e garante o resultado final</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Sous-Chef → Agente Planejador:</strong> Decompoe a tarefa em subtarefas e define a ordem de execucao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Cozinheiro de Linha → Agente Executor:</strong> Implementa cada subtarefa com foco total em qualidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Sommelier → Agente Especialista:</strong> Dominio profundo em uma area especifica (seguranca, performance, UX)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Maitre → Agente de Interface:</strong> Cuida da comunicacao com o usuario e apresentacao dos resultados</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Por que a divisao funciona
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Contexto limpo:</strong> Cada agente recebe apenas as informacoes necessarias para sua tarefa, sem poluicao</li>
+          <li><strong>Paralelismo natural:</strong> Assim como o patissier trabalha nas sobremesas enquanto o cozinheiro prepara o prato principal, agentes independentes trabalham simultaneamente</li>
+          <li><strong>Qualidade por especializacao:</strong> Um agente focado 100% em revisao de codigo encontra mais bugs do que um agente que tambem esta tentando escrever codigo</li>
+          <li><strong>Escalabilidade:</strong> Precisa de mais capacidade? Adicione mais agentes, assim como um restaurante contrata mais cozinheiros em noites movimentadas</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🧬 Origem biologica: inteligencia de enxame</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O conceito de swarm de IA nao surgiu do nada — ele tem raizes profundas na biologia e na ciencia da computacao. Em <strong class="text-emerald-400">1989</strong>, os pesquisadores <strong>Jing Wang</strong> e <strong>Gerardo Beni</strong> cunharam o termo <strong>"Swarm Intelligence"</strong> (inteligencia de enxame) ao estudar sistemas roboticos auto-organizados. Eles observaram que agentes individuais simples, seguindo regras locais basicas, podiam gerar comportamentos coletivos complexos e inteligentes — sem nenhum controle central.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A inspiracao veio da natureza: colonias de formigas, enxames de abelhas, cardumes de peixes e bandos de passaros. Nenhuma formiga individual "sabe" o caminho mais curto ate a comida, mas a colonia inteira encontra otimamente usando um mecanismo chamado <strong class="text-emerald-400">stigmergy</strong> — comunicacao indireta atraves de marcadores no ambiente (feromonios). Cada formiga deposita feromonio no caminho que percorre; caminhos mais curtos acumulam mais feromonio e atraem mais formigas, criando um ciclo de retroalimentacao que converge para a solucao otima.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Principios da Inteligencia de Enxame
+        </h3>
+        <p class="text-neutral-300 mb-4">Tres pilares fundamentais que se aplicam tanto a formigas quanto a agentes de IA:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Auto-organizacao:</strong> A ordem emerge das interacoes locais entre agentes, sem um controlador central impondo regras top-down</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Descentralizacao:</strong> Nenhum agente individual tem a visao completa do sistema — cada um atua com informacoes parciais e o resultado global emerge</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Emergencia:</strong> O comportamento do grupo e qualitativamente diferente (e superior) ao comportamento de qualquer individuo isolado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Stigmergy:</strong> Agentes se comunicam indiretamente atraves de modificacoes no ambiente compartilhado (arquivos, bancos de dados, mensagens)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Da biologia a IA
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Colonia de formigas → Ant Colony Optimization (ACO):</strong> Algoritmo classico de otimizacao inspirado em feromonios, usado ate hoje em logistica e roteamento</li>
+          <li><strong>Enxame de abelhas → Particle Swarm Optimization (PSO):</strong> Tecnica de busca que simula o comportamento exploratorio de abelhas procurando nectar</li>
+          <li><strong>Cardumes → Flocking algorithms:</strong> Regras simples de alinhamento e coesao que geram movimento coordenado complexo</li>
+          <li><strong>Em swarms de IA:</strong> Os mesmos principios se aplicam — agentes com regras simples e claras, trabalhando em conjunto, produzem resultados que superam qualquer agente individual</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📊 Quando usar swarm vs agente unico</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Nem todo problema precisa de um swarm. <strong class="text-emerald-400">Usar multiagentes onde um unico agente basta</strong> e desperdicio de recursos, aumento de latencia e complexidade desnecessaria. A decisao entre swarm e agente unico depende de tres criterios principais: a <strong>complexidade</strong> da tarefa, o potencial de <strong>paralelizacao</strong> e a necessidade de <strong>especializacao</strong>. Saber avaliar esses criterios e o que separa arquitetos de sistemas multiagentes eficazes de quem apenas segue modismos.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A regra pratica e simples: se um unico agente consegue resolver a tarefa em 5-10 interacoes mantendo qualidade consistente, voce nao precisa de swarm. Quando a tarefa exige mais de 3 especializacoes diferentes (ex: codigo + seguranca + testes + documentacao), ou quando partes da tarefa podem rodar em paralelo, ou quando voce precisa de "verificacao cruzada" entre agentes, ai sim um swarm compensa a complexidade adicional.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Criterios de Decisao
+        </h3>
+        <p class="text-neutral-300 mb-4">Use estas perguntas para decidir se precisa de um swarm:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Complexidade:</strong> A tarefa exige mais de 3 habilidades distintas? Se sim, swarm provavelmente compensa</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Paralelizacao:</strong> Existem subtarefas que podem rodar simultaneamente? Se sim, swarm acelera drasticamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Especializacao:</strong> A qualidade melhora significativamente com agentes dedicados? Se sim, swarm eleva o resultado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Volume:</strong> Precisa processar muitas tarefas similares? Swarms escalam horizontalmente com facilidade</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados — Decisao -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Guia rapido de decisao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Agente unico:</strong> Perguntas simples, geracao de texto curto, traducao, resumo, analise pontual de dados, tarefas com menos de 10 interacoes</li>
+          <li><strong>Swarm pequeno (2-3 agentes):</strong> Codigo com revisao, escrita com edicao, pesquisa com sintese — tarefas que se beneficiam de um "segundo olhar"</li>
+          <li><strong>Swarm medio (4-7 agentes):</strong> Desenvolvimento de features completas, analise multidimensional, projetos com etapas distintas (plan → build → test → docs)</li>
+          <li><strong>Swarm grande (8+ agentes):</strong> Sistemas enterprise, pipelines de CI/CD inteligentes, projetos que exigem especializacao profunda em multiplos dominios</li>
+        </ul>
+      </div>
+
+      <!-- Grid Fazer/Evitar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ Use swarm quando</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Tarefa exige 3+ especializacoes</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Partes podem rodar em paralelo</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Precisa de verificacao cruzada</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Projeto de medio/grande porte</span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ Evite swarm quando</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Tarefa e simples e direta</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Latencia e critica (swarms adicionam overhead)</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Orcamento e muito limitado</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Nao ha infraestrutura para orquestracao</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🚀 Panorama 2026: o mundo agentico</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Estamos vivendo a era agentica da IA. Em 2026, o mercado de sistemas multiagentes explodiu: frameworks maduros, protocolos padronizados e adocao enterprise massiva transformaram swarms de conceito academico em ferramenta de producao. Os principais players ja oferecem solucoes robustas, e a escolha do framework certo pode acelerar seu projeto em semanas.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Tres categorias dominam o ecossistema: <strong class="text-emerald-400">frameworks de orquestracao</strong> (que criam e coordenam os agentes), <strong class="text-emerald-400">protocolos de comunicacao</strong> (que padronizam como agentes se falam) e <strong class="text-emerald-400">plataformas de deploy</strong> (que colocam swarms em producao). Dominar ao menos um de cada categoria e essencial para qualquer profissional que queira construir sistemas multiagentes serios.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Ecossistema de Frameworks e Protocolos
+        </h3>
+        <p class="text-neutral-300 mb-4">Os principais frameworks e protocolos que definem o panorama agentico em 2026:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>CrewAI:</strong> Framework Python para criar equipes de agentes com papeis definidos. Simplicidade e produtividade como diferenciais</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>LangGraph:</strong> Extensao do LangChain para criar grafos de agentes com estado. Controle fino sobre fluxos complexos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>AutoGen (Microsoft):</strong> Framework para conversas multiagentes. Forte em cenarios de debate e consenso entre agentes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>MCP (Model Context Protocol):</strong> Protocolo da Anthropic que padroniza como agentes acessam ferramentas e dados externos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>A2A (Agent-to-Agent):</strong> Protocolo do Google para comunicacao direta entre agentes de diferentes plataformas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Estado do mercado
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Adocao enterprise:</strong> 72% dos projetos corporativos de IA usam alguma forma de multiagentes</li>
+          <li><strong>Crescimento de frameworks:</strong> CrewAI atingiu 50k+ stars no GitHub; LangGraph e o padrao para fluxos complexos</li>
+          <li><strong>Protocolos abertos:</strong> MCP e A2A estao se tornando padroes de facto para interoperabilidade entre agentes</li>
+          <li><strong>Investimento:</strong> Venture capital em startups de agentes ultrapassou US$ 8 bilhoes em 2025</li>
+        </ul>
+      </div>
+
+      <!-- Warning Box -->
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center">
+          <span class="mr-2">⚠️</span> Alerta: taxa de cancelamento
+        </h3>
+        <p class="text-neutral-300 mb-4">
+          Nem tudo sao flores. Segundo a <strong>Gartner (2025)</strong>, <strong class="text-amber-400">40% dos projetos de IA agentica sao cancelados</strong> antes de chegar a producao. As causas mais comuns:
+        </p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Over-engineering:</strong> Criar swarms para problemas que um agente unico resolveria — complexidade sem necessidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Falta de observabilidade:</strong> Sem monitoramento, e impossivel saber por que o swarm esta falhando</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Custo subestimado:</strong> Multiplos agentes = multiplas chamadas de API = custos que escalam rapidamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Expectativas irreais:</strong> Swarms melhoram resultados, mas nao fazem magica — ainda precisam de engenharia cuidadosa</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">O problema do agente unico</strong>
+              <span class="text-neutral-400"> - Sobrecarga de contexto, perda de foco e limitacao de tokens degradam resultados</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Swarm = equipe especializada</strong>
+              <span class="text-neutral-400"> - Orquestrador coordena subagentes focados para resultados superiores</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Analogia da cozinha</strong>
+              <span class="text-neutral-400"> - Divisao de trabalho, especializacao e coordenacao produzem excelencia</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Inteligencia de enxame</strong>
+              <span class="text-neutral-400"> - Auto-organizacao, descentralizacao e emergencia desde Beni & Wang (1989)</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Swarm vs agente unico</strong>
+              <span class="text-neutral-400"> - Complexidade, paralelizacao e especializacao como criterios de decisao</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Panorama 2026</strong>
+              <span class="text-neutral-400"> - CrewAI, LangGraph, AutoGen, MCP, A2A — e o alerta dos 40% de cancelamento</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">1.2 - Anatomia de um Agente de IA</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Voltar a Trilha 1
+          </a>
+          <a href="modulo-1-2.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">
+            Modulo 1.2 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>
