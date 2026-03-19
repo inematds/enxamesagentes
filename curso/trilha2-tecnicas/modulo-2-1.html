@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.1: OpenAI Swarm: seu primeiro swarm | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Modulo 2.1</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 2.1
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎓 OpenAI Swarm: seu primeiro swarm</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Aprenda os fundamentos de swarms com o framework educacional da OpenAI — codigo limpo e conceitos essenciais de handoffs e context variables.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">40</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Iniciante</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Pratica</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🎓 OpenAI Swarm: ferramenta educacional</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">OpenAI Swarm</strong> e um framework minimalista e experimental criado pela OpenAI com um proposito muito especifico: ensinar os principios fundamentais de sistemas multiagentes. Diferente de frameworks de producao como CrewAI ou LangGraph, o Swarm foi projetado para ser extremamente legivel — seu codigo-fonte inteiro cabe em poucas centenas de linhas. Isso o torna o ponto de entrada ideal para quem esta aprendendo a mecanica de como agentes colaboram.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O Swarm roda inteiramente no lado do cliente, usando a Chat Completions API da OpenAI. Ele nao mantem estado entre chamadas, nao tem banco de dados embutido e nao oferece recursos enterprise como monitoramento ou retry automatico. Essas "limitacoes" sao intencionais: ao remover toda a complexidade de producao, o Swarm expoe os conceitos puros de agentes, handoffs e variaveis de contexto de forma cristalina. Pense nele como um laboratorio didatico, nao como uma ferramenta de deploy.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Por que comecar pelo Swarm
+        </h3>
+        <p class="text-neutral-300 mb-4">O OpenAI Swarm ensina os blocos fundamentais que todos os outros frameworks usam:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Minimalismo proposital:</strong> Codigo-fonte pequeno e legivel — voce pode ler e entender tudo em uma tarde</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Conceitos puros:</strong> Agents, handoffs e context variables sem camadas de abstracao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Nao para producao:</strong> A OpenAI deixa claro no README — e educacional, nao enterprise</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Base transferivel:</strong> Os conceitos aprendidos aqui se aplicam diretamente a CrewAI, LangGraph e qualquer outro framework</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Contexto tecnico
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Repositorio:</strong> github.com/openai/swarm — codigo aberto, bem documentado</li>
+          <li><strong>Dependencia:</strong> Apenas a biblioteca openai do Python — sem frameworks pesados</li>
+          <li><strong>Execucao:</strong> Client-side, stateless — cada chamada e independente</li>
+          <li><strong>Exemplos inclusos:</strong> Triage agent, airline customer service, weather agent — casos de uso classicos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🤖 Conceito de Agent no Swarm</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        No OpenAI Swarm, um <strong class="text-blue-400">Agent</strong> e a unidade basica de trabalho. Sua definicao e surpreendentemente simples: um agente e a combinacao de <strong>instructions</strong> (o system prompt que define o comportamento), <strong>functions</strong> (as ferramentas que o agente pode usar) e <strong>model</strong> (qual LLM sera usado). Opcionalmente, voce pode dar um <strong>name</strong> ao agente para facilitar o rastreamento em logs e debugging.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Essa simplicidade e proposital e poderosa. Em vez de classes complexas com dezenas de parametros, o Swarm define um agente com apenas quatro campos. As instructions podem ser uma string estatica ou uma funcao que recebe context_variables e retorna um prompt dinamico — isso permite que o comportamento do agente se adapte ao estado atual da conversa. As functions sao funcoes Python comuns que o agente pode chamar via function calling da OpenAI. E o model define qual LLM processar as chamadas.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Anatomia de um Agent
+        </h3>
+        <p class="text-neutral-300 mb-4">Os quatro componentes que definem um agente no Swarm:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>instructions:</strong> String ou funcao que retorna o system prompt — define personalidade, regras e comportamento</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>functions:</strong> Lista de funcoes Python que o agente pode chamar — sao as 'ferramentas' dele</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>model:</strong> Qual modelo da OpenAI usar (gpt-4o, gpt-4o-mini, etc.) — afeta custo e capacidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>name:</strong> Identificador opcional — essencial para debugging quando multiplos agentes interagem</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Exemplo pratico
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Agent minimo:</strong> Apenas instructions + model ja cria um agente funcional (sem tools)</li>
+          <li><strong>Instructions dinamicas:</strong> Funcao que recebe context_variables permite personalizar comportamento por cliente</li>
+          <li><strong>Functions como tools:</strong> Qualquer funcao Python com docstring se torna uma tool acessivel via function calling</li>
+          <li><strong>Tipagem automatica:</strong> O Swarm converte automaticamente funcoes Python em schemas JSON para function calling</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔄 Handoffs: transferencia de controle</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">handoff</strong> e o mecanismo central que torna o Swarm um sistema multiagente de verdade. Quando um agente determina que a tarefa atual e melhor tratada por outro agente, ele pode retornar uma referencia ao agente de destino. O Swarm entao transfere o controle — o novo agente recebe o historico da conversa e assume o processamento. E como um atendente de telemarketing que transfere sua ligacao para o departamento correto.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, um handoff e implementado como uma funcao que retorna um objeto Agent. Por exemplo, o agente de triagem pode ter uma funcao <code>transfer_to_sales()</code> que simplesmente retorna o objeto <code>sales_agent</code>. Quando o modelo de IA decide chamar essa funcao, o Swarm detecta que o retorno e um Agent e realiza a transferencia automaticamente. O contexto da conversa (mensagens anteriores) e passado integralmente, e as context_variables sao compartilhadas entre todos os agentes do swarm.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mecanica do Handoff
+        </h3>
+        <p class="text-neutral-300 mb-4">Como a transferencia de controle funciona internamente:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>transfer_to_agent():</strong> Funcao que retorna um objeto Agent — o Swarm detecta e realiza a transferencia</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Historico preservado:</strong> Todas as mensagens anteriores sao passadas ao novo agente — sem perda de contexto</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Context variables compartilhadas:</strong> O dicionario de estado e acessivel por todos os agentes na cadeia</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Roteamento inteligente:</strong> O agente de triagem decide para quem transferir baseado na intencao do usuario</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Padroes de handoff
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Triagem → Especialista:</strong> Padrao mais comum — agente generico classifica e roteia para especializado</li>
+          <li><strong>Escalacao:</strong> Agente simples nao consegue resolver → transfere para agente mais capaz</li>
+          <li><strong>Ida e volta:</strong> Especialista resolve e devolve para triagem aguardar proximo pedido</li>
+          <li><strong>Cadeia:</strong> Agente A → B → C → D, cada um processando uma etapa do pipeline</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📦 Context Variables: estado compartilhado</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        As <strong class="text-blue-400">context variables</strong> sao o mecanismo de estado compartilhado do Swarm. Trata-se de um dicionario Python simples que e passado para todas as funcoes dos agentes e pode ser usado para interpolar valores nas instructions. Quando um agente precisa compartilhar informacao com outro (nome do cliente, numero do pedido, historico de decisoes), ele escreve no dicionario de context variables. O proximo agente na cadeia pode ler esse valor e ajustar seu comportamento.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O design e intencionalmente minimalista: e um dicionario mutavel passado por referencia. Nao ha ORM, nao ha schema, nao ha validacao embutida. Qualquer agente pode ler e escrever qualquer chave. Em producao, isso seria um risco — mas num framework educacional, expoe claramente como estado flui entre agentes. Voce aprende o conceito puro antes de implementar as camadas de seguranca e validacao que frameworks como CrewAI e LangGraph oferecem.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Como Context Variables funcionam
+        </h3>
+        <p class="text-neutral-300 mb-4">O fluxo de dados entre agentes via context variables:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Dicionario compartilhado:</strong> Um unico dict Python acessivel por todos os agentes e funcoes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Passagem por referencia:</strong> Alteracoes feitas por um agente sao imediatamente visiveis para todos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Interpolacao em instructions:</strong> Voce pode usar {nome_cliente} no system prompt e o Swarm substitui automaticamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Persistencia na sessao:</strong> Context variables sobrevivem a handoffs — o estado acompanha a conversa</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Casos de uso tipicos
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Identificacao do cliente:</strong> Agente de triagem identifica o cliente e salva nome, plano, historico</li>
+          <li><strong>Decisoes acumuladas:</strong> Cada agente registra suas decisoes para o proximo na cadeia</li>
+          <li><strong>Controle de fluxo:</strong> Flags como 'reembolso_autorizado=True' controlam o que agentes subsequentes podem fazer</li>
+          <li><strong>Dados do dominio:</strong> Numero do pedido, produto em questao, valor — informacoes que fluem pelo pipeline</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">💻 Exemplo pratico: atendimento ao cliente</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O repositorio do OpenAI Swarm inclui um exemplo classico de <strong class="text-blue-400">atendimento ao cliente de companhia aerea</strong> que demonstra todos os conceitos em acao. O sistema comeca com um <strong>Triage Agent</strong> que recebe a mensagem do cliente, classifica a intencao (compra, suporte tecnico, reembolso) e transfere para o agente especialista correto. Cada especialista tem suas proprias instructions e ferramentas especificas para resolver aquele tipo de problema.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O fluxo funciona assim: o cliente envia "Quero cancelar meu voo". O Triage Agent classifica como reembolso e chama <code>transfer_to_refund_agent()</code>. O Refund Agent recebe o contexto, acessa context_variables para obter dados do voo, verifica a politica de cancelamento e processa o reembolso. Se precisar de informacoes adicionais, pergunta ao cliente. Se o caso for complexo demais, escala para um humano. Todo o fluxo e transparente, rastreavel e facil de debugar.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Arquitetura do exemplo
+        </h3>
+        <p class="text-neutral-300 mb-4">Os componentes do sistema de atendimento ao cliente:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Triage Agent:</strong> Classifica intencao e roteia — nao resolve, apenas direciona</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Sales Agent:</strong> Especialista em vendas com tools para consultar voos e processar compras</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Support Agent:</strong> Especialista em suporte com acesso a base de conhecimento e status de voos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Refund Agent:</strong> Especialista em reembolsos com regras de negocio e autorizacao para creditar</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Licoes do exemplo
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Separacao clara:</strong> Cada agente tem escopo bem definido — nao ha sobreposicao de responsabilidades</li>
+          <li><strong>Handoffs fluidos:</strong> O cliente nem percebe a troca de agente — a experiencia e continua</li>
+          <li><strong>Context variables essenciais:</strong> Dados do cliente fluem pelo pipeline sem precisar perguntar novamente</li>
+          <li><strong>Escalabilidade do pattern:</strong> Adicionar um novo especialista (ex: bagagem) e trivial — basta criar o agente e adicionar o handoff</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔀 De Swarm para producao: proximos passos</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O OpenAI Swarm cumpre seu papel educacional brilhantemente, mas tem <strong class="text-blue-400">limitacoes claras</strong> que impedem seu uso em producao. Ele nao persiste estado entre sessoes (tudo se perde quando a execucao termina), nao tem mecanismo de retry (se uma chamada de API falha, o swarm para), nao oferece observabilidade (sem logs estruturados, metricas ou traces) e nao suporta execucao paralela (tudo e sequencial). Para sistemas reais, voce precisa de um framework mais robusto.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A boa noticia e que todos os conceitos do Swarm se traduzem diretamente para frameworks de producao. O Agent do Swarm vira um Agent do CrewAI (com role, goal, backstory). Os handoffs viram edges condicionais no LangGraph. As context variables viram o State do LangGraph ou as context variables do CrewAI. E as functions viram Tools em qualquer framework. A transicao e natural: voce ja entende os conceitos, agora precisa aprender a sintaxe e os recursos adicionais de cada framework.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mapa de migracao
+        </h3>
+        <p class="text-neutral-300 mb-4">Como conceitos do Swarm se traduzem para frameworks de producao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Agent → CrewAI Agent:</strong> instructions vira role+goal+backstory, functions viram tools, model permanece</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Handoff → LangGraph Edge:</strong> transfer_to_agent() vira uma conditional_edge() no grafo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Context Variables → State:</strong> O dicionario compartilhado vira TypedDict ou Pydantic model com validacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Swarm.run() → Crew.kickoff() ou graph.invoke():</strong> O loop principal ganha retry, timeout, observabilidade</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Quando migrar
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Precisa de persistencia:</strong> Estado entre sessoes → LangGraph com checkpointing ou CrewAI com memoria</li>
+          <li><strong>Precisa de paralelismo:</strong> Tarefas simultaneas → LangGraph com fan-out ou CrewAI com processos paralelos</li>
+          <li><strong>Precisa de observabilidade:</strong> Logs, metricas, traces → qualquer framework de producao oferece integracao com LangSmith, Phoenix, etc.</li>
+          <li><strong>Precisa de escala:</strong> Multiplos usuarios simultaneos → framework com suporte a async e filas</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">OpenAI Swarm: educacional</strong>
+              <span class="text-neutral-400"> - Framework minimalista para aprender principios de swarms</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Agent = instructions + functions + model</strong>
+              <span class="text-neutral-400"> - Unidade basica simples e poderosa do Swarm</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Handoffs: transferencia entre agentes</strong>
+              <span class="text-neutral-400"> - Mecanismo central de roteamento e colaboracao</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Context Variables</strong>
+              <span class="text-neutral-400"> - Estado compartilhado simples via dicionario Python</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Exemplo de atendimento</strong>
+              <span class="text-neutral-400"> - Sistema completo com triagem e agentes especialistas</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Migracao para producao</strong>
+              <span class="text-neutral-400"> - Conceitos do Swarm se traduzem para CrewAI, LangGraph e outros</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Proximo:</h3>
+          <p class="text-neutral-300">Modulo 2.2 - CrewAI: equipes de agentes</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Voltar a Trilha 2
+          </a>
+          <a href="modulo-2-2.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">
+            Modulo 2.2 - CrewAI: equipes de agentes →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.2: Anatomia de um Agente de IA | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Modulo 1.2</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 1.2
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧠 Anatomia de um Agente de IA</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Entenda a diferenca entre um LLM e um agente, o loop de raciocinio ReAct, ferramentas, memoria e os graus de autonomia que definem cada papel num swarm.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">40</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Iniciante</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🧠 De LLM a Agente: a diferenca</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um <strong class="text-emerald-400">Large Language Model (LLM)</strong> como Claude, GPT ou Gemini e, em essencia, um motor de completacao de texto extremamente sofisticado. Voce envia um prompt, ele gera uma resposta — e ai para. Nao importa quao brilhante seja a resposta: o LLM nao verifica se ela esta correta, nao busca informacoes adicionais, nao executa codigo para validar e nao lembra da conversa na proxima sessao. Ele e reativo por natureza: responde quando perguntado e fica inerte o resto do tempo.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um <strong class="text-emerald-400">agente de IA</strong>, por outro lado, e um sistema construido <em>sobre</em> um LLM que adiciona quatro capacidades fundamentais: <strong>perceber</strong> o ambiente (ler arquivos, receber dados de APIs, observar mudancas), <strong>raciocinar</strong> sobre o que fazer (planejar estrategias, decompor problemas), <strong>agir</strong> no mundo (executar codigo, chamar ferramentas, modificar arquivos) e <strong>lembrar</strong> o que aconteceu (manter contexto entre sessoes, acumular conhecimento). Essa transicao de "modelo que responde" para "sistema que age" e o salto conceitual mais importante da IA moderna.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Fundamental
+        </h3>
+        <p class="text-neutral-300 mb-4">Um agente nao e apenas um LLM com prompt melhor — e uma arquitetura completa com quatro pilares que transformam geracao de texto em acao autonoma:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Percepcao:</strong> O agente observa seu ambiente — le arquivos do projeto, recebe dados de APIs, monitora mudancas em repositorios, analisa imagens e logs</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Raciocinio:</strong> O LLM interno analisa o que percebeu, formula hipoteses, cria planos de acao e decide a proxima etapa logica</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Acao:</strong> O agente executa operacoes concretas — escreve codigo, roda comandos no terminal, chama APIs externas, cria arquivos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Memoria:</strong> O agente retém informacoes entre etapas e sessoes — lembra decisoes passadas, acumula conhecimento sobre o projeto</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> LLM vs Agente — comparacao direta
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>LLM puro:</strong> Recebe prompt → gera texto → termina. Nao verifica, nao executa, nao persiste. E um turno unico sem feedback</li>
+          <li><strong>Agente baseado em LLM:</strong> Recebe tarefa → planeja → executa → observa resultado → corrige → repete ate completar. Multiplos turnos com auto-correcao</li>
+          <li><strong>Analogia:</strong> Um LLM e como um consultor que da conselhos por telefone. Um agente e como um funcionario que entra no escritorio, analisa a situacao, executa o trabalho e reporta o resultado</li>
+          <li><strong>Na pratica:</strong> Claude Code, OpenCode e GitHub Copilot Workspace sao exemplos de agentes — usam LLMs internamente mas adicionam percepcao, acao e memoria ao redor</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔄 Loop de raciocinio: ReAct</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O padrao <strong class="text-emerald-400">ReAct (Reason + Act)</strong>, proposto por Yao et al. em 2022, e o loop fundamental que transforma um LLM em um agente funcional. A ideia e elegante na sua simplicidade: em vez de pedir ao modelo que gere a resposta final de uma vez, voce o instrui a alternar entre <strong>pensar</strong> (Thought), <strong>agir</strong> (Action) e <strong>observar</strong> (Observation) em ciclos iterativos ate chegar ao resultado desejado. Cada ciclo refina a compreensao do problema e aproxima o agente da solucao.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, o ciclo ReAct funciona assim: o agente recebe uma tarefa ("corrija o bug no login"), formula um pensamento ("preciso primeiro encontrar o arquivo de autenticacao"), executa uma acao (busca no codebase por arquivos relacionados a auth), observa o resultado (encontra auth.py com um erro na linha 42), formula novo pensamento ("o erro e uma comparacao incorreta de hash"), executa nova acao (edita a linha 42) e observa novamente (roda os testes e todos passam). Esse loop continua ate que o agente determine que a tarefa esta completa.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> O Ciclo Thought → Action → Observation
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada iteracao do loop ReAct segue tres etapas rigidas que se repetem ate a tarefa ser concluida:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Thought (Pensamento):</strong> O agente raciocina em linguagem natural sobre o estado atual — o que ja sabe, o que falta descobrir, qual a proxima acao logica</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Action (Acao):</strong> O agente invoca uma ferramenta concreta — buscar arquivos, ler codigo, executar comando, chamar API — com parametros especificos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Observation (Observacao):</strong> O resultado da acao retorna ao agente como nova informacao — saida do terminal, conteudo do arquivo, resposta da API</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Iteracao:</strong> Com a observacao em maos, o agente formula novo pensamento e decide: continuar (mais acoes necessarias) ou finalizar (tarefa completa)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> ReAct na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Performance comprovada:</strong> ReAct supera chain-of-thought puro em tarefas que exigem informacao externa, com ganhos de 20-30% em benchmarks de question-answering</li>
+          <li><strong>Transparencia:</strong> Como cada pensamento e explicito, e possivel auditar exatamente por que o agente tomou cada decisao — essencial para depuracao</li>
+          <li><strong>Variantes modernas:</strong> ReWOO (Reason Without Observation) separa planejamento de execucao para reduzir custos; Plan-and-Execute faz todo o plano antes de agir</li>
+          <li><strong>Limite pratico:</strong> Loops muito longos (20+ iteracoes) tendem a degradar porque o contexto acumulado de thoughts/actions/observations consome a janela do modelo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🛠️ Ferramentas (Tools)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um LLM sem ferramentas e como um cirurgiao sem bisturi: pode ter todo o conhecimento do mundo, mas nao consegue operar. As <strong class="text-emerald-400">ferramentas (tools)</strong> sao o que transformam o raciocinio do agente em acao concreta. Quando um agente precisa ler um arquivo, ele chama a ferramenta <code class="text-emerald-400">read_file</code>. Quando precisa executar codigo, chama <code class="text-emerald-400">run_command</code>. Quando precisa buscar na web, chama <code class="text-emerald-400">web_search</code>. Cada ferramenta e uma funcao bem definida com parametros de entrada e saida estruturada.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O mecanismo que permite ao LLM invocar ferramentas chama-se <strong class="text-emerald-400">function calling</strong>. Em vez de gerar texto livre, o modelo gera uma chamada de funcao estruturada (nome da funcao + argumentos em JSON) que o sistema executa e retorna o resultado. Esse mecanismo foi padronizado pela OpenAI em 2023 e hoje e suportado por todos os grandes provedores. Em 2024, a Anthropic elevou o conceito com o <strong>Model Context Protocol (MCP)</strong>, que cria um padrao aberto para conectar agentes a qualquer fonte de dados ou ferramenta externa de forma interoperavel.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Tipos de Ferramentas
+        </h3>
+        <p class="text-neutral-300 mb-4">Ferramentas se dividem em categorias pela natureza da interacao que proporcionam ao agente:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Function Calling nativo:</strong> O LLM gera chamadas de funcao estruturadas (JSON) que o runtime executa — o padrao basico de todos os agentes modernos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>API Tools:</strong> Ferramentas que se conectam a servicos externos — busca web, envio de email, consulta a bancos de dados, integracao com Slack, GitHub, Jira</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>MCP (Model Context Protocol):</strong> Protocolo aberto da Anthropic que padroniza como agentes descobrem e usam ferramentas — um "USB-C" para conectar IAs a qualquer recurso</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Ferramentas de sistema:</strong> Leitura/escrita de arquivos, execucao de comandos shell, manipulacao de git — o que permite ao agente interagir com o sistema operacional</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto das ferramentas
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sem ferramentas:</strong> O agente so pode responder com texto baseado em seu treinamento — nao pode verificar fatos, executar codigo ou acessar dados atualizados</li>
+          <li><strong>Com ferramentas basicas (file + shell):</strong> O agente ja pode ler codebases, executar testes, fazer commits — nivel de Claude Code e OpenCode</li>
+          <li><strong>Com MCP:</strong> O agente se conecta a qualquer recurso externo de forma padronizada — bancos de dados, APIs empresariais, servicos cloud, ferramentas de design</li>
+          <li><strong>Ecossistema MCP em 2026:</strong> Milhares de servidores MCP disponiveis — de integracao com Figma ate consultas a data warehouses corporativos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">💾 Memoria: curta e longa</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A <strong class="text-emerald-400">memoria</strong> e o que separa um agente que aprende de um que repete os mesmos erros. Todo LLM tem uma forma de "memoria de curto prazo" embutida: a <strong>janela de contexto</strong> (context window). Tudo que esta na conversa atual — o system prompt, as mensagens trocadas, os resultados de ferramentas — faz parte dessa memoria temporaria. Ela e poderosa enquanto dura, mas desaparece completamente quando a sessao termina ou quando o volume de informacao ultrapassa o limite de tokens do modelo.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para superar essa limitacao, agentes modernos implementam <strong class="text-emerald-400">memoria de longo prazo</strong> usando tecnicas como <strong>RAG (Retrieval-Augmented Generation)</strong> e <strong>vector stores</strong>. A ideia e simples: em vez de tentar guardar tudo na janela de contexto, o agente armazena informacoes em um banco de dados externo e recupera apenas o que e relevante para a tarefa atual. Vector stores transformam textos em representacoes matematicas (embeddings) que permitem busca por similaridade semantica — o agente pode perguntar "o que eu sei sobre autenticacao neste projeto?" e recuperar os trechos mais relevantes de toda sua memoria.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Tipos de Memoria em Agentes
+        </h3>
+        <p class="text-neutral-300 mb-4">A memoria de um agente opera em multiplas camadas, cada uma com funcao e duracao distintas:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Memoria de trabalho (context window):</strong> Toda a conversa atual — prompt, mensagens, resultados de tools. Limitada a 128k-1M tokens. Volatil: desaparece ao fim da sessao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Memoria episodica (RAG):</strong> Registros de interacoes passadas armazenados externamente e recuperados por relevancia. Permite ao agente "lembrar" de sessoes anteriores</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Memoria semantica (vector store):</strong> Conhecimento estruturado sobre o projeto — arquitetura, decisoes de design, padroes de codigo — indexado para busca por similaridade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Memoria procedimental (spec files):</strong> Arquivos como AGENTS.md, .cursorrules ou spec.md que definem como o agente deve se comportar — persistem entre sessoes</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Memoria na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Context window atual:</strong> Claude oferece ate 1M tokens (~750k palavras); GPT-4 ate 128k tokens. Parece muito, mas codebases reais preenchem rapidamente</li>
+          <li><strong>RAG em swarms:</strong> O agente Explorer escaneia o codebase e indexa num vector store. Outros agentes consultam esse indice em vez de ler todos os arquivos</li>
+          <li><strong>Custo de contexto:</strong> Cada token na janela custa dinheiro em API. Memoria de longo prazo via RAG pode reduzir custos em 60-80% comparado a enviar tudo no prompt</li>
+          <li><strong>Spec files como memoria:</strong> Projetos como OpenCode Swarm usam arquivos .md no repositorio como "memoria compartilhada" entre agentes e sessoes</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📋 Planejamento e decomposicao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A capacidade de <strong class="text-emerald-400">planejar</strong> e o que separa um agente que resolve problemas reais de um que apenas segue instrucoes passo a passo. Quando voce pede a um agente "implemente um sistema de autenticacao com OAuth2", ele precisa decompor essa tarefa ambigua em subtarefas concretas e executaveis: instalar dependencias, criar rotas de callback, configurar providers, implementar token refresh, adicionar middleware de protecao e escrever testes. Sem essa capacidade de decomposicao, o agente tentaria fazer tudo de uma vez e produziria codigo fragmentado e inconsistente.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O padrao <strong class="text-emerald-400">Plan-and-Execute</strong> separa explicitamente o planejamento da execucao. Primeiro, um agente planejador (ou o proprio orquestrador) cria um plano detalhado com todas as etapas numeradas. Depois, cada etapa e executada individualmente — potencialmente por agentes diferentes. A grande vantagem e que o plano pode ser revisado e ajustado antes de qualquer execucao, evitando desperdicio de recursos. Em swarms avancados, a decomposicao e <strong>hierarquica</strong>: uma tarefa grande se decompoe em subtarefas medias, que por sua vez se decompoe em tarefas atomicas que um unico agente executor pode completar.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrategias de Planejamento
+        </h3>
+        <p class="text-neutral-300 mb-4">Agentes usam diferentes estrategias de planejamento dependendo da complexidade da tarefa:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Plan-and-Execute:</strong> Cria o plano completo antes de executar qualquer etapa. Ideal para tarefas bem definidas com dependencias claras entre subtarefas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Decomposicao hierarquica:</strong> Tarefas grandes viram subtarefas medias que viram tarefas atomicas. Cada nivel pode ser delegado a agentes diferentes no swarm</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Replanning dinamico:</strong> O plano e ajustado durante a execucao com base nos resultados observados — essencial quando o ambiente muda ou surgem imprevistos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Discovery-first:</strong> Antes de planejar, o agente faz perguntas ao usuario e explora o ambiente para entender restricoes e requisitos — usado pelo agente Prometheus no OMO</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto do planejamento
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Com planejamento:</strong> Agentes completam tarefas complexas com taxa de sucesso 40-60% maior do que sem planejamento explicito</li>
+          <li><strong>Decomposicao hierarquica:</strong> Reduz tarefas de 50+ etapas (que travam agentes) em blocos de 5-8 tarefas atomicas gerenciaveis</li>
+          <li><strong>Custo do replanejamento:</strong> Recriar um plano custa tokens, mas e muito mais barato do que executar um plano ruim ate o fim e ter que recomecar</li>
+          <li><strong>Spec files na pratica:</strong> Sistemas como OpenCode Swarm geram um plan.md antes da execucao — esse arquivo funciona como contrato entre o planejador e os executores</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🎯 Agente autonomo vs assistente</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Nem todo agente precisa (ou deve) ser totalmente autonomo. Existe um <strong class="text-emerald-400">espectro de autonomia</strong> que vai desde o chatbot basico — que so responde quando perguntado — ate o agente completamente autonomo que recebe um objetivo de alto nivel e executa dezenas de acoes sem intervencao humana. A escolha do nivel de autonomia correto para cada agente no swarm e uma decisao de design critica que impacta qualidade, seguranca e confianca do usuario.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O conceito de <strong class="text-emerald-400">human-in-the-loop</strong> e o mecanismo que permite calibrar essa autonomia. Em modo assistente, o agente propoe acoes e espera aprovacao humana antes de executar. Em modo semi-autonomo, o agente executa acoes de baixo risco sozinho mas pede confirmacao para operacoes criticas (deletar arquivos, fazer deploy, modificar banco de dados). Em modo totalmente autonomo, o agente age por conta propria com guardrails — regras de seguranca que impedem acoes destrutivas independentemente da "vontade" do agente. Em swarms, cada papel tipicamente tem um nivel de autonomia diferente: o Explorer pode rodar livre (so le), mas o Coder precisa de gates de revisao.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Espectro de Autonomia
+        </h3>
+        <p class="text-neutral-300 mb-4">Os graus de autonomia de um agente de IA, do mais restrito ao mais livre:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Chatbot (autonomia zero):</strong> Responde perguntas e gera texto, mas nao executa acoes. O usuario faz tudo manualmente com base nas respostas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Assistente (autonomia baixa):</strong> Propoe acoes e espera aprovacao humana para cada uma. Util em ambientes de alta criticidade como producao ou financas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Semi-autonomo (autonomia media):</strong> Executa acoes seguras automaticamente, pede aprovacao apenas para operacoes de risco. O equilibrio mais comum em swarms de codigo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Autonomo com guardrails (autonomia alta):</strong> Age livremente dentro de limites predefinidos — nao pode deletar arquivos criticos, fazer deploy sem testes, ou exceder budget de tokens</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Autonomia em swarms reais
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Explorer/Pesquisador:</strong> Autonomia total — so fazem leitura, nao podem causar dano. Rodam livremente para coletar contexto</li>
+          <li><strong>Coder/Executor:</strong> Autonomia media — escrevem codigo mas passam por revisao automatica antes de merge. Gates de qualidade obrigatorios</li>
+          <li><strong>Reviewer/Critic:</strong> Autonomia alta na avaliacao — podem rejeitar e pedir retrabalho sem intervencao humana. O veto do revisor e automatico</li>
+          <li><strong>Human-in-the-loop em 2026:</strong> A maioria dos swarms de producao mantém um ponto de aprovacao humana para decisoes arquiteturais e deploys — autonomia total end-to-end ainda e rara</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">De LLM a Agente</strong>
+              <span class="text-neutral-400"> - Agentes adicionam percepcao, raciocinio, acao e memoria ao LLM base</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Loop ReAct</strong>
+              <span class="text-neutral-400"> - Ciclo Thought → Action → Observation que transforma geracao de texto em acao iterativa</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Ferramentas</strong>
+              <span class="text-neutral-400"> - Function calling, API tools e MCP dao ao agente a capacidade de agir no mundo real</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Memoria curta e longa</strong>
+              <span class="text-neutral-400"> - Context window para o imediato; RAG e vector stores para conhecimento persistente</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Planejamento</strong>
+              <span class="text-neutral-400"> - Plan-and-Execute e decomposicao hierarquica para tarefas complexas</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Autonomia</strong>
+              <span class="text-neutral-400"> - Espectro de chatbot a agente autonomo, com human-in-the-loop como mecanismo de controle</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">1.3 - Arquiteturas de Swarms</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 1.1
+          </a>
+          <a href="modulo-1-3.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">
+            Modulo 1.3 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

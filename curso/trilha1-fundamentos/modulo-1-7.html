@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.7: Sequencial vs Paralelo | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Modulo 1.7</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 1.7
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📐 Sequencial vs Paralelo: estudo comparativo</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Analise aprofundada dos dois paradigmas dominantes — OpenCode Swarm (sequencial) e oh-my-openagent (paralelo) — com benchmarks, decisoes de design e sistemas de qualidade.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">40</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Interm.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Analise</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📐 OpenCode Swarm: o modelo sequencial</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">opencode-swarm</strong> e um dos projetos multiagentes mais bem documentados do ecossistema, com 828+ commits e um pipeline sequencial rigoroso de 8 subagentes. Cada agente opera em uma etapa especifica e so pode passar para a proxima apos completar a sua com aprovacao. O fluxo e: <strong>Explorer</strong> (escaneia o codebase) → <strong>SME</strong> (especialista no dominio) → <strong>Architect</strong> (desenha a solucao) → <strong>Critic</strong> (avalia o plano) → <strong>Coder</strong> (implementa) → <strong>Reviewer</strong> (revisa) → <strong>Test</strong> (testa) → <strong>Docs</strong> (documenta).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A filosofia por tras dessa abordagem e que a <strong class="text-emerald-400">confiabilidade supera a velocidade</strong>. Em vez de tentar fazer tudo ao mesmo tempo e lidar com conflitos, o pipeline sequencial garante que cada etapa recebe o resultado validado da etapa anterior. A maquina de estados (state machine) governa as transicoes — nao e possivel pular etapas ou executar fora de ordem. O resultado e previsivel, auditavel e depuravel, porque voce pode examinar exatamente o que cada agente recebeu e produziu.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Pipeline Sequencial de 8 Agentes
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada agente tem uma funcao especifica e so avanca apos aprovacao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Explorer → SME:</strong> Escaneia o codebase e repassa descobertas para o especialista de dominio que contextualiza tecnicamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Architect → Critic:</strong> O Architect desenha a solucao e o Critic avalia viabilidade, riscos e alternativas antes de aprovar a implementacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Coder → Reviewer:</strong> O Coder implementa e o Reviewer verifica qualidade, seguranca e aderencia ao plano — usando modelo de provider diferente (anti-blindspot)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Test → Docs:</strong> O Test Engineer valida com testes automatizados e o Docs gera documentacao atualizada — o pipeline so finaliza com tudo aprovado</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Caracteristicas do modelo sequencial
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Gated pipeline:</strong> Cada etapa tem um "portao" — o agente so avanca se o resultado atende aos criterios de qualidade</li>
+          <li><strong>State machine formal:</strong> Estados e transicoes sao explicitos e rastreados em arquivos — impossivel perder-se no fluxo</li>
+          <li><strong>Zero race conditions:</strong> Apenas um agente esta ativo por vez — eliminacao total de conflitos de escrita</li>
+          <li><strong>Trade-off:</strong> Mais lento que paralelo (cada etapa espera a anterior), mas significativamente mais confiavel</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">⚡ oh-my-openagent: o modelo paralelo</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Em contraste direto com o pipeline sequencial, o <strong class="text-emerald-400">oh-my-openagent (OMO)</strong> adota o paradigma paralelo. O orquestrador <strong>Sisyphus</strong> — nomeado em homenagem ao personagem mitico que nunca desiste — recebe a tarefa, decompoe em subtarefas independentes e dispara multiplos agentes simultaneamente. Enquanto o agente de backend implementa a API, o agente de frontend constroi os componentes visuais e o agente de testes prepara os casos de teste — tudo ao mesmo tempo.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O desafio do modelo paralelo e a <strong class="text-emerald-400">coordenacao</strong>. Quando multiplos agentes editam o projeto simultaneamente, conflitos sao inevitaveis sem mecanismos de protecao. O OMO resolve isso com <strong>zonas seguras</strong> (cada agente trabalha em arquivos/diretorios exclusivos), <strong>hash checking</strong> (deteccao automatica de conflitos quando agentes tocam regioes proximas) e <strong>merge coordenado pelo Sisyphus</strong> (o orquestrador integra os resultados de todos os agentes ao final, resolvendo conflitos remanescentes).
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Arquitetura Paralela do OMO
+        </h3>
+        <p class="text-neutral-300 mb-4">Como Sisyphus coordena agentes simultaneos:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Sisyphus como coordenador:</strong> Recebe a tarefa, identifica subtarefas independentes, atribui zonas seguras e dispara agentes em background</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Background agents:</strong> Cada agente roda como um processo independente em seu proprio contexto — paralelismo real, nao simulado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Zonas seguras:</strong> Agente A edita /src/api, Agente B edita /src/components, Agente C edita /tests — sem sobreposicao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Merge de resultados:</strong> Sisyphus coleta os resultados de todos os agentes, resolve conflitos residuais e integra em um resultado coeso</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Caracteristicas do modelo paralelo
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Velocidade:</strong> 3-5x mais rapido que sequencial para tarefas com muitas subtarefas independentes</li>
+          <li><strong>7 agentes especializados:</strong> Sisyphus, Prometheus, Hephaestus, Explorer, Librarian, Multimodal Looker e mais</li>
+          <li><strong>3 modos de operacao:</strong> Auto (totalmente autonomo), Semi-Auto (aprovacao humana em pontos criticos), Manual (passo a passo)</li>
+          <li><strong>Trade-off:</strong> Mais rapido, mas exige mecanismos sofisticados de coordenacao e resolucao de conflitos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📊 Benchmarks: velocidade vs confiabilidade</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A pergunta que todo arquiteto de swarms faz e: <strong class="text-emerald-400">"Qual abordagem e melhor?"</strong>. A resposta honesta e: depende do que voce otimiza. Dados reais mostram que a abordagem paralela e significativamente mais rapida, mas a abordagem sequencial produz resultados mais confiaveis. O dado mais impressionante vem do impacto do hash checking em swarms paralelos: sem ele, a taxa de sucesso em tarefas complexas era de apenas <strong>6%</strong>. Com hash checking habilitado, essa taxa saltou para <strong>68.3%</strong>.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Esse salto de 6% para 68.3% demonstra algo fundamental: o <strong class="text-emerald-400">paralelismo sem mecanismos de protecao e quase inutil</strong>. Agentes que editam o mesmo codebase simultaneamente sem deteccao de conflitos produzem resultados corrompidos na vasta maioria das vezes. Mas com os mecanismos certos (hash checking, zonas seguras, merge coordenado), o paralelismo se torna viavel e imensamente mais rapido. A abordagem sequencial, por outro lado, comeca com taxa de sucesso mais alta (~75-85%) mas leva 3-5x mais tempo para completar.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Comparativo Direto
+        </h3>
+        <p class="text-neutral-300 mb-4">Sequencial vs Paralelo em metricas objetivas:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Velocidade:</strong> Paralelo e 3-5x mais rapido — tarefas que levam 30min em sequencial completam em 8-10min em paralelo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Confiabilidade (sem protecao):</strong> Sequencial ~80% vs Paralelo ~6% — paralelo desprotegido e praticamente inutilizavel</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Confiabilidade (com hash checking):</strong> Sequencial ~80% vs Paralelo ~68.3% — gap significativamente reduzido com mecanismos corretos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Depurabilidade:</strong> Sequencial e muito mais facil de depurar — fluxo linear, cada etapa e rastreavel. Paralelo exige ferramentas de observabilidade</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Quando escolher cada abordagem
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sequencial ideal para:</strong> Tarefas com alta interdependencia entre etapas, projetos criticos onde falhas sao caras, equipes que precisam de auditoria detalhada</li>
+          <li><strong>Paralelo ideal para:</strong> Tarefas com muitas subtarefas independentes, projetos com prazo apertado, situacoes onde velocidade supera perfeicao na primeira tentativa</li>
+          <li><strong>Hibrido (melhor opcao):</strong> Planejamento sequencial (Architect → Critic → aprovacao) seguido de execucao paralela (3 Coders simultaneos em zonas diferentes)</li>
+          <li><strong>Dado critico:</strong> O salto de 6% → 68.3% com hash checking mostra que a tecnologia de coordenacao e mais importante que a escolha entre sequencial e paralelo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔍 18 decisoes de design do opencode-swarm</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O opencode-swarm nao e apenas um projeto — e um <strong class="text-emerald-400">laboratorio de aprendizado</strong> com 18 decisoes de design documentadas em seu arquivo design-rationale.md. Cada decisao tem uma justificativa clara, alternativas consideradas e razoes para a escolha. Estudar essas decisoes e como ter acesso ao caderno de notas de um arquiteto experiente que ja enfrentou (e resolveu) os problemas que voce vai encontrar.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Tres decisoes merecem destaque especial por serem contra-intuitivas: <strong class="text-emerald-400">"serial over parallel"</strong> (escolher serial quando paralelo parece mais eficiente), <strong class="text-emerald-400">"persistent memory"</strong> (manter estado em disco em vez de em memoria) e <strong class="text-emerald-400">"heterogeneous models"</strong> (usar modelos diferentes deliberadamente em vez de padronizar). Cada uma dessas decisoes vai contra o instinto inicial de um engenheiro, mas tem justificativas solidas baseadas em experiencia real com 828+ commits.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Decisoes de Design Destacadas
+        </h3>
+        <p class="text-neutral-300 mb-4">As mais importantes das 18 decisoes documentadas:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Serial over parallel:</strong> "Preferimos confiabilidade a velocidade. Em 828 commits, serial eliminou classes inteiras de bugs de concorrencia que paralisavam o desenvolvimento"</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Persistent memory:</strong> "Estado em disco (.swarm/) sobrevive a falhas, permite auditoria e habilita retomada de tarefas interrompidas — impossiveis com estado em memoria"</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Heterogeneous models:</strong> "Coder e Reviewer usam providers diferentes para maximizar deteccao de bugs — modelos iguais concordam ate nos erros"</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gated progression:</strong> "Nenhum agente avanca sem aprovacao do gate anterior — elimina propagacao de erros ao longo do pipeline"</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Outras decisoes relevantes
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Critic before Coder:</strong> O Critic avalia o plano do Architect ANTES da implementacao — evita desperdicar tokens codificando uma solucao ruim</li>
+          <li><strong>Explorer first:</strong> O Explorer sempre roda primeiro — coletar contexto antes de qualquer decisao melhora dramaticamente a qualidade</li>
+          <li><strong>Atomic tasks:</strong> Cada agente recebe tarefas atomicas e auto-contidas — se falhar, so aquela tarefa precisa ser refeita</li>
+          <li><strong>Evidence-based decisions:</strong> Nenhuma decisao arquitetural e tomada sem evidencias coletadas pelo Explorer e pelo SME</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🎯 Gates de qualidade automatizados</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O opencode-swarm implementa <strong class="text-emerald-400">6 gates de qualidade automatizados</strong> que cada tarefa deve passar antes de ser aceita. Esses gates nao sao verificacoes subjetivas feitas por LLMs — sao checagens programaticas, deterministicas e reproduziveis. Se um gate falha, o agente responsavel recebe feedback especifico e deve corrigir o problema antes de tentar novamente. Nenhum codigo chega ao final do pipeline sem passar por todos os 6 gates.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Esta abordagem resolve um problema fundamental dos swarms: <strong class="text-emerald-400">como garantir qualidade quando quem produz e quem verifica sao ambos LLMs?</strong> A resposta e nao depender apenas de LLMs para verificacao. Os gates usam ferramentas tradicionais de engenharia de software — linters, analisadores estaticos, compiladores, test runners — que produzem resultados objetivos e incontestáveis. O LLM escreve o codigo; a ferramenta automatica verifica se o codigo e valido.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Os 6 Gates de Qualidade
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada gate verifica um aspecto diferente, em ordem de execucao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gate 1 — Syntax:</strong> Verifica se o codigo e sintaticamente valido usando Tree-sitter — detecta erros de sintaxe antes de qualquer outra analise</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gate 2 — Placeholder:</strong> Busca por placeholders residuais (TODO, FIXME, "implement here") — garante que nenhum trecho ficou incompleto</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gate 3 — SAST (Static Application Security Testing):</strong> Analise de seguranca estatica baseada no OWASP Top 10 — detecta vulnerabilidades conhecidas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gate 4 — SBOM (Software Bill of Materials):</strong> Rastreia dependencias e verifica vulnerabilidades conhecidas em bibliotecas usadas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gate 5 — Build:</strong> Verifica se o projeto compila e executa corretamente — testes unitarios passam, build nao quebra</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gate 6 — Quality Budget:</strong> Verifica se a qualidade geral (cobertura de testes, complexidade ciclomatica) esta dentro do "orcamento" definido</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto dos gates
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sem gates:</strong> ~40% dos resultados do swarm contem erros de sintaxe, placeholders ou vulnerabilidades — exigem correcao manual</li>
+          <li><strong>Com 6 gates:</strong> Erros residuais caem para menos de 5% — e os que passam sao erros logicos sutis, nao falhas grosseiras</li>
+          <li><strong>Feedback automatico:</strong> Cada gate que falha envia ao agente responsavel exatamente o que esta errado e onde — o agente corrige sem intervencao humana</li>
+          <li><strong>Tempo adicional:</strong> Os 6 gates adicionam ~30 segundos ao pipeline — investimento minimo para eliminacao massiva de defeitos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 Sistema Curator: drift plano vs realidade</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um dos conceitos mais inovadores do opencode-swarm e o <strong class="text-emerald-400">sistema Curator</strong> — um mecanismo de monitoramento quantitativo que mede continuamente o <strong>desvio (drift)</strong> entre o plano original e a implementacao real. Em qualquer projeto complexo, a implementacao tende a se afastar do plano: o Coder faz escolhas diferentes das planejadas pelo Architect, ou descobre obstaculos que exigem mudancas de rota. O Curator detecta essas divergencias e alerta antes que se tornem problemas.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O drift e quantificado em uma escala de <strong class="text-emerald-400">0.0 a 1.0</strong>, com quatro categorias: <strong>ALIGNED</strong> (0.0-0.2, implementacao segue o plano fielmente), <strong>MINOR</strong> (0.2-0.5, desvios pequenos e aceitaveis), <strong>MAJOR</strong> (0.5-0.8, desvios significativos que exigem revisao do plano) e <strong>OFF_SPEC</strong> (0.8-1.0, implementacao diverge tanto do plano que precisa ser refeita). Quando o drift atinge MAJOR, o Curator notifica o orquestrador, que pode pausar a execucao, revisar o plano e realinhar a equipe.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Escala de Drift
+        </h3>
+        <p class="text-neutral-300 mb-4">Como o Curator classifica o desvio entre plano e implementacao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>ALIGNED (0.0-0.2):</strong> Implementacao segue o plano fielmente. Desvios cosmeticos ou melhorias menores sao aceitaveis. Nenhuma acao necessaria</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>MINOR (0.2-0.5):</strong> Desvios pequenos — talvez o Coder escolheu uma biblioteca diferente da planejada, ou reorganizou a estrutura de arquivos. Registro para auditoria, sem bloqueio</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>MAJOR (0.5-0.8):</strong> Desvios significativos — a arquitetura mudou, APIs foram alteradas, dependencias criticas foram substituidas. Orquestrador e notificado para revisao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>OFF_SPEC (0.8-1.0):</strong> Implementacao nao corresponde ao plano. O trabalho pode precisar ser descartado e refeito com um plano revisado. Execucao pausada automaticamente</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Por que drift monitoring importa
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sem monitoramento de drift:</strong> Equipes so descobrem que a implementacao divergiu do plano no final — quando corrigir custa 10x mais</li>
+          <li><strong>Com Curator:</strong> Desvios sao detectados em tempo real, permitindo correcao de rota antes que acumulem</li>
+          <li><strong>Conceito unico:</strong> Poucos sistemas multiagentes implementam monitoramento quantitativo de drift — o opencode-swarm e pioneiro nessa abordagem</li>
+          <li><strong>Aplicacao mais ampla:</strong> O conceito de drift monitoring pode ser aplicado a qualquer projeto de software, nao apenas swarms — e uma ferramenta de governanca universal</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">OpenCode Swarm (sequencial)</strong>
+              <span class="text-neutral-400"> - 8 agentes em pipeline gated, state machine formal, zero race conditions</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">oh-my-openagent (paralelo)</strong>
+              <span class="text-neutral-400"> - Sisyphus coordena agentes simultaneos com zonas seguras e merge</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Benchmarks</strong>
+              <span class="text-neutral-400"> - Paralelo 3-5x mais rapido; hash checking eleva sucesso de 6% para 68.3%</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">18 decisoes de design</strong>
+              <span class="text-neutral-400"> - Serial over parallel, persistent memory, heterogeneous models e mais</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">6 quality gates</strong>
+              <span class="text-neutral-400"> - Syntax, placeholder, SAST, SBOM, build, quality budget — verificacao automatica</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Sistema Curator</strong>
+              <span class="text-neutral-400"> - Drift score 0.0-1.0, categorias ALIGNED/MINOR/MAJOR/OFF_SPEC</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">1.8 - Mapa do ecossistema agentico</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-6.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 1.6
+          </a>
+          <a href="modulo-1-8.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">
+            Modulo 1.8 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

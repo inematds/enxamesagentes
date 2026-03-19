@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.3: Arquiteturas de Swarms | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Modulo 1.3</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 1.3
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏗️ Arquiteturas de Swarms</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Conheca os quatro padroes arquiteturais fundamentais — hierarquico, sequencial, paralelo e mesh — e aprenda quando usar cada um em projetos reais.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">45</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Intermed.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🏗️ Hierarquica (Supervisor/Worker)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A arquitetura <strong class="text-emerald-400">hierarquica</strong>, tambem conhecida como Supervisor/Worker ou hub-and-spoke, e o padrao mais comum e intuitivo de swarms. Nela, um <strong>agente supervisor</strong> (orquestrador) ocupa o centro do sistema e delega tarefas para <strong>agentes trabalhadores</strong> (workers) especializados. O supervisor recebe a tarefa do usuario, analisa o que precisa ser feito, decide quais workers acionar, distribui subtarefas e coleta os resultados. E exatamente como uma equipe corporativa: o gerente de projeto distribui tarefas, os especialistas executam e reportam de volta.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A grande vantagem dessa arquitetura e a <strong class="text-emerald-400">previsibilidade e controle</strong>. O supervisor tem visao global do progresso, pode repriorizar tarefas, detectar falhas e realocar trabalho. Em sistemas como CrewAI e LangGraph, esse padrao e implementado nativamente. O supervisor tipicamente usa um modelo mais potente (Claude Opus, GPT-5.3) para raciocinio complexo, enquanto os workers podem usar modelos mais leves e baratos. A desvantagem e que o supervisor pode se tornar um gargalo: se ele falha ou fica sobrecarregado, todo o swarm para.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Anatomia do Padrao Hub-and-Spoke
+        </h3>
+        <p class="text-neutral-300 mb-4">O modelo hierarquico segue um fluxo centralizado onde toda comunicacao passa pelo supervisor:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Supervisor (Hub):</strong> Recebe a tarefa, cria plano de execucao, seleciona workers, delega subtarefas e agrega resultados finais</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Workers (Spokes):</strong> Agentes especializados que recebem subtarefas atomicas, executam com foco total e retornam o resultado ao supervisor</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Delegacao inteligente:</strong> O supervisor escolhe o worker certo baseado no tipo de tarefa — codigo vai para o Coder, revisao para o Reviewer, testes para o Tester</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Controle centralizado:</strong> O supervisor monitora progresso, detecta falhas e pode relancar tarefas ou mudar o plano em tempo real</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Onde o hierarquico brilha
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Adocao:</strong> Mais de 60% dos swarms em producao usam alguma variante hierarquica — e o padrao mais testado e confiavel</li>
+          <li><strong>Frameworks:</strong> CrewAI (manager_llm), LangGraph (supervisor node), AutoGen (GroupChat manager) — todos oferecem suporte nativo</li>
+          <li><strong>Ideal para:</strong> Projetos com equipe definida de agentes, tarefas decomposiveis e necessidade de controle e auditoria</li>
+          <li><strong>Risco principal:</strong> Single point of failure — se o supervisor trava, nenhum worker pode continuar. Mitigacao: health checks e fallback supervisors</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔗 Pipeline sequencial</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na arquitetura de <strong class="text-emerald-400">pipeline sequencial</strong>, os agentes estao organizados em uma cadeia (chain) onde cada um processa uma etapa e passa o resultado para o proximo. E como uma linha de montagem industrial: a peca entra crua no inicio, cada estacao adiciona valor e no final sai o produto acabado. No contexto de swarms de codigo, um pipeline tipico seria: <strong>Explorer</strong> (escaneia codebase) → <strong>Architect</strong> (projeta solucao) → <strong>Coder</strong> (implementa) → <strong>Reviewer</strong> (revisa) → <strong>Tester</strong> (testa) → <strong>Docs</strong> (documenta).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O conceito de <strong class="text-emerald-400">handoff</strong> e central nessa arquitetura: quando um agente termina sua tarefa, ele "passa o bastao" para o proximo, transferindo seu contexto e resultados. Em pipelines avancados, existem <strong>gates</strong> entre etapas — checkpoints de qualidade que precisam ser aprovados para o fluxo continuar. Por exemplo, o codigo produzido pelo Coder so avanca para o Tester se o Reviewer aprovar. Se reprovar, o fluxo retorna ao Coder com feedback para correcao. Esse mecanismo de <strong>gated pipeline</strong> e o que garante qualidade em sistemas como o OpenCode Swarm.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Elementos do Pipeline Sequencial
+        </h3>
+        <p class="text-neutral-300 mb-4">Um pipeline sequencial robusto combina tres elementos que garantem fluxo ordenado e qualidade:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Chain (cadeia):</strong> Agentes conectados em sequencia fixa — a saida de um e a entrada do proximo. A ordem importa porque cada etapa depende da anterior</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Handoff (transferencia):</strong> O mecanismo de passagem de contexto entre agentes — inclui o resultado produzido, metadados e instrucoes para a proxima etapa</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gates (portoes de qualidade):</strong> Checkpoints entre etapas que validam se o resultado e aceitavel antes de prosseguir. Se reprovar, o fluxo retorna a etapa anterior</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Feedback loops:</strong> Quando um gate rejeita, o agente anterior recebe feedback especifico sobre o que corrigir — criando um ciclo de melhoria dentro do pipeline</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Pipeline na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>OpenCode Swarm:</strong> Pipeline de 8 etapas (Explorer → SME → Architect → Critic → Coder → Reviewer → Test → Docs) com gates entre cada transicao</li>
+          <li><strong>Vantagem principal:</strong> Simplicidade e previsibilidade — facil de debugar porque voce sabe exatamente qual etapa falhou</li>
+          <li><strong>Desvantagem principal:</strong> Lentidao — cada agente espera o anterior terminar, mesmo quando poderia trabalhar em paralelo</li>
+          <li><strong>Quando usar:</strong> Tarefas com dependencias estritas entre etapas, quando qualidade e mais importante que velocidade, e quando cada etapa modifica o mesmo artefato</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔀 Paralelo (Fan-out/Fan-in)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A arquitetura <strong class="text-emerald-400">paralela</strong>, conhecida como fan-out/fan-in, e o padrao que maximiza velocidade. Em vez de processar etapas uma a uma, o orquestrador identifica tarefas que sao <strong>independentes entre si</strong> e as dispara simultaneamente para multiplos agentes. Cada agente trabalha em sua tarefa sem esperar pelos outros, e quando todos terminam, os resultados sao <strong>mesclados (merge)</strong> em um resultado final coerente. E como uma equipe de jornalistas cobrindo diferentes aspectos de uma mesma historia: cada um investiga seu angulo em paralelo e o editor junta tudo no final.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O grande desafio da execucao paralela e a <strong class="text-emerald-400">concorrencia</strong>: quando dois agentes tentam modificar o mesmo arquivo simultaneamente, conflitos surgem. Sistemas maduros resolvem isso com <strong>zonas seguras</strong> — cada agente recebe uma area exclusiva de trabalho (arquivos ou pastas especificas) e nenhum outro pode tocar nessa area. O oh-my-openagent (OMO), por exemplo, despacha agentes paralelos em categorias separadas (Frontend, Backend, Database) onde cada agente trabalha em arquivos distintos, eliminando o risco de conflito. A fase de merge no final reconcilia os resultados.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Fan-out/Fan-in: o padrao
+        </h3>
+        <p class="text-neutral-300 mb-4">A execucao paralela segue um fluxo de dispersao e convergencia:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Fan-out (dispersao):</strong> O orquestrador identifica N tarefas independentes e dispara N agentes simultaneamente — cada um recebe sua tarefa e contexto isolado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Execucao concorrente:</strong> Todos os agentes trabalham ao mesmo tempo em suas respectivas tarefas, sem depender uns dos outros</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Fan-in (convergencia):</strong> Quando todos terminam, os resultados sao coletados e mesclados em um resultado unificado pelo orquestrador</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Zonas seguras:</strong> Cada agente tem uma area exclusiva de trabalho (arquivos, pastas, modulos) para evitar conflitos de concorrencia</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Paralelo na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Ganho de velocidade:</strong> Com 4 agentes paralelos, tarefas que levariam 40 minutos sequencialmente podem ser concluidas em 10-15 minutos</li>
+          <li><strong>Custo:</strong> Execucao paralela consome mais tokens por minuto (multiplas chamadas de API simultaneas), mas o custo total pode ser similar porque cada agente trabalha com contexto menor</li>
+          <li><strong>Risco de conflito:</strong> Sem zonas seguras, dois agentes editando o mesmo arquivo simultaneamente geram merge conflicts e codigo inconsistente</li>
+          <li><strong>Melhor caso:</strong> Tarefas genuinamente independentes — implementar 5 endpoints de API diferentes, escrever testes para modulos distintos, documentar componentes separados</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🕸️ Peer Mesh (descentralizado)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A arquitetura <strong class="text-emerald-400">Peer Mesh</strong> (ou mesh descentralizado) e o padrao mais radical: <strong>nao ha supervisor central</strong>. Os agentes colaboram diretamente entre si, negociando tarefas, compartilhando resultados e se auto-organizando sem que nenhum deles tenha autoridade sobre os demais. Cada agente e um "par" (peer) com capacidade de iniciar trabalho, pedir ajuda a outros agentes e contribuir para o objetivo coletivo. E o padrao mais proximo da inteligencia de enxame biologica original — como formigas que se coordenam sem rainha.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A grande vantagem do mesh e a <strong class="text-emerald-400">resiliencia</strong>: se um agente falha, os outros continuam operando normalmente porque ninguem depende de um ponto central. Alem disso, o sistema e inerentemente escalavel — adicionar mais agentes nao cria gargalo no supervisor porque nao ha supervisor. A desvantagem e a <strong>complexidade de coordenacao</strong>: sem controle central, garantir que dois agentes nao facam a mesma tarefa ou que nenhuma tarefa fique sem dono e um desafio significativo. Por isso, o mesh puro e relativamente raro em producao; ele e mais comum como componente dentro de arquiteturas hibridas.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Principios do Mesh Descentralizado
+        </h3>
+        <p class="text-neutral-300 mb-4">O mesh descentralizado se apoia em tres propriedades emergentes que dispensam controle central:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Auto-organizacao:</strong> Agentes decidem autonomamente que tarefas assumir com base em suas capacidades e na disponibilidade de trabalho</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Comunicacao peer-to-peer:</strong> Agentes se comunicam diretamente entre si via protocolos como A2A (Agent-to-Agent) sem intermediario</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Resiliencia:</strong> Nenhum ponto unico de falha — se um agente cai, os demais redistribuem o trabalho automaticamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Emergencia:</strong> O comportamento coletivo inteligente surge das interacoes locais entre agentes, sem ser programado explicitamente</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Mesh na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Adocao:</strong> Menos de 10% dos swarms em producao usam mesh puro — e mais comum como sub-padrao dentro de arquiteturas hibridas</li>
+          <li><strong>Protocolo A2A:</strong> O Google Agent-to-Agent Protocol facilita comunicacao direta entre agentes de diferentes plataformas — essencial para mesh cross-platform</li>
+          <li><strong>Casos de uso:</strong> Sistemas de monitoramento distribuido, swarms de pesquisa exploratoria onde cada agente investiga uma direcao diferente autonomamente</li>
+          <li><strong>Desafio principal:</strong> Coordenacao — sem supervisor, quem garante que todas as tarefas foram feitas e que nenhuma foi duplicada? Requer mecanismos de consenso</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔄 Sequencial vs Paralelo na pratica</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para entender concretamente a diferenca entre sequencial e paralelo, nada melhor do que comparar dois sistemas reais. O <strong class="text-emerald-400">OpenCode Swarm</strong> e um exemplo classico de pipeline sequencial: Explorer analisa o codebase, SME (Subject Matter Expert) fornece contexto de dominio, Architect projeta a solucao, Critic avalia o design, Coder implementa, Reviewer revisa, Test Engineer valida e Docs documenta. Cada agente espera o anterior terminar. O resultado e altamente consistente e auditavel, mas o processo completo pode levar 20-40 minutos para uma feature media.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">oh-my-openagent (OMO)</strong>, por contraste, adota execucao paralela agressiva. O agente Sisyphus (orquestrador) recebe a tarefa, o Prometheus cria o plano e depois despacha agentes Hephaestus em paralelo por categorias: um para Frontend, outro para Backend, outro para Database, todos trabalhando simultaneamente em seus respectivos arquivos. O resultado e velocidade dramaticamente maior — a mesma feature pode ser completada em 8-12 minutos — mas com maior risco de inconsistencias entre os modulos produzidos por agentes diferentes, exigindo uma fase de integracao mais cuidadosa.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Trade-offs: Sequencial vs Paralelo
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada abordagem tem vantagens e desvantagens claras que determinam quando usar cada uma:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Consistencia vs Velocidade:</strong> Sequencial garante que cada etapa tem o contexto completo da anterior; paralelo sacrifica isso em troca de velocidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Depuracao:</strong> Sequencial e facil de debugar (qual etapa falhou?); paralelo exige monitoramento mais sofisticado de multiplos agentes simultaneos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Race conditions:</strong> No paralelo, dois agentes podem criar funcoes com nomes conflitantes ou dependencias contraditorias — requer zonas seguras bem definidas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Custo:</strong> Paralelo usa mais recursos por minuto, mas o custo total pode ser similar ou menor porque cada agente trabalha com contexto mais enxuto</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Comparacao OpenCode Swarm vs OMO
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>OpenCode Swarm (sequencial):</strong> 8 agentes em cadeia, 828+ commits de maturidade, gates de qualidade entre cada etapa, resultado altamente consistente, 20-40 min por feature</li>
+          <li><strong>OMO (paralelo):</strong> 7 agentes com execucao paralela por categoria, Sisyphus nao para ate terminar, velocidade 2-3x maior, requer fase de integracao cuidadosa</li>
+          <li><strong>Quando sequencial vence:</strong> Tarefas que modificam um unico arquivo/modulo profundamente, refatoracoes que afetam toda a codebase, migracoes de banco de dados</li>
+          <li><strong>Quando paralelo vence:</strong> Features que tocam multiplos modulos independentes, criacao de CRUD completo, implementacao simultanea de frontend e backend</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🎨 Hibrido: o melhor dos dois mundos</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, a maioria dos swarms de producao nao usa uma unica arquitetura pura — eles combinam padroes em uma <strong class="text-emerald-400">abordagem hibrida</strong> que pega o melhor de cada mundo. O padrao mais eficaz e o que chamamos de <strong>"Plan Sequential, Execute Parallel"</strong>: as fases de planejamento e revisao rodam sequencialmente (porque precisam de contexto completo e coerencia), enquanto as fases de execucao rodam em paralelo (porque as tarefas sao independentes entre si). Esse padrao captura a consistencia do sequencial na fase critica (planejamento) e a velocidade do paralelo na fase de producao (execucao).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Em um swarm hibrido tipico, o fluxo seria: (1) <strong>Planejamento sequencial</strong> — o Explorer escaneia o codebase, o Architect cria o plano detalhado, o Critic valida o plano; (2) <strong>Execucao paralela</strong> — multiplos Coders implementam diferentes partes do plano simultaneamente em zonas seguras; (3) <strong>Revisao sequencial</strong> — o Reviewer avalia cada contribuicao, o Tester roda suites de teste, os resultados sao integrados. Os <strong>gates de qualidade</strong> ficam nas transicoes entre fases: o plano so avanca para execucao se o Critic aprovar, e o codigo so avanca para integracao se o Reviewer aprovar. Esse modelo combina rigor e velocidade de forma equilibrada.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Padrao Plan Sequential → Execute Parallel
+        </h3>
+        <p class="text-neutral-300 mb-4">O hibrido mais eficaz combina tres fases com transicoes controladas por gates:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Fase 1 — Planejamento (sequencial):</strong> Explorer → Architect → Critic. Cada etapa depende da anterior. O plano e validado antes de qualquer execucao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Gate 1:</strong> O Critic avalia o plano. Se aprovado, o plano e dividido em tarefas atomicas independentes para execucao paralela</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Fase 2 — Execucao (paralela):</strong> Multiplos Coders trabalham simultaneamente em tarefas independentes, cada um em sua zona segura de arquivos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Fase 3 — Integracao (sequencial):</strong> Reviewer valida cada contribuicao, Tester roda testes de integracao, resultados sao mesclados no branch final</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Hibrido na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Ganho real:</strong> Swarms hibridos combinam a consistencia do sequencial (95%+ de acuracia no plano) com a velocidade do paralelo (3-4x mais rapido na execucao)</li>
+          <li><strong>Gates de qualidade:</strong> Funcionam como "semaforos" que impedem codigo ruim de avancar — APPROVED ou NEEDS_REVISION sao as unicas saidas possiveis</li>
+          <li><strong>Adocao crescente:</strong> Em 2026, a tendencia clara e migrar de sequencial puro para hibrido — os ganhos de velocidade sao grandes demais para ignorar</li>
+          <li><strong>Complexidade de implementacao:</strong> Hibrido exige mais engenharia (zonas seguras, merge logic, gates) mas o investimento se paga em projetos medios e grandes</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Hierarquica (Supervisor/Worker)</strong>
+              <span class="text-neutral-400"> - Hub-and-spoke com controle centralizado, padrao mais comum e testado</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Pipeline sequencial</strong>
+              <span class="text-neutral-400"> - Cadeia de agentes com handoffs e gates de qualidade entre etapas</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Paralelo fan-out/fan-in</strong>
+              <span class="text-neutral-400"> - Execucao simultanea com zonas seguras e merge de resultados</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Peer Mesh descentralizado</strong>
+              <span class="text-neutral-400"> - Auto-organizacao sem controle central, maximo de resiliencia</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Sequencial vs Paralelo</strong>
+              <span class="text-neutral-400"> - OpenCode Swarm (sequencial) vs OMO (paralelo) — trade-offs de consistencia e velocidade</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Hibrido</strong>
+              <span class="text-neutral-400"> - Plan Sequential → Execute Parallel com gates de qualidade nas transicoes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">1.4 - Papeis e Especializacao de Agentes</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 1.2
+          </a>
+          <a href="modulo-1-4.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">
+            Modulo 1.4 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.3: LangGraph: controle total com grafos | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Modulo 2.3</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 2.3
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📊 LangGraph: controle total com grafos</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Construa workflows complexos como grafos de estado com controle fino sobre fluxo, checkpointing e aprovacao humana.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">45</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Interm.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Pratica</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📊 LangGraph: workflows como grafos</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">LangGraph</strong> e uma extensao do LangChain que permite modelar workflows de agentes como <strong>grafos dirigidos com estado</strong>. Em vez de definir agentes com papeis (como no CrewAI), voce define <strong>nos</strong> (funcoes que processam estado), <strong>arestas</strong> (conexoes que definem o fluxo) e um <strong>estado tipado</strong> (TypedDict ou Pydantic model) que flui pelo grafo. Essa abordagem oferece controle maximo sobre cada passo da execucao.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A filosofia do LangGraph e <strong>explicitude sobre conveniencia</strong>. Enquanto CrewAI abstrai o fluxo com metaforas de equipe, LangGraph expoe cada decisao de roteamento como codigo. Isso significa mais trabalho na configuracao inicial, mas total transparencia e controle sobre o comportamento do sistema. Para workflows complexos com muitas condicoes, loops e pontos de aprovacao humana, LangGraph e a escolha predominante em 2026 — especialmente em organizacoes que precisam de auditabilidade completa.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceitos fundamentais
+        </h3>
+        <p class="text-neutral-300 mb-4">Os tres pilares do LangGraph:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>StateGraph:</strong> O container principal — define o tipo de estado e o grafo de nos/arestas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Nodes:</strong> Funcoes Python que recebem estado, processam e retornam estado atualizado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Edges:</strong> Conexoes entre nos — fixas (sempre segue) ou condicionais (if/else baseado no estado)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Checkpointing:</strong> Persistencia automatica do estado a cada passo — retomar apos falhas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Numeros e adocao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>LangGraph Cloud:</strong> Plataforma de deploy gerenciada disponivel desde 2025</li>
+          <li><strong>LangChain Academy:</strong> Curso gratuito 'Introduction to LangGraph' — melhor recurso de aprendizado</li>
+          <li><strong>Adocao enterprise:</strong> Padrao para workflows com compliance em financeiro, saude e governo</li>
+          <li><strong>Integracao:</strong> LangSmith para observabilidade, LangServe para deploy, LangChain para tools</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔲 Nos: unidades de processamento</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um <strong class="text-blue-400">no (node)</strong> no LangGraph e simplesmente uma funcao Python que recebe o estado atual, processa e retorna uma atualizacao do estado. O estado e um dicionario tipado (geralmente um TypedDict) que carrega toda a informacao necessaria para o workflow. Cada no pode ser um agente LLM, uma ferramenta, uma validacao de negocio ou qualquer logica Python — nao ha restricao sobre o que acontece dentro do no.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A beleza dos nos esta na composicao. Voce pode ter um no que chama um LLM para classificar uma mensagem, seguido por um no que executa codigo baseado na classificacao, seguido por um no que valida o resultado. Cada no e uma funcao Python testavel e reutilizavel. Isso torna o LangGraph particularmente atrativo para equipes de engenharia que valorizam testes unitarios, code review e manutencao a longo prazo.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Anatomia de um Node
+        </h3>
+        <p class="text-neutral-300 mb-4">Como nos processam e transformam estado:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Input:</strong> O no recebe o estado completo do grafo (TypedDict ou Pydantic model)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Processamento:</strong> Qualquer logica Python — chamada de LLM, API, banco de dados, validacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Output:</strong> Retorna um dicionario com as chaves do estado que devem ser atualizadas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Reducers:</strong> Para listas, voce pode definir como novos valores se combinam com existentes (append, replace)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Tipos comuns de nos
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Agent node:</strong> Chama um LLM com tools — o agente raciocina e possivelmente chama funcoes</li>
+          <li><strong>Tool node:</strong> Executa uma ferramenta especifica e retorna o resultado no estado</li>
+          <li><strong>Logic node:</strong> Logica de negocio pura — validacao, transformacao, decisao sem LLM</li>
+          <li><strong>Human node:</strong> Pausa execucao e aguarda input humano — essencial para aprovacoes</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">➡️ Arestas: fluxo de controle</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        As <strong class="text-blue-400">arestas (edges)</strong> definem como o controle flui entre nos. Existem dois tipos: <strong>arestas fixas</strong> (o no A sempre vai para o no B) e <strong>arestas condicionais</strong> (uma funcao examina o estado e decide para qual no ir). As arestas condicionais sao onde a logica de roteamento vive — e o equivalente a um "if/else" ou "switch" no fluxo do grafo.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O poder das arestas condicionais esta na flexibilidade. Voce pode criar roteamento baseado em classificacao de intencao ("se o usuario quer suporte, va para o no de suporte"), baseado em qualidade ("se o score de confianca e menor que 0.8, va para o no de revisao") ou baseado em estado ("se ja tentamos 3 vezes, va para o no de fallback"). Esse controle explicito e o que diferencia LangGraph de frameworks mais opinados — nada e magico, tudo e codigo que voce pode inspecionar e testar.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Tipos de arestas
+        </h3>
+        <p class="text-neutral-300 mb-4">Como definir o fluxo entre nos:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>add_edge(A, B):</strong> Aresta fixa — apos no A, sempre execute no B</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>add_conditional_edges(A, func, mapping):</strong> Funcao examina estado e retorna o nome do proximo no</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>START → primeiro no:</strong> Define onde o grafo comeca</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>no → END:</strong> Define condicoes de termino do grafo</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Padroes de roteamento
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Router pattern:</strong> No de classificacao → arestas condicionais para especialistas</li>
+          <li><strong>Loop pattern:</strong> No de execucao → no de avaliacao → se ok END, senao volta para execucao</li>
+          <li><strong>Fan-out:</strong> Um no dispara multiplos nos em paralelo (send API do LangGraph)</li>
+          <li><strong>Fallback pattern:</strong> Se condicao de erro, roteia para no de recuperacao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">💾 Checkpointing: execucao duravel</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">checkpointing</strong> e um dos recursos mais poderosos do LangGraph para producao. A cada transicao entre nos, o estado completo do grafo e automaticamente salvo em um backend de persistencia (SQLite, PostgreSQL, Redis). Se a execucao falha no meio — timeout de API, crash do servidor, rate limit — voce pode retomar exatamente de onde parou, sem reprocessar os nos anteriores.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para swarms de longa duracao que podem levar minutos ou horas para completar, checkpointing e essencial. Imagine um workflow de revisao de documentos com 15 etapas: sem checkpointing, uma falha na etapa 12 forca voce a recomecar do zero. Com checkpointing, voce retoma da etapa 12 com todo o estado preservado. O custo adicional de persistencia e negligivel comparado ao custo de reprocessar chamadas de LLM.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Como checkpointing funciona
+        </h3>
+        <p class="text-neutral-300 mb-4">O mecanismo de persistencia e recuperacao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Save automatico:</strong> Estado salvo a cada transicao entre nos — sem intervencao do desenvolvedor</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Thread ID:</strong> Cada execucao tem um identificador unico para rastrear e retomar</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Backends:</strong> SQLite (dev), PostgreSQL (producao), Redis (alta performance)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Resume:</strong> Passar o thread_id para retomar execucao exatamente de onde parou</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Beneficios em producao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Resiliencia:</strong> Falhas de API, timeouts e crashes nao perdem trabalho ja feito</li>
+          <li><strong>Human-in-the-loop:</strong> Pausar execucao, esperar aprovacao humana, retomar — dias depois se necessario</li>
+          <li><strong>Debugging:</strong> Inspecionar estado em qualquer ponto da execucao para entender o que aconteceu</li>
+          <li><strong>Replay:</strong> Re-executar um workflow com o mesmo estado inicial para reproduzir bugs</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">👤 Human-in-the-loop</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">human-in-the-loop</strong> do LangGraph permite inserir pontos de aprovacao humana em qualquer lugar do grafo. Usando a funcao <code>interrupt()</code>, voce pausa a execucao do workflow e aguarda input do usuario. O estado e automaticamente salvo via checkpointing, e quando o humano responde (minutos, horas ou dias depois), a execucao retoma exatamente de onde parou.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Esse recurso e fundamental para cenarios de governanca: antes de executar uma transacao financeira, o agente pausa e pede aprovacao humana. Antes de enviar um email importante, o agente mostra o rascunho para revisao. Antes de fazer deploy em producao, o agente apresenta o plano e espera confirmacao. O human-in-the-loop transforma agentes autonomos em sistemas de colaboracao homem-maquina com nivel de confianca adequado para enterprise.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Implementacao de HITL
+        </h3>
+        <p class="text-neutral-300 mb-4">Como inserir pontos de aprovacao humana:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>interrupt():</strong> Funcao que pausa execucao e envia estado atual para o usuario</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Checkpointing automatico:</strong> Estado preservado enquanto aguarda resposta humana</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Resume com input:</strong> Humano envia aprovacao/rejeicao/modificacao e execucao continua</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Multiplos pontos:</strong> Voce pode ter varios interrupts em diferentes pontos do grafo</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Casos de uso enterprise
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Aprovacao financeira:</strong> Agente prepara transacao, humano aprova ou rejeita</li>
+          <li><strong>Revisao de conteudo:</strong> Agente gera texto, humano revisa antes de publicar</li>
+          <li><strong>Deploy safety:</strong> Agente prepara deploy, humano confirma antes de aplicar em producao</li>
+          <li><strong>Compliance:</strong> Pontos de auditoria obrigatorios onde humano valida conformidade</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🏗️ Supervisors e subgraphs</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para workflows muito complexos, o LangGraph permite <strong class="text-blue-400">compor grafos dentro de grafos</strong> usando subgraphs. Um <strong>supervisor</strong> e um no que contem um subgrafo inteiro — ele recebe estado, executa o subgrafo completo e retorna o resultado. Isso permite criar hierarquias onde um supervisor de alto nivel coordena supervisores de area, cada um com seus proprios agentes especializados.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, voce pode ter um supervisor principal com tres subgrafos: "pesquisa" (com agentes de busca e analise), "desenvolvimento" (com agentes de codigo e teste) e "documentacao" (com agentes de escrita e revisao). Cada subgrafo e um LangGraph completo com seus proprios nos, arestas e logica. O supervisor principal decide qual subgrafo acionar baseado na tarefa. Essa composicao permite escalar para sistemas muito complexos mantendo cada parte gerenciavel.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Composicao hierarquica
+        </h3>
+        <p class="text-neutral-300 mb-4">Como construir sistemas complexos com subgrafos:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Subgraph:</strong> Um grafo completo encapsulado como um unico no no grafo pai</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Supervisor pattern:</strong> No principal que decide qual subgrafo acionar baseado no estado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>State mapping:</strong> Mapear estado do grafo pai para estado do subgrafo e vice-versa</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Reutilizacao:</strong> O mesmo subgrafo pode ser usado em multiplos grafos pais</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Padroes arquiteturais
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Supervisor + Workers:</strong> Supervisor roteia tarefas para subgrafos especializados</li>
+          <li><strong>Pipeline de subgrafos:</strong> Subgrafo A → Subgrafo B → Subgrafo C em sequencia</li>
+          <li><strong>Supervisor hierarquico:</strong> Supervisor principal → supervisores de area → agentes worker</li>
+          <li><strong>Subgrafo condicional:</strong> Acionar subgrafos diferentes baseado na classificacao da tarefa</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">LangGraph: grafos de estado</strong>
+              <span class="text-neutral-400"> - Maximo controle sobre fluxo de agentes</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Nos: processamento de estado</strong>
+              <span class="text-neutral-400"> - Funcoes Python que transformam estado do grafo</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Arestas: fluxo de controle</strong>
+              <span class="text-neutral-400"> - Roteamento explicito entre nos com condicoes</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Checkpointing duravel</strong>
+              <span class="text-neutral-400"> - Persistencia automatica de estado para resiliencia</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Human-in-the-loop</strong>
+              <span class="text-neutral-400"> - Aprovacao humana em qualquer ponto do workflow</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Supervisors e subgraphs</strong>
+              <span class="text-neutral-400"> - Composicao de grafos para escalar complexidade</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Proximo:</h3>
+          <p class="text-neutral-300">Modulo 2.4 - oh-my-openagent</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 2.2 - CrewAI
+          </a>
+          <a href="modulo-2-4.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">
+            Modulo 2.4 - oh-my-openagent →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.2: Instalando o oh-my-openagent | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#F59E0B', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%); }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; } html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; } html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; } html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; } html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; } html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-amber-400 hover:text-amber-300"><span class="text-2xl">🐝</span><span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Tecnicas</span></a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Pratica Avancada</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Mao na Massa</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400">Trilha 4</a><span>/</span>
+      <span class="text-amber-400">Modulo 4.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MODULO 4.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📦 Instalando o oh-my-openagent</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">O plugin que transforma o OpenCode em um swarm de agentes especializados com um unico comando.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">25</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Iniciante</div><div class="text-xs text-neutral-400">Nivel</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Passo a passo</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🎯 Escolher: instalacao global ou por projeto</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A primeira decisao e se voce quer o oh-my-openagent ativo em <strong class="text-amber-400">todos os seus projetos</strong> (global) ou <strong class="text-amber-400">apenas neste projeto</strong> (local). Cada abordagem tem vantagens diferentes.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Comparacao: Global vs Por Projeto</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-neutral-300">
+            <thead><tr class="border-b border-dark-600"><th class="text-left py-2 pr-4 text-amber-400">Criterio</th><th class="text-left py-2 pr-4">Global</th><th class="text-left py-2">Por Projeto</th></tr></thead>
+            <tbody>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-4 font-semibold">Ativa em</td><td class="py-2 pr-4">Todos os projetos</td><td class="py-2">So nesse projeto</td></tr>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-4 font-semibold">Ideal para</td><td class="py-2 pr-4">Uso pessoal diario</td><td class="py-2">Demos, aulas, testes</td></tr>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-4 font-semibold">Configuracao</td><td class="py-2 pr-4">~/.config/opencode/</td><td class="py-2">.opencode/ na raiz</td></tr>
+              <tr><td class="py-2 pr-4 font-semibold">Recomendacao</td><td class="py-2 pr-4 text-green-400">Recomendado</td><td class="py-2">Para experimentar</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Dica pratica</h3>
+        <p class="text-neutral-300">Se voce esta comecando agora, <strong>escolha global</strong>. Voce pode mudar depois. A maioria dos usuarios prefere ter o swarm disponivel em todos os projetos.</p>
+      </div>
+    </section>
+
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">⚡ Passo 1: identificar suas assinaturas</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O comando de instalacao precisa saber quais provedores voce tem para configurar os agentes corretamente. Identifique qual cenario se aplica a voce:</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Cenarios mais comuns</h3>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Claude + Gemini (Antigravity):</strong> O cenario mais comum e recomendado. Claude para tarefas criticas, Gemini para suporte</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>So Claude:</strong> Funciona muito bem. Todos os agentes usam modelos Anthropic</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Claude + ChatGPT Plus:</strong> Boa combinacao. Heterogeneidade de modelos melhora qualidade</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>So modelos gratuitos:</strong> Funciona! Qualidade menor, mas voce consegue completar todo o curso</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📦 Passo 2: executar o instalador</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Agora vem o momento da acao. Um unico comando instala tudo — o oh-my-openagent configura os agentes, cria os system prompts, registra o plugin e prepara o swarm. Escolha o comando correto para o seu cenario:</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Comandos de instalacao por cenario</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Caso mais comum: Claude + Gemini (Antigravity)
+bunx oh-my-opencode install --no-tui \
+  --claude=yes --gemini=yes --copilot=no --opencode-zen=yes
+
+# So Claude
+bunx oh-my-opencode install --no-tui \
+  --claude=yes --gemini=no --copilot=no --opencode-zen=yes
+
+# Claude + ChatGPT Plus
+bunx oh-my-opencode install --no-tui \
+  --claude=yes --openai=yes --gemini=no --copilot=no
+
+# So modelos gratuitos
+bunx oh-my-opencode install --no-tui \
+  --claude=no --openai=no --gemini=no --copilot=no --opencode-zen=yes</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> O que acontece durante a instalacao</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>1.</strong> O instalador baixa os templates de agentes (Sisyphus, Hephaestus, Prometheus, etc.)</li>
+          <li><strong>2.</strong> Configura os system prompts otimizados para cada papel</li>
+          <li><strong>3.</strong> Registra o plugin no OpenCode (modifica opencode.json)</li>
+          <li><strong>4.</strong> Atribui modelos padrao conforme seus provedores</li>
+          <li><strong>5.</strong> Pronto! O swarm esta instalado</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔍 Passo 3: verificar a instalacao</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Apos a instalacao, voce precisa confirmar que o plugin foi registrado corretamente. Isso evita descobrir problemas no pior momento — no meio de uma execucao.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Verificando o registro do plugin</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Verificar que o plugin foi registrado
+cat ~/.config/opencode/opencode.json
+
+# Voce deve ver algo como:
+# {
+#   "plugins": ["oh-my-opencode"],
+#   ...
+# }
+
+# Se "oh-my-opencode" aparece no array de plugins, esta tudo certo!</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> O que procurar no arquivo</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>plugins:</strong> Deve conter "oh-my-opencode" no array</li>
+          <li><strong>agents:</strong> Pode listar os agentes configurados (Sisyphus, Hephaestus, etc.)</li>
+          <li><strong>Se o arquivo nao existe:</strong> A instalacao falhou — repita o passo anterior</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🚀 Passo 4: abrir OpenCode e conferir a mudanca</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Este e o momento da verdade. Ao abrir o OpenCode agora, a interface deve ser <strong class="text-amber-400">completamente diferente</strong> do que era antes. Os modos Build e Plan desaparecem e dao lugar aos agentes do swarm.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Abrindo com o swarm ativo</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Entrar na pasta do projeto
+cd ~/meu-primeiro-swarm
+
+# Abrir o OpenCode
+opencode
+
+# ANTES (sem oh-my-openagent):
+# Modos: Build | Plan
+#
+# AGORA (com oh-my-openagent):
+# Agentes: Sisyphus | Hephaestus | Plan Builder | Plan Executor
+#
+# Voce tambem pode ver os subagentes:
+# Oracle, Librarian, Explore, Multimodal Looker</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Confirmacao visual</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-green-400">✅</span><span><strong>Sisyphus</strong> aparece como agente principal (orquestrador)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-green-400">✅</span><span><strong>Hephaestus</strong> aparece como agente executor</span></li>
+          <li class="flex items-start space-x-2"><span class="text-green-400">✅</span><span><strong>Plan Builder</strong> (Prometheus) disponivel via Tab</span></li>
+          <li class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Build e Plan <strong>nao aparecem mais</strong> (foram substituidos)</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🛠️ Solucao de problemas comuns</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Se algo nao funcionou como esperado, nao entre em panico. Aqui estao os 5 erros mais comuns e como resolver cada um:</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Top 5 erros e solucoes</h3>
+        <div class="space-y-4">
+          <div class="bg-dark-900/50 rounded-lg p-4">
+            <p class="text-red-400 font-semibold mb-1">1. "bunx: command not found"</p>
+            <p class="text-neutral-300 text-sm">Bun nao esta instalado ou o terminal nao foi reaberto. Solucao: <code class="bg-dark-700 px-1 rounded">curl -fsSL https://bun.sh/install | bash</code> e reabrir terminal.</p>
+          </div>
+          <div class="bg-dark-900/50 rounded-lg p-4">
+            <p class="text-red-400 font-semibold mb-1">2. Plugin nao aparece no OpenCode</p>
+            <p class="text-neutral-300 text-sm">O plugin nao foi registrado. Solucao: verifique <code class="bg-dark-700 px-1 rounded">cat ~/.config/opencode/opencode.json</code> e rode o instalador novamente.</p>
+          </div>
+          <div class="bg-dark-900/50 rounded-lg p-4">
+            <p class="text-red-400 font-semibold mb-1">3. Modelos com prefixo errado</p>
+            <p class="text-neutral-300 text-sm">Nomes como "claude-opus" em vez de "anthropic/claude-opus-4-6". Solucao: use sempre o formato <code class="bg-dark-700 px-1 rounded">provedor/modelo</code>.</p>
+          </div>
+          <div class="bg-dark-900/50 rounded-lg p-4">
+            <p class="text-red-400 font-semibold mb-1">4. Sisyphus responde generico (sem personalidade de swarm)</p>
+            <p class="text-neutral-300 text-sm">O plugin instalou mas os system prompts nao foram aplicados. Solucao: rode <code class="bg-dark-700 px-1 rounded">bunx oh-my-opencode install</code> novamente.</p>
+          </div>
+          <div class="bg-dark-900/50 rounded-lg p-4">
+            <p class="text-red-400 font-semibold mb-1">5. Agentes nao trabalham em paralelo</p>
+            <p class="text-neutral-300 text-sm">Versao do OpenCode pode ser antiga. Solucao: atualize o OpenCode para a versao mais recente.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📚</span> Resumo do Modulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Escolha global vs projeto</strong><span class="text-neutral-400"> - Global recomendado para uso diario</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Assinaturas identificadas</strong><span class="text-neutral-400"> - Cenario definido para o instalador</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Instalador executado</strong><span class="text-neutral-400"> - bunx oh-my-opencode install com flags corretas</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Instalacao verificada</strong><span class="text-neutral-400"> - Plugin registrado no opencode.json</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Swarm confirmado</strong><span class="text-neutral-400"> - Sisyphus, Hephaestus, Prometheus visiveis</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Problemas resolvidos</strong><span class="text-neutral-400"> - 5 erros comuns com solucao</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-amber-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">4.3 - Configurando os modelos de cada agente</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Modulo 4.1</a>
+          <a href="modulo-4-3.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Modulo 4.3 →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm"><p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p></div>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle=document.getElementById('theme-toggle'),themeToggleDarkIcon=document.getElementById('theme-toggle-dark-icon'),themeToggleLightIcon=document.getElementById('theme-toggle-light-icon'),html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'||(!localStorage.getItem('theme')&&!html.classList.contains('dark'))){themeToggleDarkIcon.classList.remove('hidden');html.classList.remove('dark');}else{themeToggleLightIcon.classList.remove('hidden');}
+    themeToggle.addEventListener('click',()=>{themeToggleDarkIcon.classList.toggle('hidden');themeToggleLightIcon.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

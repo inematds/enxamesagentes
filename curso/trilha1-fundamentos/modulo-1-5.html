@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.5: Comunicacao entre Agentes | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Modulo 1.5</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 1.5
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📡 Comunicacao entre Agentes</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Como agentes trocam informacao, transferem controle e evitam conflitos — dos handoffs simples aos protocolos emergentes MCP, A2A e ACP.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">35</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Interm.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📡 Por que comunicacao importa</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um swarm sem comunicacao eficaz e apenas um grupo de agentes independentes trabalhando no escuro. Imagine uma equipe de cirurgia onde o anestesista nao fala com o cirurgiao, ou uma orquestra onde cada musico toca no seu proprio tempo. O resultado seria catastrofico. Em sistemas multiagentes, a <strong class="text-emerald-400">comunicacao e o tecido conectivo</strong> que transforma agentes isolados em uma equipe coordenada capaz de resolver problemas complexos.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Sem mecanismos de comunicacao bem definidos, agentes caem em tres armadilhas classicas: <strong>duplicacao de trabalho</strong> (dois agentes fazendo a mesma coisa), <strong>conflitos de escrita</strong> (dois agentes editando o mesmo arquivo simultaneamente) e <strong>inconsistencia de estado</strong> (um agente tomando decisoes baseadas em informacoes desatualizadas). Cada uma dessas falhas pode comprometer todo o swarm, e a solucao passa por protocolos claros de coordenacao e sincronizacao.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Fundamental
+        </h3>
+        <p class="text-neutral-300 mb-4">A comunicacao entre agentes resolve tres problemas criticos de qualquer sistema distribuido:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Coordenacao:</strong> Quem faz o que, quando e em que ordem — evita duplicacao e garante cobertura completa da tarefa</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Sincronizacao:</strong> Garantir que agentes que dependem do resultado de outros esperem antes de comecar — evita trabalho sobre dados incompletos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Evitar conflitos:</strong> Mecanismos que impedem dois agentes de modificar o mesmo recurso ao mesmo tempo — evita corrupcao de dados</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Propagacao de contexto:</strong> Informacoes descobertas por um agente (ex: Explorer) precisam chegar a quem vai usa-las (ex: Coder)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sem coordenacao:</strong> Agentes paralelos frequentemente geram conflitos de merge em 40-60% das execucoes, exigindo intervencao manual</li>
+          <li><strong>Com coordenacao basica:</strong> Zonas seguras e handoffs reduzem conflitos para menos de 5%</li>
+          <li><strong>Sincronizacao importa:</strong> Um agente de testes que roda antes do codigo estar pronto desperdiça tokens e gera falsos negativos</li>
+          <li><strong>Contexto propagado:</strong> Quando o Explorer compartilha descobertas com o Coder, a taxa de acerto na primeira tentativa sobe de 35% para 72%</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔄 Handoffs: passando o bastao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">handoff</strong> e o mecanismo mais simples e eficaz de comunicacao entre agentes. Funciona como uma corrida de revezamento: um agente completa sua etapa, empacota o resultado e <strong>transfere o controle</strong> para o proximo agente da cadeia. O agente que recebe o bastao herda todo o contexto necessario para continuar o trabalho — sem precisar "perguntar" o que aconteceu antes.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O framework <strong class="text-emerald-400">OpenAI Swarm</strong> popularizou este padrao com sua funcao <code class="bg-dark-700 px-2 py-1 rounded text-emerald-400">transfer_to_agent()</code>. Quando um agente de triagem identifica que o usuario precisa de suporte tecnico, ele chama <code class="bg-dark-700 px-2 py-1 rounded text-emerald-400">transfer_to_tech_support()</code>, e o controle da conversa passa imediatamente para o agente especializado. As <strong>context variables</strong> — um dicionario compartilhado — permitem que o agente receptor acesse informacoes como nome do usuario, historico de compras ou codigo do erro, sem que nada se perca na transicao.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Anatomia de um Handoff
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada handoff envolve tres componentes essenciais:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Transferencia de controle:</strong> O agente atual para de processar e o proximo agente assume — nao ha dois agentes ativos ao mesmo tempo no mesmo fluxo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Context variables:</strong> Dicionario de dados compartilhado entre todos os agentes — informacoes persistem ao longo de toda a cadeia de handoffs</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Decisao inteligente:</strong> O agente decide para quem transferir com base no conteudo da conversa — nao e um roteamento fixo, e uma decisao contextual</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Exemplo OpenAI Swarm:</strong> Agente Triage analisa pedido → decide que e suporte → chama transfer_to_support() → agente Support assume com todo o contexto</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Handoffs na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Pipeline sequencial:</strong> Explorer → SME → Architect → Coder — cada transicao e um handoff com contexto acumulado</li>
+          <li><strong>Atendimento ao cliente:</strong> Triage → Vendas ou Triage → Suporte — routing baseado na intencao do usuario</li>
+          <li><strong>Vantagem principal:</strong> Zero race conditions — apenas um agente esta ativo por vez, eliminando conflitos de escrita</li>
+          <li><strong>Limitacao:</strong> Handoffs sao sequenciais por natureza — para paralelismo, sao necessarios mecanismos adicionais</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📋 Estado compartilhado</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Enquanto handoffs funcionam bem para pipelines sequenciais, swarms mais complexos precisam de um mecanismo mais robusto: o <strong class="text-emerald-400">estado compartilhado</strong>. Em vez de passar informacoes diretamente de agente para agente, todos os agentes leem e escrevem em um repositorio central de estado — como um quadro branco compartilhado que toda a equipe pode consultar e atualizar a qualquer momento.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, o estado compartilhado frequentemente vive no sistema de arquivos. O <strong class="text-emerald-400">opencode-swarm</strong> usa um diretorio <code class="bg-dark-700 px-2 py-1 rounded text-emerald-400">.swarm/</code> que funciona como uma maquina de estados persistente. Dentro dele, arquivos como <code class="bg-dark-700 px-2 py-1 rounded text-emerald-400">plan.md</code> registram o plano de execucao, <code class="bg-dark-700 px-2 py-1 rounded text-emerald-400">evidence.md</code> guarda descobertas dos agentes exploradores, e <code class="bg-dark-700 px-2 py-1 rounded text-emerald-400">state.json</code> rastreia em que etapa cada tarefa esta. Quando o Coder precisa saber o que o Architect decidiu, ele simplesmente le o plano. Quando o Reviewer termina, ele atualiza o estado da tarefa para "reviewed".
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Componentes do Estado Compartilhado
+        </h3>
+        <p class="text-neutral-300 mb-4">Um sistema de estado bem projetado tem estas camadas:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>State machine:</strong> Fluxo formal de estados (PLANNING → CODING → REVIEWING → TESTING → DONE) que governa transicoes permitidas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Diretorio .swarm/:</strong> Armazenamento persistente em disco — plan.md, evidence.md, decisions.md, state.json — sobrevive a reinicializacoes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Plan.md como contrato:</strong> O plano escrito e a "fonte de verdade" — todos os agentes se referem a ele para saber o que fazer e o que ja foi feito</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Versionamento implicito:</strong> Como tudo esta em arquivos, o git pode rastrear cada mudanca de estado — auditoria gratuita</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Estado compartilhado vs context variables
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Context variables (Swarm):</strong> Dicionario em memoria, simples, perde-se ao encerrar — ideal para swarms de sessao unica</li>
+          <li><strong>Estado em arquivo (.swarm/):</strong> Persistente em disco, auditavel, sobrevive a falhas — ideal para swarms de longa duracao</li>
+          <li><strong>Estado em banco de dados:</strong> Escalavel, consultas complexas, compartilhavel entre maquinas — ideal para swarms enterprise</li>
+          <li><strong>Melhor pratica:</strong> Comece com arquivos (simples e transparente), migre para banco so quando a complexidade exigir</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔒 Zonas seguras: evitar interferencia</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Quando multiplos agentes trabalham em paralelo, o risco de <strong class="text-emerald-400">conflitos de escrita</strong> e real e perigoso. Imagine dois agentes editando o mesmo arquivo ao mesmo tempo: o Agente A adiciona uma funcao na linha 50, enquanto o Agente B refatora a linha 48. Quando ambos tentam salvar, um dos trabalhos e sobrescrito. Esse problema classico de sistemas distribuidos — conhecido como <strong>race condition</strong> — exige solucoes arquiteturais especificas.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O oh-my-openagent resolve isso com o conceito de <strong class="text-emerald-400">zonas seguras</strong> (safe zones). Cada agente recebe uma area exclusiva de trabalho — arquivos ou diretorios especificos onde apenas ele pode escrever. Adicionalmente, o sistema usa um mecanismo engenhoso de <strong>hash unico por linha</strong>: cada linha editada recebe um identificador que permite detectar e resolver conflitos automaticamente quando dois agentes tocam regioes proximas do mesmo arquivo.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrategias de Isolamento
+        </h3>
+        <p class="text-neutral-300 mb-4">Tres abordagens para evitar interferencia entre agentes paralelos:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>File locking:</strong> Um agente "trava" o arquivo antes de editar e "destrava" ao terminar — outros agentes esperam na fila. Simples mas pode criar gargalos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Zonas exclusivas:</strong> Cada agente so pode escrever em arquivos/diretorios pre-definidos. Agente de frontend edita /src/components, agente de backend edita /src/api — sem sobreposicao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Hash unico por linha:</strong> Cada linha modificada recebe um hash identificador. Se dois agentes tocam a mesma regiao, o sistema detecta o conflito e aplica resolucao automatica</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Branches isolados:</strong> Cada agente trabalha em um branch git separado, e o merge e feito pelo orquestrador ao final — maximo isolamento</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Resultados do hash checking
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sem hash checking:</strong> Taxa de sucesso de apenas 6% em tarefas paralelas complexas — conflitos constantes corrompem o resultado</li>
+          <li><strong>Com hash checking:</strong> Taxa de sucesso sobe para 68.3% — o sistema detecta e resolve conflitos automaticamente</li>
+          <li><strong>Zonas exclusivas:</strong> Eliminam 100% dos conflitos de escrita, mas limitam a flexibilidade — melhor para projetos com fronteiras claras entre modulos</li>
+          <li><strong>Abordagem hibrida:</strong> Zonas exclusivas para a maioria + hash checking para areas compartilhadas = melhor relacao seguranca/flexibilidade</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📨 Protocolos emergentes: MCP, A2A, ACP</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Ate recentemente, cada framework de agentes inventava sua propria forma de comunicacao — criando silos incompativeis. Em 2025-2026, tres protocolos emergentes comecaram a padronizar como agentes se comunicam, acessam ferramentas e interoperam entre plataformas diferentes. Juntos, eles formam a <strong class="text-emerald-400">infraestrutura de comunicacao</strong> da era agentica, e entende-los e fundamental para construir swarms que nao fiquem presos a um unico ecossistema.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Os tres protocolos resolvem problemas complementares: o <strong class="text-emerald-400">MCP</strong> (Model Context Protocol) da Anthropic padroniza como agentes acessam ferramentas e dados externos. O <strong class="text-emerald-400">A2A</strong> (Agent-to-Agent) do Google padroniza como agentes de diferentes plataformas se comunicam diretamente. E o <strong class="text-emerald-400">ACP</strong> (Agent Communication Protocol) da IBM padroniza dialogos estruturados entre agentes com contratos formais. Nenhum deles substitui os outros — eles se complementam em camadas diferentes do stack de comunicacao.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Os Tres Protocolos
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada protocolo atua em uma camada diferente da comunicacao agentica:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>MCP (Anthropic) — Agente ↔ Ferramentas:</strong> Padroniza como agentes descobrem e usam ferramentas externas (APIs, bancos de dados, sistemas de arquivos). Pense como "USB-C para agentes" — conecte qualquer ferramenta a qualquer agente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>A2A (Google) — Agente ↔ Agente:</strong> Padroniza comunicacao direta entre agentes de plataformas diferentes. Um agente CrewAI pode delegar para um agente LangGraph sem adaptadores customizados. Agora sob governanca da Linux Foundation</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>ACP (IBM) — Dialogo estruturado:</strong> Define contratos formais para conversas entre agentes — schemas de entrada/saida, capacidades declaradas, negociacao de tarefas. Foco em ambientes enterprise com compliance</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Adocao e maturidade
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>MCP:</strong> Mais maduro — ja integrado nativamente em Claude Code, OpenCode, Cursor e dezenas de IDEs. Ecossistema de servidores MCP crescendo rapidamente</li>
+          <li><strong>A2A:</strong> Em adocao acelerada — Google, Salesforce, SAP e outros grandes players ja implementam. Transferido para a Linux Foundation para governanca neutra</li>
+          <li><strong>ACP:</strong> Mais recente — foco enterprise com IBM liderando. Forte em cenarios regulados (financas, saude) que exigem contratos formais</li>
+          <li><strong>Tendencia:</strong> A industria caminha para usar os tres juntos — MCP para ferramentas, A2A para interoperabilidade, ACP para compliance</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📊 Feedback e auto-correcao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A comunicacao nao e apenas "para frente" — a capacidade de um swarm dar <strong class="text-emerald-400">feedback para tras</strong> e se autocorrigir e o que separa sistemas amadores de sistemas de producao. Em um pipeline rigido, se o Coder produz codigo com bug, o Tester detecta a falha mas nao tem como pedir uma correcao — o resultado ruim simplesmente e entregue. Em um swarm com feedback loop, o Tester envia o resultado de volta ao Coder com instrucoes especificas de correcao, e o ciclo se repete ate atingir o padrao de qualidade.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O padrao <strong class="text-emerald-400">maker-checker</strong> e a implementacao mais comum: um agente "faz" (maker) e outro "verifica" (checker). Se a verificacao falha, o resultado volta ao maker com feedback detalhado. Este loop pode ter limites configurados (maximo de 3 tentativas, por exemplo) para evitar loops infinitos. No opencode-swarm, os <strong>quality gates</strong> automatizam este processo com 6 verificacoes sequenciais — se qualquer gate falha, o agente responsavel recebe feedback especifico e tenta novamente.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mecanismos de Auto-correcao
+        </h3>
+        <p class="text-neutral-300 mb-4">Tres niveis de feedback em swarms, do mais simples ao mais sofisticado:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Feedback loop basico:</strong> Resultado do Checker volta ao Maker com erro descrito → Maker corrige → Checker verifica novamente. Maximo N tentativas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Maker-Checker com modelos diferentes:</strong> O Maker usa Claude, o Checker usa GPT (ou vice-versa) — modelos diferentes capturam erros que o mesmo modelo ignoraria (anti-blindspot)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Quality gates automatizados:</strong> Verificacoes programaticas (nao-LLM) como linting, testes unitarios, analise SAST — feedback objetivo e determinístico</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Escalacao ao orquestrador:</strong> Se o loop maker-checker esgota tentativas, o orquestrador e notificado e pode tomar decisoes mais amplas (trocar agente, mudar estrategia)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto do feedback
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sem feedback:</strong> Primeira versao do codigo aceita como final — taxa de bugs em producao alta, correcoes manuais constantes</li>
+          <li><strong>Com 1 ciclo de feedback:</strong> Agente revisor identifica problemas e o coder corrige — reducao de 60% em bugs</li>
+          <li><strong>Com quality gates:</strong> 6 verificacoes automaticas garantem qualidade minima antes de aceitar — bugs residuais caem para menos de 5%</li>
+          <li><strong>Limite pratico:</strong> Mais de 3 ciclos de feedback geralmente indica que o prompt ou a tarefa precisa ser reformulada, nao que mais tentativas resolverao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Comunicacao e essencial</strong>
+              <span class="text-neutral-400"> - Coordenacao, sincronizacao e prevencao de conflitos sao os tres pilares</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Handoffs</strong>
+              <span class="text-neutral-400"> - Transferencia de controle com context variables — simples, eficaz, zero race conditions</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Estado compartilhado</strong>
+              <span class="text-neutral-400"> - Diretorio .swarm/, plan.md e state machine para persistencia e coordenacao</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Zonas seguras</strong>
+              <span class="text-neutral-400"> - File locking, zonas exclusivas e hash unico por linha evitam conflitos</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Protocolos MCP/A2A/ACP</strong>
+              <span class="text-neutral-400"> - Tres padroes complementares para ferramentas, interoperabilidade e compliance</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Feedback e auto-correcao</strong>
+              <span class="text-neutral-400"> - Loops maker-checker e quality gates garantem qualidade iterativa</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">1.6 - Modelos e Custos: estrategia inteligente</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-4.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 1.4
+          </a>
+          <a href="modulo-1-6.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">
+            Modulo 1.6 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

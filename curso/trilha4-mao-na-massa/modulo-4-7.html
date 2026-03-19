@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.7: Comandos avancados e otimizacao | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#F59E0B',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif;}.dark body{background-color:#111827;}html:not(.dark) body{background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 50%,#f1f5f9 100%);}html:not(.dark) .bg-dark-900{background-color:#ffffff;}html:not(.dark) .bg-dark-800{background-color:#f9fafb;}html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}html:not(.dark) .text-neutral-100{color:#111827;}html:not(.dark) .text-neutral-300{color:#4b5563;}html:not(.dark) .text-neutral-400{color:#6b7280;}html:not(.dark) .text-neutral-500{color:#9ca3af;}html:not(.dark) .border-dark-600{border-color:#d1d5db;}html:not(.dark) .border-dark-700{border-color:#e5e7eb;}</style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="flex justify-between items-center h-14"><div class="flex items-center space-x-4"><a href="../../index.html" class="flex items-center space-x-2 text-amber-400 hover:text-amber-300"><span class="text-2xl">🐝</span><span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span></a><span class="text-neutral-600">|</span><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a></div><div class="flex items-center space-x-1 sm:space-x-2"><a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a><a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Tecnicas</span></a><a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Pratica Avancada</span></a><a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Mao na Massa</span></a><button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2"><svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg><svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg></button></div></div></div></nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4"><div class="flex items-center space-x-2 text-sm text-neutral-400"><a href="../../index.html" class="hover:text-amber-400">Inicio</a><span>/</span><a href="index.html" class="hover:text-amber-400">Trilha 4</a><span>/</span><span class="text-amber-400">Modulo 4.7</span></div></nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MODULO 4.7</span><h1 class="text-3xl sm:text-4xl font-bold mb-4">🔧 Comandos avancados e otimizacao</h1><p class="text-lg text-neutral-400 max-w-3xl">Loop de perfeicao, contexto profundo, revisao pre-deploy, multimodal e monitoramento de custos.</p><div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl"><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">35</div><div class="text-xs text-neutral-400">Minutos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Intermediario</div><div class="text-xs text-neutral-400">Nivel</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Passo a passo</div><div class="text-xs text-neutral-400">Tipo</div></div></div></div></header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span><h2 class="text-2xl font-bold">🔄 /ulw-loop: loop ate a perfeicao</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400">/ulw-loop</code> e o modo mais persistente do swarm. Em vez de entregar na primeira tentativa, ele entra em um <strong class="text-amber-400">ciclo de execucao, revisao e correcao</strong> que so para quando o resultado atinge zero erros e qualidade satisfatoria.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Como funciona o loop</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># No chat do Sisyphus:
+/ulw-loop
+
+# O que acontece:
+# Ciclo 1: Executa → Revisa → Encontra 5 problemas
+# Ciclo 2: Corrige 5 problemas → Revisa → Encontra 2 problemas
+# Ciclo 3: Corrige 2 problemas → Revisa → Zero problemas
+# → Resultado final entregue!
+
+# Ideal para:
+# - Projetos onde qualidade e mais importante que velocidade
+# - Codigo que precisa estar production-ready
+# - Quando voce quer "set and forget" com maxima qualidade</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Quando usar</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Use quando:</strong> Qualidade maxima e prioridade, voce pode esperar mais</li>
+          <li><strong>Evite quando:</strong> Prototipo rapido, tarefa simples, orcamento limitado (cada loop consome tokens)</li>
+          <li><strong>Tipicamente:</strong> 2-4 ciclos para convergir em projetos medios</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span><h2 class="text-2xl font-bold">📂 /init-deep: contexto profundo do projeto</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Em projetos grandes, os agentes podem perder contexto sobre a estrutura do codebase. O <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400">/init-deep</code> gera automaticamente um arquivo <strong>AGENTS.md</strong> em cada pasta do projeto, documentando o que cada diretorio contem e como os arquivos se relacionam.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Usando init-deep</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># No chat do Sisyphus:
+/init-deep
+
+# O que acontece:
+# 1. Explorer escaneia todo o projeto
+# 2. Cria AGENTS.md em cada diretorio
+# 3. Cada arquivo documenta:
+#    - O que esta pasta contem
+#    - Quais arquivos sao criticos
+#    - Dependencias entre modulos
+#    - Convencoes do projeto
+#
+# Resultado: agentes tomam decisoes muito melhores
+# porque entendem a estrutura completa do codebase</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span><h2 class="text-2xl font-bold">🔍 /review: revisao antes do deploy</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400">/review</code> e sua ultima camada de seguranca antes de entregar. Ele ativa o agente revisor que analisa o diff das mudancas, busca problemas de seguranca, performance e qualidade, e sugere melhorias.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Executando review</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># No chat:
+/review
+
+# O agente revisor:
+# 1. Analisa o diff (mudancas desde ultimo commit)
+# 2. Busca problemas:
+#    - Seguranca (XSS, injecao, dados expostos)
+#    - Performance (assets pesados, loops ineficientes)
+#    - Qualidade (codigo duplicado, funcoes longas)
+#    - Acessibilidade (alt em imagens, contraste)
+# 3. Gera relatorio com sugestoes
+# 4. Pode corrigir automaticamente se voce autorizar</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span><h2 class="text-2xl font-bold">🖼️ Multimodal Looker: de imagem para codigo</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O <strong class="text-amber-400">Multimodal Looker</strong> e o agente visual do swarm. Voce fornece uma imagem (screenshot, mockup do Figma, foto de um rascunho no papel) e ele converte em codigo HTML/CSS. Acelera drasticamente a implementacao de designs.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Usando o Multimodal Looker</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Screenshot de site:</strong> Tire print de um site que voce gosta e peca para replicar o layout</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Mockup Figma:</strong> Exporte a tela como PNG e o agente converte em HTML pixel-perfect</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Rascunho no papel:</strong> Tire foto do seu wireframe e o agente interpreta a estrutura</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Erro visual:</strong> Mostre um screenshot de um bug visual e peca para corrigir</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span><h2 class="text-2xl font-bold">🔧 Trocar provedor no meio da execucao</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Isso aconteceu na aula real: os creditos de Claude acabaram no meio de um projeto. A solucao? Editar o arquivo de configuracao e trocar o modelo — sem perder nenhum progresso.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Procedimento de troca</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># 1. Abrir o arquivo em outro terminal/aba
+nano .opencode/oh-my-opencode.jsonc
+
+# 2. Trocar o modelo do agente afetado
+# Exemplo: Claude acabou, trocar Sisyphus para GPT:
+#   "sisyphus": { "model": "openai/gpt-5.3-codex" }
+
+# 3. Salvar o arquivo (Ctrl+O, Enter, Ctrl+X)
+
+# 4. O OpenCode detecta automaticamente
+# → Agente continua com novo modelo
+# → Zero progresso perdido
+# → Execucao nao para
+
+# Dica: mantenha uma "lista B" de modelos alternativos
+# para trocar rapidamente se necessario</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span><h2 class="text-2xl font-bold">📊 Monitorando custo e tokens</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Com multiplos agentes trabalhando em paralelo, os custos podem subir rapidamente se voce nao monitorar. Cada agente consome tokens do seu provedor, e os custos variam entre modelos.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Estrategias de monitoramento</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Dashboard do provedor:</strong> Acesse console.anthropic.com, platform.openai.com ou console.cloud.google.com para ver consumo em tempo real</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Custo por agente:</strong> Sisyphus e Prometheus consomem mais (modelos grandes). Oracle, Librarian e Explore consomem menos (modelos leves/gratuitos)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Otimizacao:</strong> Use modelos gratuitos para suporte, reserve pagos para tarefas criticas</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Alerta:</strong> Configure alertas de gasto nos dashboards dos provedores para evitar surpresas</span></li>
+        </ul>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Estimativas de custo tipicas</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Tarefa simples (natural):</strong> ~$0.05 - $0.20</li>
+          <li><strong>Projeto medio (Prometheus):</strong> ~$0.50 - $2.00</li>
+          <li><strong>Projeto grande (ultrawork):</strong> ~$2.00 - $8.00</li>
+          <li><strong>Com /ulw-loop:</strong> Multiplique por 2-4x (cada ciclo consome tokens)</li>
+          <li><strong>100% gratuito:</strong> $0.00 (mas qualidade menor)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📚</span> Resumo do Modulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">/ulw-loop</strong><span class="text-neutral-400"> - Loop de execucao, revisao e correcao ate a perfeicao</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">/init-deep</strong><span class="text-neutral-400"> - AGENTS.md em cada pasta para contexto profundo</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">/review</strong><span class="text-neutral-400"> - Revisao de seguranca, performance e qualidade pre-deploy</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Multimodal Looker</strong><span class="text-neutral-400"> - Converter imagens em codigo HTML/CSS</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Hot-swap de provedor</strong><span class="text-neutral-400"> - Trocar modelo sem perder progresso</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Monitoramento de custos</strong><span class="text-neutral-400"> - Dashboards, alertas e otimizacao</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8"><h3 class="font-semibold text-amber-400 mb-2">Proximo Modulo:</h3><p class="text-neutral-300">4.8 - Projeto guiado completo: do zero ao deploy</p></div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-6.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Modulo 4.6</a>
+          <a href="modulo-4-8.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Modulo 4.8 →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm"><a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a><a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a><a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a><a href="index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a></div><div class="text-center text-neutral-500 text-sm"><p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p></div></div></footer>
+  <script>const themeToggle=document.getElementById('theme-toggle'),themeToggleDarkIcon=document.getElementById('theme-toggle-dark-icon'),themeToggleLightIcon=document.getElementById('theme-toggle-light-icon'),html=document.documentElement;if(localStorage.getItem('theme')==='light'||(!localStorage.getItem('theme')&&!html.classList.contains('dark'))){themeToggleDarkIcon.classList.remove('hidden');html.classList.remove('dark');}else{themeToggleLightIcon.classList.remove('hidden');}themeToggle.addEventListener('click',()=>{themeToggleDarkIcon.classList.toggle('hidden');themeToggleLightIcon.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});</script>
+</body>
+</html>

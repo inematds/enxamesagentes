@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.6: Modelos e Custos | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Modulo 1.6</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 1.6
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">💰 Modelos e Custos: estrategia inteligente</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Como escolher o modelo certo para cada agente, combinar providers diferentes e otimizar custos sem sacrificar qualidade.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">35</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Iniciante</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Pratica</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🧩 Modelo certo para cada papel</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Um dos erros mais caros em sistemas multiagentes e usar o <strong class="text-emerald-400">mesmo modelo para todos os agentes</strong>. O orquestrador precisa de raciocinio sofisticado para decompor tarefas, avaliar resultados e tomar decisoes estrategicas — isso exige um modelo poderoso como Claude Opus ou GPT-5.3. Mas o agente que apenas formata documentacao ou faz buscas simples nao precisa dessa potencia. Usar Opus para formatar Markdown e como contratar um neurocirurgiao para colocar um band-aid.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A estrategia inteligente e <strong class="text-emerald-400">mapear o nivel de complexidade cognitiva</strong> de cada papel no swarm e atribuir modelos proporcionais. Tarefas que exigem raciocinio multi-etapa, planejamento e avaliacao critica recebem modelos premium. Tarefas mecanicas, repetitivas ou de baixa ambiguidade podem usar modelos leves ou ate gratuitos. O resultado e um swarm que mantém qualidade maxima nas decisoes criticas enquanto reduz custos drasticamente nas tarefas operacionais.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Hierarquia de Modelos por Papel
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada tipo de tarefa no swarm tem um nivel ideal de modelo:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Tier 1 — Modelos premium (Opus, GPT-5.3):</strong> Orquestrador, Planejador, Architect — tarefas que exigem raciocinio profundo, decomposicao complexa e decisoes estrategicas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Tier 2 — Modelos intermediarios (Sonnet, GPT-4o):</strong> Coder, Reviewer, Test Engineer — tarefas que exigem competencia tecnica solida mas com escopo bem definido</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Tier 3 — Modelos leves (Haiku, GPT-4o-mini):</strong> Formatacao, traducao, extracao de dados — tarefas mecanicas com baixa ambiguidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Tier 4 — Modelos gratuitos:</strong> Exploracao, busca, rascunhos preliminares — tarefas onde o resultado sera refinado por outro agente</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto no custo
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Swarm homogeneo (tudo Opus):</strong> US$ 15-25 por tarefa complexa — alta qualidade em tudo, mas custo proibitivo para uso continuo</li>
+          <li><strong>Swarm heterogeneo otimizado:</strong> US$ 3-8 por tarefa — mesma qualidade nas decisoes criticas, custo 60-70% menor</li>
+          <li><strong>Regra 80/20:</strong> Tipicamente 80% das chamadas de API sao tarefas simples que podem usar modelos baratos, e 20% sao decisoes criticas que justificam modelos premium</li>
+          <li><strong>Erro comum:</strong> Economizar no orquestrador e desperdicar no executor — o inverso do que deveria ser</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔀 Modelos heterogeneos (anti-blindspot)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Alem de escolher o modelo certo por nivel de complexidade, ha uma razao estrategica para usar <strong class="text-emerald-400">modelos de providers diferentes</strong> no mesmo swarm: eliminar pontos cegos. Cada LLM foi treinado em datasets diferentes, com tecnicas diferentes, e portanto tem vieses e fraquezas diferentes. Quando o mesmo modelo que escreveu o codigo tambem o revisa, ele tende a "concordar consigo mesmo" — os mesmos padroes que geraram o bug tambem impedem o modelo de detecta-lo.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A tecnica <strong class="text-emerald-400">anti-blindspot</strong> usa deliberadamente modelos de providers distintos para Coder e Reviewer. Se o Coder usa Claude (Anthropic), o Reviewer usa GPT (OpenAI), ou vice-versa. Como os modelos foram treinados em dados diferentes e tem vieses diferentes, o Reviewer e mais propenso a detectar erros que o Coder teria ignorado. Este principio — semelhante a "segunda opiniao medica" — e uma das decisoes de design documentadas no opencode-swarm e demonstrou reducao significativa de bugs que passavam despercebidos.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrategia Anti-Blindspot
+        </h3>
+        <p class="text-neutral-300 mb-4">Por que modelos diferentes se complementam:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Dados de treino distintos:</strong> Claude, GPT e Gemini foram treinados em corpora diferentes — cada um "sabe" coisas que os outros nao sabem</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Vieses complementares:</strong> Um modelo pode ser forte em logica mas fraco em edge cases; outro pode ser o oposto — juntos cobrem mais territorio</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Padrao Coder/Reviewer cross-provider:</strong> Claude escreve, GPT revisa (ou vice-versa) — maximiza a chance de detectar erros sutis</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Resiliencia de provider:</strong> Se um provider cai, os agentes usando outros providers continuam funcionando — sem single point of failure</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Evidencias praticas
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Mesmo modelo para coder e reviewer:</strong> O reviewer "concorda" com o coder em 85%+ dos casos — incluindo bugs</li>
+          <li><strong>Modelos diferentes:</strong> Taxa de deteccao de bugs sobe 35-45% quando reviewer usa provider diferente do coder</li>
+          <li><strong>Design decision #7 do opencode-swarm:</strong> "Heterogeneous models" — documentada como decisao deliberada para maximizar qualidade</li>
+          <li><strong>Bonus inesperado:</strong> Modelos diferentes tambem geram solucoes mais criativas quando usados em brainstorming paralelo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">💰 Modelos gratuitos: quando usar</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma das vantagens pouco exploradas do ecossistema atual e a disponibilidade de <strong class="text-emerald-400">modelos gratuitos de qualidade surpreendente</strong>. O OpenCode oferece acesso a modelos como Big Pickle, minimax e outros atraves do seu modo <strong>Zen</strong>, que permite uso sem custo para o usuario. Esses modelos nao sao brinquedos — muitos deles competem com modelos pagos de geracoes anteriores em tarefas especificas.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A chave e saber <strong class="text-emerald-400">quando um modelo gratuito e suficiente</strong> e quando investir em um modelo pago faz diferenca. Para tarefas de exploracao (ler codebase, buscar padroes, listar arquivos), formatacao (converter Markdown, organizar dados) e rascunhos preliminares (primeira versao que sera refinada), modelos gratuitos sao perfeitamente adequados. O resultado sera verificado e refinado por agentes mais poderosos na cadeia — portanto, a qualidade do rascunho inicial nao precisa ser perfeita.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mapa de Uso de Modelos Gratuitos
+        </h3>
+        <p class="text-neutral-300 mb-4">Tarefas ideais para modelos gratuitos vs tarefas que exigem modelos pagos:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>OpenCode Zen:</strong> Modo gratuito do OpenCode que oferece modelos sem custo — ideal para agentes de exploracao e pesquisa que nao precisam gerar codigo critico</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Big Pickle:</strong> Modelo gratuito com boa capacidade de compreensao de texto — util para agentes que analisam documentacao e extraem informacoes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Minimax:</strong> Bom para tarefas de classificacao e triagem — pode ser usado em agentes de roteamento que decidem para onde encaminhar tarefas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Regra pratica:</strong> Se o resultado do agente sera revisado por outro agente mais poderoso, use gratuito. Se o resultado vai direto para producao, use pago</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Grid Fazer/Evitar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ Use gratuito quando</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Exploracao e leitura de codebase</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Formatacao e organizacao de dados</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Rascunhos que serao refinados</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400">✓</span>
+              <span>Prototipagem e experimentacao</span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ Evite gratuito quando</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Codigo vai direto para producao</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Decisoes arquiteturais criticas</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Raciocinio multi-etapa complexo</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400">✗</span>
+              <span>Analise de seguranca ou compliance</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📈 Estrategia de custo por agente</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Vamos colocar a teoria em pratica com um <strong class="text-emerald-400">mapeamento concreto agente → modelo</strong> baseado nos sistemas reais oh-my-openagent e opencode-swarm. A ideia e simples: cada agente no swarm tem um nivel de responsabilidade diferente, e o custo do modelo deve ser proporcional ao impacto das decisoes que esse agente toma. O orquestrador decide o rumo de todo o projeto — merece o melhor modelo. O explorador apenas le e reporta — pode usar o mais barato.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        No oh-my-openagent, o <strong class="text-emerald-400">Sisyphus</strong> (orquestrador incansavel) e o <strong>Prometheus</strong> (planejador) exigem raciocinio de altissimo nivel — Claude Opus e a escolha natural. O <strong>Hephaestus</strong> (executor, deus da forja) precisa de excelente capacidade de codigo — Codex 5.3 ou Claude Sonnet atendem bem. Ja o <strong>Explorer</strong> e o <strong>Librarian</strong> (pesquisadores) podem usar modelos gratuitos sem problema, pois seus resultados serao processados e refinados pelos agentes superiores.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mapeamento Agente → Modelo
+        </h3>
+        <p class="text-neutral-300 mb-4">Configuracao otimizada baseada em sistemas reais:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Sisyphus (orquestrador) → Claude Opus:</strong> Raciocinio profundo, decomposicao de tarefas, avaliacao de resultados — precisa do melhor modelo disponivel</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Prometheus (planejador) → Claude Opus:</strong> Entrevista o usuario, identifica escopo, cria plano detalhado — mesma exigencia do orquestrador</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Hephaestus (executor) → Codex 5.3 / Claude Sonnet:</strong> Escreve codigo com qualidade — modelo intermediario com excelente performance em codigo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Explorer / Librarian → Modelo gratuito (Zen):</strong> Le codebase, busca documentacao — resultados serao refinados, nao precisam ser perfeitos</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Economia real
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Cenario A (tudo Opus):</strong> 7 agentes x Claude Opus = ~US$ 20 por tarefa complexa</li>
+          <li><strong>Cenario B (otimizado):</strong> 2 Opus + 2 Sonnet + 3 gratuitos = ~US$ 6 por tarefa — 70% de economia</li>
+          <li><strong>Qualidade:</strong> Identica nas decisoes criticas (Opus para orquestrador e planejador), minima diferenca nas tarefas operacionais</li>
+          <li><strong>Volume:</strong> Em 100 tarefas/mes, a economia passa de US$ 1.400 — suficiente para pagar a assinatura de varios servicos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">⚡ Limites e rate limits</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Swarms consomem tokens em velocidade muito superior a um agente unico — afinal, multiplos agentes estao fazendo chamadas de API simultaneamente. Cada provider de LLM impoe <strong class="text-emerald-400">rate limits</strong> (limites de taxa) que restringem quantos tokens voce pode processar por minuto, quantas requisicoes pode fazer por hora e quanto pode gastar por dia. Quando um swarm atinge esses limites, agentes comecam a receber erros e o fluxo inteiro pode travar.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A solucao passa por tres estrategias complementares: <strong class="text-emerald-400">planejamento de consumo</strong> (estimar quantos tokens cada agente usara e distribuir dentro dos limites), <strong class="text-emerald-400">fallback automatico</strong> (se o provider principal atingir o limite, trocar para um provider alternativo automaticamente) e <strong class="text-emerald-400">provider switching</strong> (distribuir chamadas entre multiplos providers para evitar atingir o limite de qualquer um deles). A combinacao dessas tres estrategias garante que o swarm nunca pare por falta de tokens.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrategias contra Rate Limits
+        </h3>
+        <p class="text-neutral-300 mb-4">Tres niveis de defesa contra interrupcoes por limite de taxa:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Tokens por minuto (TPM):</strong> Cada provider tem um limite de tokens processados por minuto. Swarms paralelos podem atingir esse limite em segundos — monitore o consumo em tempo real</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Fallback automatico:</strong> Configure um modelo alternativo para cada agente. Se Claude atinge o limite, o agente automaticamente muda para GPT (ou vice-versa) sem interrupcao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Provider switching inteligente:</strong> Distribua agentes entre providers diferentes desde o inicio — 3 agentes em Anthropic, 2 em OpenAI, 2 em Google — para diluir o consumo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Retry com backoff:</strong> Quando um rate limit e atingido, espere um tempo crescente (1s, 2s, 4s, 8s) antes de tentar novamente — evita sobrecarregar o provider</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Warning Box -->
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center">
+          <span class="mr-2">⚠️</span> Armadilhas comuns
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Swarm paralelo sem controle:</strong> 7 agentes fazendo chamadas simultaneas podem esgotar o rate limit em 30 segundos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Loop de feedback sem limite:</strong> Maker-checker com muitas tentativas consome tokens exponencialmente — sempre defina um maximo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Contexto inflado:</strong> Agentes que acumulam historico sem resumir enviam cada vez mais tokens por chamada — implemente sumarizacao periodica</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🏢 OpenCode como hub multi-modelo</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">OpenCode</strong> se destaca no ecossistema de ferramentas para agentes por ser genuinamente <strong>provider-agnostico</strong>. Enquanto muitas ferramentas sao otimizadas para um unico provider (Claude Code para Anthropic, Copilot para OpenAI), o OpenCode permite configurar cada agente do swarm com um provider e modelo diferente — tudo no mesmo fluxo de trabalho, sem necessidade de adaptadores ou middlewares.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, isso significa que voce pode ter o orquestrador usando <strong class="text-emerald-400">Claude Opus</strong> (Anthropic), o coder usando <strong class="text-emerald-400">Codex 5.3</strong> (OpenAI), o explorer usando um <strong class="text-emerald-400">modelo gratuito</strong> do ecossistema Zen, e o reviewer usando <strong class="text-emerald-400">Gemini</strong> (Google) — tudo coordenado pelo mesmo sistema. Essa flexibilidade elimina o lock-in de ecossistema, permite otimizar custo por agente e habilita a estrategia anti-blindspot com modelos de providers diferentes sem nenhuma complexidade adicional.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> OpenCode como Hub Central
+        </h3>
+        <p class="text-neutral-300 mb-4">Capacidades multi-modelo do OpenCode:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Provider agnostico:</strong> Suporta Anthropic, OpenAI, Google, modelos open-source e modelos gratuitos — sem favorecer nenhum ecossistema</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Configuracao por agente:</strong> Cada subagente do swarm pode usar um provider e modelo diferente — defina no arquivo de configuracao e pronto</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Multi-ecosystem:</strong> Combine o melhor de cada provider — raciocinio do Claude, codigo do Codex, velocidade do Gemini — sem compromissos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Fallback nativo:</strong> Se um provider falha ou atinge rate limit, o OpenCode pode trocar para o provider alternativo automaticamente</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Vantagens praticas
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Zero lock-in:</strong> Troque de provider a qualquer momento sem reescrever codigo — apenas mude a configuracao</li>
+          <li><strong>Otimizacao continua:</strong> Conforme novos modelos sao lancados, troque agentes individuais para o modelo mais recente sem afetar o resto</li>
+          <li><strong>Modo Zen:</strong> Acesso a modelos gratuitos integrado — perfeito para agentes de baixa criticidade, prototipagem e experimentacao</li>
+          <li><strong>Comunidade ativa:</strong> Plugins como oh-my-openagent e Superpowers estendem o OpenCode com capacidades multiagentes pre-configuradas</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Modelo certo para cada papel</strong>
+              <span class="text-neutral-400"> - Premium para orquestrador, intermediario para coder, gratuito para explorer</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Anti-blindspot</strong>
+              <span class="text-neutral-400"> - Modelos de providers diferentes para coder e reviewer capturam mais erros</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Modelos gratuitos</strong>
+              <span class="text-neutral-400"> - OpenCode Zen, Big Pickle e minimax para tarefas de baixa criticidade</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Custo por agente</strong>
+              <span class="text-neutral-400"> - Opus para Sisyphus, Sonnet para Hephaestus, gratuito para Explorer — 70% de economia</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Rate limits</strong>
+              <span class="text-neutral-400"> - Fallback automatico, provider switching e retry com backoff evitam interrupcoes</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">OpenCode multi-modelo</strong>
+              <span class="text-neutral-400"> - Hub provider-agnostico que combina o melhor de cada ecossistema</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">1.7 - Sequencial vs Paralelo: estudo comparativo</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-5.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 1.5
+          </a>
+          <a href="modulo-1-7.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">
+            Modulo 1.7 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

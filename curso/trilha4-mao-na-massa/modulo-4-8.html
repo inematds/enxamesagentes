@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.8: Projeto guiado completo: do zero ao deploy | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#F59E0B',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif;}.dark body{background-color:#111827;}html:not(.dark) body{background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 50%,#f1f5f9 100%);}html:not(.dark) .bg-dark-900{background-color:#ffffff;}html:not(.dark) .bg-dark-800{background-color:#f9fafb;}html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}html:not(.dark) .text-neutral-100{color:#111827;}html:not(.dark) .text-neutral-300{color:#4b5563;}html:not(.dark) .text-neutral-400{color:#6b7280;}html:not(.dark) .text-neutral-500{color:#9ca3af;}html:not(.dark) .border-dark-600{border-color:#d1d5db;}html:not(.dark) .border-dark-700{border-color:#e5e7eb;}</style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="flex justify-between items-center h-14"><div class="flex items-center space-x-4"><a href="../../index.html" class="flex items-center space-x-2 text-amber-400 hover:text-amber-300"><span class="text-2xl">🐝</span><span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span></a><span class="text-neutral-600">|</span><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a></div><div class="flex items-center space-x-1 sm:space-x-2"><a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a><a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Tecnicas</span></a><a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Pratica Avancada</span></a><a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Mao na Massa</span></a><button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2"><svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg><svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg></button></div></div></div></nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4"><div class="flex items-center space-x-2 text-sm text-neutral-400"><a href="../../index.html" class="hover:text-amber-400">Inicio</a><span>/</span><a href="index.html" class="hover:text-amber-400">Trilha 4</a><span>/</span><span class="text-amber-400">Modulo 4.8</span></div></nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MODULO 4.8</span><h1 class="text-3xl sm:text-4xl font-bold mb-4">🏆 Projeto guiado completo: do zero ao deploy</h1><p class="text-lg text-neutral-400 max-w-3xl">Defina SEU projeto, entreviste com Prometheus, execute o swarm, revise e valide — tudo do zero.</p><div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl"><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">90</div><div class="text-xs text-neutral-400">Minutos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Intermediario</div><div class="text-xs text-neutral-400">Nivel</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Projeto</div><div class="text-xs text-neutral-400">Tipo</div></div></div></div></header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span><h2 class="text-2xl font-bold">🎯 Definicao do projeto: landing page para sua marca</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Este e o modulo final — e o mais importante. Em vez de usar exemplos genericos, voce vai construir algo <strong class="text-amber-400">real e util para voce</strong>. Escolha um projeto proprio: sua empresa, seu portfolio, seu projeto pessoal, sua marca. Isso gera motivacao real e um resultado que voce pode usar de verdade.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Definindo seu projeto</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Escolha um tema real:</strong> Sua consultoria, seu portfolio de freelancer, uma ideia de startup</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Defina 5-10 secoes:</strong> Hero, Servicos, Sobre, Depoimentos, FAQ, Contato, Footer</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Escolha a stack:</strong> HTML+CSS+JS (recomendado), ou Next.js, ou Astro, ou qualquer framework</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Defina o visual:</strong> Tema escuro/claro, cores da marca, tom de voz</span></li>
+        </ul>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Preparacao</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Criar pasta para seu projeto
+mkdir ~/meu-projeto-real
+cd ~/meu-projeto-real
+git init
+
+# Abrir o OpenCode
+opencode
+
+# Tempo estimado total: ~90 minutos
+# Fase 1: Entrevista (15 min)
+# Fase 2: Execucao (30-45 min)
+# Fase 3: Revisao (15 min)
+# Fase 4: Validacao (15 min)</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span><h2 class="text-2xl font-bold">📋 Fase 1: Entrevista com Prometheus (15 min)</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Agora voce vai aplicar tudo que aprendeu no Modulo 4.5, mas com SEU projeto real. Siga o fluxo completo de entrevista.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Fluxo completo passo a passo</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Passo 1: Trocar para Prometheus
+[Tab] → Selecionar Prometheus / Plan Builder
+
+# Passo 2: Descrever e pedir entrevista
+"Quero construir uma landing page para [SEU PROJETO].
+ Me entreviste antes de comecar."
+
+# Passo 3: Responder todas as perguntas do Prometheus
+# - Nome e marca
+# - Servicos/produtos
+# - Publico-alvo
+# - Secoes desejadas
+# - Stack tecnico
+# - Tom de voz
+# - Formulario (campos)
+# - Referencias visuais
+
+# Passo 4: Revisar o resumo
+# Prometheus mostra tudo que coletou
+# Corrija se necessario
+
+# Passo 5: Confirmar e executar
+"Sim, correto. Pode comecar!"
+/start-work</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Dica importante</h3>
+        <p class="text-neutral-300">Nao tenha pressa na entrevista. Cada detalhe que voce fornece agora economiza ajustes depois. Se o Prometheus perguntar algo que voce nao pensou, use isso como oportunidade para refinar sua visao do projeto.</p>
+      </div>
+    </section>
+
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span><h2 class="text-2xl font-bold">🚀 Fase 2: Execucao do swarm (30-45 min)</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Apos o <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400">/start-work</code>, o swarm entra em acao. Multiplos agentes trabalham em paralelo, organizados em <strong class="text-amber-400">waves</strong> (ondas) de implementacao. Cada wave foca em uma camada do projeto.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Waves de execucao</h3>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1 font-bold">Wave 1:</span><span><strong>Estrutura</strong> — HTML base, layout das secoes, navegacao</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1 font-bold">Wave 2:</span><span><strong>Conteudo</strong> — Textos de cada secao, dados dos depoimentos, perguntas do FAQ</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1 font-bold">Wave 3:</span><span><strong>Estilo</strong> — CSS completo, tema, cores, tipografia, responsividade</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1 font-bold">Wave 4:</span><span><strong>Interatividade</strong> — JavaScript, formulario, FAQ accordion, animacoes</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1 font-bold">Wave 5:</span><span><strong>Revisao</strong> — Oracle e Reviewer verificam erros, acessibilidade, performance</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1 font-bold">Wave 6:</span><span><strong>Polish</strong> — Ajustes finais, micro-interacoes, detalhes visuais</span></li>
+        </ul>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> O que fazer durante a execucao</h3>
+        <p class="text-neutral-300">Voce pode acompanhar em tempo real clicando nos indicadores de subagentes, ou simplesmente ir fazer outra coisa. O swarm e autonomo — ele se autocorrige e chega ao resultado final sozinho. E o poder do sistema multiagente em acao.</p>
+      </div>
+    </section>
+
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span><h2 class="text-2xl font-bold">🔍 Fase 3: Revisao e ajustes (15 min)</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O swarm entrega ~90% do resultado final. Os 10% restantes sao refinamento humano — ajustes de conteudo, correcoes visuais, preferencias pessoais que so voce pode decidir.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Ajustes pontuais em linguagem natural</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Exemplos de ajustes que voce pode pedir ao Sisyphus:
+
+"Mude a cor do hero para azul escuro"
+"Adicione mais um depoimento de cliente"
+"O formulario precisa de campo telefone com mascara"
+"Aumente o tamanho do titulo principal"
+"Troque o icone do servico 3 para um icone de grafico"
+"Adicione um botao de WhatsApp flutuante"
+"O FAQ precisa de mais uma pergunta sobre precos"
+
+# Use /review para uma revisao completa:
+/review</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span><h2 class="text-2xl font-bold">✅ Fase 4: Validacao final e checklist</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Antes de considerar o projeto pronto, passe por este checklist completo de qualidade. Um processo sistematico garante qualidade consistente em todos os seus projetos.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Checklist Final de Qualidade</h3>
+        <div class="space-y-3 text-neutral-300">
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Todas as secoes presentes e com conteudo real (sem Lorem ipsum)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Formulario funcional (todos os campos, validacao basica)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Responsivo — testar em mobile (F12 → Toggle device toolbar)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Zero erros no console do navegador (F12 → Console)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Links funcionando (footer, redes sociais, navegacao)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Politica de privacidade presente (obrigatorio com formulario)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Performance aceitavel (carregamento rapido, imagens otimizadas)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Textos sem erros de portugues</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>FAQ abrindo e fechando corretamente</span></div>
+          <div class="flex items-start space-x-2"><span class="text-neutral-500">☐</span><span>Cores e fontes consistentes com a marca</span></div>
+        </div>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Dica de deploy</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Quando tudo estiver aprovado, faca o commit:
+git add .
+git commit -m "Landing page completa via swarm de agentes"
+
+# Deploy rapido (opcoes gratuitas):
+# - GitHub Pages: push para github e ativar Pages
+# - Netlify: arraste a pasta no netlify.com/drop
+# - Vercel: vercel deploy (se usar framework)
+# - Surge: surge ./ meu-projeto.surge.sh</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span><h2 class="text-2xl font-bold">🏆 Resultado: o que voce construiu</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Pare e reflita sobre o que acabou de acontecer. Voce deu um prompt, respondeu algumas perguntas, tomou um cafe, e agora tem um <strong class="text-amber-400">projeto completo, funcional e pronto para deploy</strong>. Isso e o poder dos swarms de agentes de IA.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> O que voce aprendeu nesta trilha</h3>
+        <div class="space-y-2 text-neutral-300">
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Instalar e configurar o ambiente completo (OpenCode + Bun + oh-my-openagent)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Escolher e atribuir modelos por agente (estrategia custo/qualidade)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Usar os 3 modos: linguagem natural, Prometheus (entrevista) e ultrawork (autonomo)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Acompanhar execucao paralela de agentes em tempo real</span></div>
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Trocar modelos em tempo real (hot-swap) sem perder progresso</span></div>
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Usar comandos avancados: /ulw-loop, /init-deep, /review</span></div>
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Revisar, ajustar e validar resultado com checklist sistematico</span></div>
+          <div class="flex items-start space-x-2"><span class="text-green-400">✅</span><span>Entregar um projeto funcional do zero usando swarm de agentes</span></div>
+        </div>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Proximos desafios</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">→</span><span><strong>Projeto mais complexo:</strong> Construir um app, dashboard ou API usando swarm</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">→</span><span><strong>Experimentar com frameworks:</strong> CrewAI ou LangGraph (Trilha 2)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">→</span><span><strong>Criar seu proprio swarm:</strong> Customizar agentes para seu dominio (Trilha 3)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">→</span><span><strong>Produtizacao:</strong> Usar swarms em projetos reais de clientes</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🏆</span> Trilha 4 Completa!</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Projeto definido</strong><span class="text-neutral-400"> - Tema real, secoes e stack escolhidos</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Entrevista completa</strong><span class="text-neutral-400"> - Prometheus coletou todos os requisitos</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Swarm executado</strong><span class="text-neutral-400"> - 6 waves de implementacao paralela</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Resultado revisado</strong><span class="text-neutral-400"> - Ajustes pontuais em linguagem natural</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Qualidade validada</strong><span class="text-neutral-400"> - Checklist completo aprovado</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Projeto entregue!</strong><span class="text-neutral-400"> - Do zero ao deploy com swarm de agentes</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-amber-400 mb-2">Parabens!</h3>
+          <p class="text-neutral-300">Voce completou a Trilha 4 — Mao na Massa. Agora voce tem as habilidades praticas para usar swarms de agentes em qualquer projeto. Explore as outras trilhas para aprofundar seus conhecimentos teoricos e avancados.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-7.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Modulo 4.7</a>
+          <a href="../../index.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Voltar ao Inicio</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm"><a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a><a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a><a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a><a href="index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a></div><div class="text-center text-neutral-500 text-sm"><p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p></div></div></footer>
+  <script>const themeToggle=document.getElementById('theme-toggle'),themeToggleDarkIcon=document.getElementById('theme-toggle-dark-icon'),themeToggleLightIcon=document.getElementById('theme-toggle-light-icon'),html=document.documentElement;if(localStorage.getItem('theme')==='light'||(!localStorage.getItem('theme')&&!html.classList.contains('dark'))){themeToggleDarkIcon.classList.remove('hidden');html.classList.remove('dark');}else{themeToggleLightIcon.classList.remove('hidden');}themeToggle.addEventListener('click',()=>{themeToggleDarkIcon.classList.toggle('hidden');themeToggleLightIcon.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});</script>
+</body>
+</html>

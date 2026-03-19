@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.7: Padroes de orquestracao | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Modulo 2.7</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 2.7
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎯 Padroes de orquestracao</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Domine os padroes arquiteturais que definem como agentes se organizam: Supervisor, Maker-Checker, Adaptive, Mediator e hierarquias.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">40</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Avancado</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🎯 Supervisor Pattern</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Supervisor Pattern</strong> e o padrao de orquestracao mais usado em sistemas multiagentes em 2026. Um agente central — o supervisor — recebe a tarefa do usuario, analisa, decompoe em subtarefas e <strong>roteia cada subtarefa para o agente especialista mais adequado</strong>. Apos os agentes completarem suas tarefas, o supervisor sintetiza os resultados e entrega a resposta final.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O Supervisor e o padrao "default" porque combina <strong>controle centralizado</strong> com <strong>execucao distribuida</strong>. O supervisor mantem a visao geral do projeto e garante que tudo converge para o objetivo, enquanto os agentes especializados focam em suas areas de expertise. CrewAI usa esse padrao implicitamente, LangGraph permite implementa-lo explicitamente, e o Sisyphus do OMO e um supervisor sofisticado.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Anatomia do Supervisor
+        </h3>
+        <p class="text-neutral-300 mb-4">Os componentes do padrao Supervisor:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Supervisor agent:</strong> Recebe tarefa, decompoe, roteia e sintetiza — o 'cerebro' do swarm</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Worker agents:</strong> Especialistas que executam subtarefas — cada um no seu dominio</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Routing logic:</strong> Como o supervisor decide qual worker acionar — regras ou LLM</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Result synthesis:</strong> Combinar outputs dos workers num resultado coerente</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Vantagens e riscos
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Vantagem:</strong> Controle total — supervisor garante consistencia e qualidade</li>
+          <li><strong>Vantagem:</strong> Facil de debugar — supervisor centraliza logs e decisoes</li>
+          <li><strong>Risco:</strong> Single point of failure — se supervisor falha, todo o swarm para</li>
+          <li><strong>Risco:</strong> Gargalo de performance — tudo passa pelo supervisor, que pode virar bottleneck</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">✅ Maker-Checker Pattern</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Maker-Checker Pattern</strong> (tambem chamado de Generator-Verifier) e um padrao onde <strong>um agente cria e outro verifica</strong>. O Maker gera o output (codigo, texto, analise) e o Checker avalia a qualidade, corretude e seguranca. Se o Checker rejeita, o Maker recebe feedback e tenta novamente. Esse ciclo continua ate o Checker aprovar ou um limite de tentativas ser atingido.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A forca desse padrao esta no uso de <strong>modelos diferentes</strong> para Maker e Checker. Se o Maker usa Claude e o Checker usa GPT, os pontos cegos de um modelo sao compensados pelo outro — o que um deixa passar, o outro pega. Esse principio de <strong>heterogeneidade anti-blindspot</strong> e validado empiricamente: revisao cross-model detecta 30-40% mais bugs do que revisao com o mesmo modelo.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Como funciona o Maker-Checker
+        </h3>
+        <p class="text-neutral-300 mb-4">O ciclo de criacao e verificacao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Maker:</strong> Gera o output — codigo, texto, plano, analise</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Checker:</strong> Avalia qualidade, corretude, seguranca — aprova ou rejeita com feedback</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Loop:</strong> Se rejeitado, Maker recebe feedback e tenta novamente — ate aprovacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Cross-model:</strong> Maker e Checker usam modelos diferentes para maximizar deteccao de erros</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Resultados empiricos
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>30-40% mais bugs</strong> detectados com revisao cross-model vs mesmo modelo</li>
+          <li><strong>Reducao de 60%</strong> em erros de producao quando Maker-Checker e aplicado a codigo</li>
+          <li><strong>2-3 iteracoes:</strong> Tipicamente, o ciclo converge em 2-3 tentativas</li>
+          <li><strong>Custo adicional:</strong> ~50% mais tokens, mas qualidade drasticamente superior</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔀 Adaptive Agent Network</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Adaptive Agent Network</strong> e um padrao avancado onde <strong>agentes se auto-organizam dinamicamente</strong> baseado na tarefa recebida. Em vez de roteamento fixo (sempre envie codigo para o coder), o sistema avalia as capacidades de cada agente disponivel e roteia para o mais adequado no momento. Se um agente esta sobrecarregado, outro assume. Se uma nova capacidade e necessaria, um agente pode ser instanciado sob demanda.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Esse padrao e inspirado nos principios de <strong>inteligencia de enxame</strong> que vimos na Trilha 1: auto-organizacao, emergencia e descentralizacao. Na pratica, e mais complexo de implementar do que o Supervisor Pattern, mas oferece <strong>resiliencia e flexibilidade superiores</strong>. Se um agente falha, o sistema se reorganiza sem intervencao. Se a carga aumenta, agentes adicionais sao recrutados automaticamente.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Principios do Adaptive Network
+        </h3>
+        <p class="text-neutral-300 mb-4">Como agentes se auto-organizam:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Capability matching:</strong> Sistema avalia capacidades de cada agente e roteia para o melhor match</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Dynamic scaling:</strong> Novos agentes instanciados sob demanda quando carga aumenta</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Self-healing:</strong> Se agente falha, tarefas redistribuidas automaticamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Emergent behavior:</strong> Padroes de colaboracao surgem da interacao, nao de regras pre-definidas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Quando usar
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Ideal:</strong> Cenarios imprevisiveis onde tipos de tarefa variam muito</li>
+          <li><strong>Ideal:</strong> Sistemas que precisam de alta disponibilidade — sem single point of failure</li>
+          <li><strong>Evitar:</strong> Quando previsibilidade e auditabilidade sao mais importantes que flexibilidade</li>
+          <li><strong>Complexidade:</strong> Significativamente mais complexo que Supervisor — use apenas quando necessario</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔗 Mediator Pattern</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Mediator Pattern</strong> resolve um problema especifico: o que acontece quando <strong>agentes discordam</strong>? Num sistema com Maker-Checker, o Maker pode insistir que seu codigo esta correto enquanto o Checker insiste que tem um bug. Quem tem razao? O Mediator e um terceiro agente que analisa ambos os lados, busca evidencias adicionais e toma a decisao final.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O Mediator pode usar diferentes estrategias de resolucao: <strong>voting</strong> (consultam-se mais agentes e a maioria vence), <strong>evidence-based</strong> (o Mediator busca dados concretos — roda testes, verifica documentacao), <strong>hierarchical</strong> (um modelo mais potente e usado como arbitro) ou <strong>compromise</strong> (o Mediator encontra uma solucao que incorpora o melhor de ambos os lados). Em todos os casos, a decisao e registrada para auditoria.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Resolucao de conflitos
+        </h3>
+        <p class="text-neutral-300 mb-4">Como o Mediator decide:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Voting:</strong> Mais agentes opinam — maioria decide (bom para decisoes de design)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Evidence-based:</strong> Mediator busca provas concretas — testes, benchmarks, documentacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Hierarchical:</strong> Modelo mais potente (ex: Opus) arbitras decisoes de modelos menores</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Compromise:</strong> Mediator sintetiza o melhor de ambos os lados numa solucao hibrida</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Cenarios de uso
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Code review conflitante:</strong> Reviewer diz que tem bug, Coder diz que nao — Mediator roda testes</li>
+          <li><strong>Design decisions:</strong> Dois arquitetos propoem abordagens diferentes — Mediator avalia trade-offs</li>
+          <li><strong>Dados contraditorios:</strong> Duas fontes de dados discordam — Mediator busca terceira fonte</li>
+          <li><strong>Prioridade:</strong> Agente de velocidade vs agente de qualidade — Mediator define o equilibrio</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📦 Regra das tres balas (opencode-swarm)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A <strong class="text-blue-400">regra das tres balas</strong> e uma heuristica pratica criada no projeto opencode-swarm: se voce nao consegue descrever uma tarefa em tres bullet points — <strong>TASK</strong> (o que fazer), <strong>FILE</strong> (em quais arquivos) e <strong>CONSTRAINT</strong> (restricoes) — a tarefa e grande demais para um unico agente e precisa ser decomposta.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Essa heuristica resolve um problema real: agentes perdem qualidade rapidamente quando recebem tarefas muito grandes. Uma tarefa como "refatore todo o modulo de autenticacao" e ambigua demais — pode significar dezenas de mudancas em dezenas de arquivos. A regra das tres balas forca a decomposicao: "TASK: extrair validacao de JWT para modulo separado, FILE: auth.py e jwt_utils.py, CONSTRAINT: manter compatibilidade com API existente". Isso e especifico o suficiente para um agente executar com precisao.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> A heuristica na pratica
+        </h3>
+        <p class="text-neutral-300 mb-4">Como aplicar a regra das tres balas:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>TASK:</strong> Uma acao especifica e verificavel — 'implementar funcao X', 'corrigir bug Y'</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>FILE:</strong> Maximo 2 arquivos — se precisa de mais, decomponha em subtarefas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>CONSTRAINT:</strong> Restricoes claras — 'manter backward compatibility', 'sem dependencias novas'</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Se nao cabe:</strong> A tarefa precisa ser decomposta pelo orquestrador antes de delegar</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto na qualidade
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Tarefas atomicas:</strong> Taxa de sucesso de 85%+ quando a regra e seguida</li>
+          <li><strong>Tarefas grandes:</strong> Taxa de sucesso cai para 30-40% sem decomposicao</li>
+          <li><strong>Max 2 arquivos:</strong> Agentes que modificam mais de 2 arquivos simultaneamente geram conflitos</li>
+          <li><strong>Orquestrador:</strong> A decomposicao e responsabilidade do supervisor, nao do worker</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🏗️ Supervisores de supervisores</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para projetos muito grandes — centenas de arquivos, dezenas de features, multiplas equipes — um unico supervisor nao e suficiente. A solucao e criar <strong class="text-blue-400">hierarquias de supervisores</strong>: um supervisor principal coordena supervisores de area, que por sua vez coordenam agentes workers. Isso cria um sistema <strong>Hierarchical Multi-Agent System (MAS)</strong> com camadas de delegacao.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, voce pode ter um <strong>Project Supervisor</strong> que coordena um <strong>Frontend Supervisor</strong> (com agentes de React, CSS, testes de UI), um <strong>Backend Supervisor</strong> (com agentes de API, banco de dados, autenticacao) e um <strong>DevOps Supervisor</strong> (com agentes de CI/CD, deploy, monitoramento). Cada supervisor de area tem autonomia total no seu dominio, e o Project Supervisor garante que tudo converge para o objetivo do projeto.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Hierarquia multinivel
+        </h3>
+        <p class="text-neutral-300 mb-4">Como supervisores se organizam em camadas:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Project Supervisor:</strong> Visao geral, decomposicao em areas, integracao final</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Area Supervisors:</strong> Autonomia no dominio, decomposicao em tarefas atomicas para workers</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Worker agents:</strong> Executam tarefas atomicas — uma funcao, um componente, um teste</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Delegation chains:</strong> Tarefa flui top-down, resultados fluem bottom-up</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Escala e limites
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>2 niveis:</strong> Suficiente para 80% dos projetos — supervisor + workers</li>
+          <li><strong>3 niveis:</strong> Para projetos grandes — project + area + workers</li>
+          <li><strong>4+ niveis:</strong> Raramente necessario — overhead de coordenacao pode superar beneficios</li>
+          <li><strong>Regra pratica:</strong> Cada supervisor deve coordenar no maximo 5-7 agentes diretos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Supervisor Pattern</strong>
+              <span class="text-neutral-400"> - Agente central roteia e sintetiza — padrao mais usado</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Maker-Checker</strong>
+              <span class="text-neutral-400"> - Um cria, outro verifica — cross-model anti-blindspot</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Adaptive Network</strong>
+              <span class="text-neutral-400"> - Auto-organizacao dinamica baseada em capacidades</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Mediator Pattern</strong>
+              <span class="text-neutral-400"> - Terceiro agente resolve conflitos com evidencias</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Regra das tres balas</strong>
+              <span class="text-neutral-400"> - TASK + FILE + CONSTRAINT — atomicidade para agentes</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Hierarquia de supervisores</strong>
+              <span class="text-neutral-400"> - Multinivel para escalar projetos muito grandes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Proximo:</h3>
+          <p class="text-neutral-300">Modulo 2.8 - Swarms Framework e outros</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-6.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 2.6 - Protocolos
+          </a>
+          <a href="modulo-2-8.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">
+            Modulo 2.8 - Swarms Framework e outros →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

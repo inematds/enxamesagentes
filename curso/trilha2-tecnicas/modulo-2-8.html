@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.8: Swarms Framework e outros | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Modulo 2.8</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 2.8
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🐝 Swarms Framework e outros</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Explore frameworks alternativos — Swarms, Agency Swarm, Camel-AI, Claude Code Agent SDK — com tabela comparativa e arvore de decisao.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">35</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Interm.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🐝 Swarms Framework (Kye Gomez)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Swarms Framework</strong> criado por Kye Gomez nao deve ser confundido com o OpenAI Swarm educacional. O Swarms e um framework <strong>enterprise-grade focado em producao</strong>, com suporte a multiplos tipos de swarm (sequencial, paralelo, hierarquico, mesh, mixture-of-agents), deploy em nuvem, observabilidade integrada e APIs para integracao com sistemas existentes.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O diferencial do Swarms e a variedade de <strong>topologias pre-construidas</strong>: SequentialWorkflow para pipelines simples, AgentRearrange para composicao flexivel, MixtureOfAgents para combinar outputs de multiplos agentes e SpreadSheetSwarm para processamento paralelo em massa. Essa variedade torna o Swarms atrativo para organizacoes que precisam de diferentes padroes de orquestracao em diferentes partes do sistema.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Topologias disponiveis
+        </h3>
+        <p class="text-neutral-300 mb-4">Os tipos de swarm pre-construidos:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>SequentialWorkflow:</strong> Pipeline linear — agente A → B → C, cada um processa e passa adiante</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>AgentRearrange:</strong> Composicao flexivel — define relacoes como 'A → B, A → C, B+C → D'</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>MixtureOfAgents:</strong> Multiplos agentes processam a mesma task e resultados sao combinados</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>SpreadSheetSwarm:</strong> Processamento paralelo em massa — ideal para grandes volumes de dados</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Contexto enterprise
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>GitHub:</strong> 25k+ stars — comunidade ativa e crescente</li>
+          <li><strong>Producao:</strong> Usado por empresas em automacao de processos, analise de dados e customer service</li>
+          <li><strong>Deploy:</strong> Suporte a Docker, Kubernetes, AWS Lambda — escala sob demanda</li>
+          <li><strong>Observabilidade:</strong> Logging estruturado, metricas de performance, traces de execucao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🏢 Agency Swarm (VRSEN)</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Agency Swarm</strong> do VRSEN adota uma metafora organizacional: voce cria uma <strong>agencia</strong> com <strong>departamentos</strong>, cada departamento tem agentes com papeis definidos, e a comunicacao entre departamentos segue canais estruturados. E como montar uma empresa virtual onde cada departamento (marketing, engenharia, vendas) opera de forma autonoma mas coordenada.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O diferencial do Agency Swarm e a <strong>confiabilidade da orquestracao</strong>. O framework usa OpenAI Assistants API por baixo, o que garante persistencia de threads, function calling confiavel e gerenciamento de estado robusto. Para quem ja esta no ecossistema OpenAI e quer uma abordagem mais estruturada que o Swarm educacional, o Agency Swarm e uma evolucao natural.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Modelo organizacional
+        </h3>
+        <p class="text-neutral-300 mb-4">Como uma agencia e estruturada:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Agency:</strong> A organizacao inteira — agrupa departamentos e define canais de comunicacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Departments:</strong> Grupos de agentes com missao especifica — marketing, engenharia, vendas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Agents:</strong> Individuos com role e tools — operam dentro do seu departamento</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Communication channels:</strong> Canais definidos entre departamentos — controle de quem fala com quem</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Vantagens e limitacoes
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Vantagem:</strong> Metafora intuitiva para stakeholders nao-tecnicos entenderem a arquitetura</li>
+          <li><strong>Vantagem:</strong> OpenAI Assistants API garante persistencia e confiabilidade</li>
+          <li><strong>Limitacao:</strong> Forte dependencia do ecossistema OpenAI — menos flexivel em providers</li>
+          <li><strong>Comunidade:</strong> 5k+ stars no GitHub — menor que CrewAI mas ativa</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🐙 Camel-AI e debate multiagente</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">CAMEL (Communicative Agents for Machine Learning)</strong> nasceu como projeto de pesquisa e evoluiu para um framework focado em <strong>role-playing e debate entre agentes</strong>. A premissa e que dois ou mais agentes assumem papeis diferentes (ex: instructor e assistant, critic e author) e <strong>debatem ate chegar a um consenso</strong> ou esgotar o numero de turnos.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O CAMEL brilha em cenarios onde a <strong>qualidade emerge do debate</strong>. Em vez de um unico agente decidindo, multiplos agentes com perspectivas diferentes argumentam, questionam e refinam suas posicoes. Pesquisas academicas mostram que agentes em debate produzem resultados 15-25% melhores em tarefas de raciocinio complexo comparado a um unico agente, especialmente quando os agentes usam modelos diferentes.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Filosofia do debate
+        </h3>
+        <p class="text-neutral-300 mb-4">Como o debate melhora resultados:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Role-playing:</strong> Agentes assumem papeis explicitos — cada um defende uma perspectiva</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Argumentacao:</strong> Agentes apresentam evidencias e contra-argumentos estruturados</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Convergencia:</strong> O debate continua ate consenso ou limite de turnos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Cross-model:</strong> Agentes com modelos diferentes trazem perspectivas diferentes</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Resultados de pesquisa
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>15-25% melhor:</strong> Qualidade em tarefas de raciocinio complexo vs agente unico</li>
+          <li><strong>Papers publicados:</strong> Dezenas de papers academicos validando a abordagem</li>
+          <li><strong>Cenarios ideais:</strong> Analise critica, revisao de documentos, decisoes estrategicas</li>
+          <li><strong>Limitacao:</strong> Mais lento que abordagens diretivas — debate toma tempo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔧 Claude Code Agent SDK</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Claude Code Agent SDK</strong> da Anthropic permite construir <strong>agentes customizados com Claude</strong> usando uma API de alto nivel. Diferente de usar a API de Chat Completions diretamente, o Agent SDK abstrai o loop de raciocinio, gerenciamento de tools, streaming e subagentes. Voce define o agente (instructions + tools) e o SDK cuida do loop ReAct, retry, e orquestracao.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O SDK suporta <strong>subagentes nativamente</strong>: um agente principal pode spawnar agentes filhos para tarefas especializadas, cada um com seu proprio contexto e tools. Isso permite criar hierarquias de agentes sem framework externo. A integracao com tool_use nativo do Claude garante chamadas de ferramentas precisas, e o streaming permite feedback em tempo real sobre o progresso do agente.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Recursos do SDK
+        </h3>
+        <p class="text-neutral-300 mb-4">O que o Claude Code Agent SDK oferece:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Loop ReAct automatico:</strong> O SDK gerencia Thought → Action → Observation automaticamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Tool management:</strong> Registro e execucao de tools com tipagem e validacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Subagentes:</strong> Spawnar agentes filhos com contexto e tools proprios</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Streaming:</strong> Feedback em tempo real — veja o agente raciocinando e agindo</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Quando usar
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Ideal:</strong> Quando Claude e seu modelo principal e voce quer integracao nativa</li>
+          <li><strong>Ideal:</strong> Para construir agentes customizados sem overhead de framework</li>
+          <li><strong>Vantagem:</strong> Latencia minima — sem camadas intermediarias entre voce e Claude</li>
+          <li><strong>Limitacao:</strong> Especifico para Claude — diferente dos frameworks multi-provider</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📊 Tabela comparativa completa</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Com tantos frameworks disponiveis, uma <strong class="text-blue-400">tabela comparativa</strong> e essencial para tomar decisoes informadas. Os criterios mais relevantes sao: <strong>paradigma</strong> (role-based, graph, conversacional, enterprise), <strong>linguagem</strong> (Python, TypeScript, multi), <strong>complexidade</strong> (baixa, media, alta), <strong>comunidade</strong> (stars, contribuidores, atividade), <strong>producao-ready</strong> (sim/nao) e <strong>caso de uso ideal</strong>.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Nenhum framework e melhor em tudo — cada um otimiza para cenarios diferentes. CrewAI otimiza para <strong>produtividade</strong> (comecar rapido, iterar rapido). LangGraph otimiza para <strong>controle</strong> (cada decisao e explicita). AutoGen otimiza para <strong>debate</strong> (coordenacao conversacional). Swarms otimiza para <strong>escala enterprise</strong>. Agency Swarm otimiza para <strong>metafora organizacional</strong>. CAMEL otimiza para <strong>qualidade via debate</strong>.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Criterios de comparacao
+        </h3>
+        <p class="text-neutral-300 mb-4">Os eixos que definem cada framework:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Paradigma:</strong> Role-based (CrewAI), Graph (LangGraph), Conversacional (AutoGen), Enterprise (Swarms)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Curva de aprendizado:</strong> OpenAI Swarm (baixa) → CrewAI (media) → LangGraph (alta)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Flexibilidade:</strong> LangGraph (maxima) → Swarms (alta) → CrewAI (media) → Agency Swarm (media)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Comunidade:</strong> CrewAI (50k+) → AutoGen (40k+) → LangGraph (parte do LangChain 90k+) → Swarms (25k+)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Resumo da tabela
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>OpenAI Swarm:</strong> Educacional, Python, baixa complexidade — para aprender</li>
+          <li><strong>CrewAI:</strong> Role-based, Python, media complexidade — para produtividade</li>
+          <li><strong>LangGraph:</strong> Graph-based, Python, alta complexidade — para controle total</li>
+          <li><strong>Swarms:</strong> Enterprise, Python, media complexidade — para escala em producao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🎯 Escolhendo o framework certo</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A decisao final sobre qual framework usar deve seguir uma <strong class="text-blue-400">arvore de decisao</strong> simples baseada em tres perguntas: (1) Qual e seu nivel de experiencia? (2) Qual e o tipo de projeto? (3) Qual nivel de controle voce precisa? As respostas convergem para a recomendacao ideal na grande maioria dos casos.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Se voce esta <strong>aprendendo</strong>, comece pelo OpenAI Swarm. Se precisa de <strong>produtividade maxima</strong> com equipes de agentes, use CrewAI. Se precisa de <strong>controle total</strong> sobre cada decisao de roteamento, use LangGraph. Se precisa de <strong>escala enterprise</strong> com multiplas topologias, use Swarms. Se esta no <strong>ecossistema Microsoft</strong>, use AutoGen/Agent Framework. E se precisa de <strong>integracao nativa com Claude</strong>, use o Claude Code Agent SDK.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Arvore de decisao
+        </h3>
+        <p class="text-neutral-300 mb-4">Tres perguntas para escolher:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Iniciante?</strong> → OpenAI Swarm para aprender → CrewAI para construir</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Equipe com papeis?</strong> → CrewAI — metafora de equipe e a mais natural</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Controle total?</strong> → LangGraph — cada decisao de roteamento e explicita no codigo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Enterprise em escala?</strong> → Swarms Framework — topologias pre-construidas e deploy gerenciado</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Recomendacoes por cenario
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Startup rapida:</strong> CrewAI — comecar em horas, iterar em dias</li>
+          <li><strong>Financeiro/compliance:</strong> LangGraph — auditabilidade e human-in-the-loop</li>
+          <li><strong>Microsoft shop:</strong> AutoGen + Agent Framework — integracao nativa</li>
+          <li><strong>Aprendizado:</strong> OpenAI Swarm → CrewAI → LangGraph — progressao natural</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Swarms Framework</strong>
+              <span class="text-neutral-400"> - Enterprise-grade com multiplas topologias de swarm</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Agency Swarm</strong>
+              <span class="text-neutral-400"> - Estrutura de agencia com departamentos e canais</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Camel-AI: debate</strong>
+              <span class="text-neutral-400"> - Role-playing e debate para qualidade superior</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Claude Code Agent SDK</strong>
+              <span class="text-neutral-400"> - Agentes customizados com integracao nativa Claude</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Tabela comparativa</strong>
+              <span class="text-neutral-400"> - Todos os frameworks lado a lado com criterios claros</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Framework certo</strong>
+              <span class="text-neutral-400"> - Arvore de decisao baseada em experiencia e projeto</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Proximo:</h3>
+          <p class="text-neutral-300">Trilha 3 - Pratica Avancada</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-7.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 2.7 - Padroes de Orquestracao
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">
+            Trilha 3 - Pratica Avancada →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

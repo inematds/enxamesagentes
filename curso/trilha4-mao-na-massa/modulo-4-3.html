@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.3: Configurando os modelos de cada agente | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#F59E0B',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;}.dark body{background-color:#111827;}
+    html:not(.dark) body{background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 50%,#f1f5f9 100%);}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="flex justify-between items-center h-14"><div class="flex items-center space-x-4"><a href="../../index.html" class="flex items-center space-x-2 text-amber-400 hover:text-amber-300"><span class="text-2xl">🐝</span><span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span></a><span class="text-neutral-600">|</span><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a></div><div class="flex items-center space-x-1 sm:space-x-2"><a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a><a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Tecnicas</span></a><a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Pratica Avancada</span></a><a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Mao na Massa</span></a><button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2"><svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg><svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg></button></div></div></div></nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4"><div class="flex items-center space-x-2 text-sm text-neutral-400"><a href="../../index.html" class="hover:text-amber-400">Inicio</a><span>/</span><a href="index.html" class="hover:text-amber-400">Trilha 4</a><span>/</span><span class="text-amber-400">Modulo 4.3</span></div></nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MODULO 4.3</span><h1 class="text-3xl sm:text-4xl font-bold mb-4">🧩 Configurando os modelos de cada agente</h1><p class="text-lg text-neutral-400 max-w-3xl">Atribua o modelo certo para cada agente e otimize o equilibrio entre custo e qualidade do seu swarm.</p><div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl"><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">30</div><div class="text-xs text-neutral-400">Minutos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Intermediario</div><div class="text-xs text-neutral-400">Nivel</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Passo a passo</div><div class="text-xs text-neutral-400">Tipo</div></div></div></div></header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span><h2 class="text-2xl font-bold">🧩 Entender a estrategia: modelo certo para cada papel</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Nem todo agente precisa do modelo mais caro. A estrategia inteligente e usar modelos <strong class="text-amber-400">potentes para tarefas criticas</strong> (orquestracao, planejamento) e modelos <strong class="text-amber-400">leves ou gratuitos para suporte</strong> (pesquisa, exploracao). A diferenca de custo pode ser 10x mantendo qualidade similar no resultado final.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Tabela de estrategia recomendada</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-neutral-300">
+            <thead><tr class="border-b border-dark-600"><th class="text-left py-2 pr-3 text-amber-400">Agente</th><th class="text-left py-2 pr-3 text-amber-400">Funcao</th><th class="text-left py-2 pr-3 text-amber-400">Modelo Recomendado</th><th class="text-left py-2 text-amber-400">Custo</th></tr></thead>
+            <tbody>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-3 font-semibold">Sisyphus</td><td class="py-2 pr-3">Orquestrador</td><td class="py-2 pr-3"><code class="text-green-400">anthropic/claude-opus-4-6</code></td><td class="py-2 text-red-400">Pago</td></tr>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-3 font-semibold">Prometheus</td><td class="py-2 pr-3">Planejador</td><td class="py-2 pr-3"><code class="text-green-400">anthropic/claude-sonnet-4-5</code></td><td class="py-2 text-red-400">Pago</td></tr>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-3 font-semibold">Hephaestus</td><td class="py-2 pr-3">Executor</td><td class="py-2 pr-3"><code class="text-green-400">openai/gpt-5.3-codex</code></td><td class="py-2 text-red-400">Pago</td></tr>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-3 font-semibold">Oracle</td><td class="py-2 pr-3">Debug</td><td class="py-2 pr-3"><code class="text-green-400">opencode/big-pickle</code></td><td class="py-2 text-green-400">Gratuito</td></tr>
+              <tr class="border-b border-dark-700"><td class="py-2 pr-3 font-semibold">Librarian</td><td class="py-2 pr-3">Pesquisa</td><td class="py-2 pr-3"><code class="text-green-400">opencode/gpt-5-nano</code></td><td class="py-2 text-green-400">Gratuito</td></tr>
+              <tr><td class="py-2 pr-3 font-semibold">Explore</td><td class="py-2 pr-3">Explorador</td><td class="py-2 pr-3"><code class="text-green-400">opencode/gpt-5-nano</code></td><td class="py-2 text-green-400">Gratuito</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Por que heterogeneidade importa</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Anti-blindspot:</strong> Modelos de provedores diferentes encontram bugs que um unico provedor nao veria</li>
+          <li><strong>Custo otimizado:</strong> Agentes de suporte consomem tokens sem custo, economizando o orcamento para tarefas criticas</li>
+          <li><strong>Resiliencia:</strong> Se um provedor cair, apenas parte do swarm e afetada</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span><h2 class="text-2xl font-bold">📄 Passo 1: criar o arquivo de configuracao</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O arquivo de configuracao e onde voce define qual modelo cada agente usa. Ele fica na raiz do seu projeto (ou na configuracao global) e usa o formato JSONC (JSON com comentarios).</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Criando o arquivo</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Criar a pasta de configuracao (se nao existir)
+mkdir -p .opencode
+
+# Criar o arquivo de configuracao
+touch .opencode/oh-my-opencode.jsonc
+
+# Agora abra este arquivo no seu editor favorito:
+# VS Code: code .opencode/oh-my-opencode.jsonc
+# Nano: nano .opencode/oh-my-opencode.jsonc
+# Vim: vim .opencode/oh-my-opencode.jsonc</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span><h2 class="text-2xl font-bold">✍️ Passo 2: definir os modelos</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Agora vem a parte pratica: escrever o JSON com o mapeamento agente → modelo. Use os nomes exatos que voce anotou no Modulo 4.1.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Configuracao completa (copie e cole)</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400">{
+  // Configuracao de modelos por agente
+  // Use os nomes exatos do "opencode models"
+
+  "sisyphus":   { "model": "anthropic/claude-opus-4-6" },
+  "hephaestus": { "model": "openai/gpt-5.3-codex" },
+  "prometheus": { "model": "anthropic/claude-sonnet-4-5" },
+  "oracle":     { "model": "opencode/big-pickle" },
+  "librarian":  { "model": "opencode/gpt-5-nano" },
+  "explore":    { "model": "opencode/gpt-5-nano" }
+}</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Formato do arquivo</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>JSONC:</strong> JSON com suporte a comentarios (linhas com //). Util para documentar suas escolhas</li>
+          <li><strong>Chaves:</strong> Nomes dos agentes em minusculo (sisyphus, hephaestus, prometheus...)</li>
+          <li><strong>Valores:</strong> Objeto com chave "model" e valor no formato "provedor/nome-do-modelo"</li>
+          <li><strong>Salve o arquivo</strong> e o OpenCode detecta a mudanca automaticamente</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span><h2 class="text-2xl font-bold">🔀 Passo 3: trocar modelos em tempo real</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Uma das vantagens mais poderosas do oh-my-openagent e o <strong class="text-amber-400">hot-swap</strong> de modelos. Se durante uma execucao os creditos de um provedor acabarem, voce simplesmente edita o arquivo JSONC, salva, e o agente continua com o novo modelo — sem perder progresso, sem reiniciar.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Como fazer hot-swap</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Cenario: creditos de Claude acabaram no meio da execucao
+
+# 1. Abrir o arquivo de configuracao (em outro terminal)
+nano .opencode/oh-my-opencode.jsonc
+
+# 2. Trocar o modelo do Sisyphus:
+#    DE:  "sisyphus": { "model": "anthropic/claude-opus-4-6" }
+#    PARA: "sisyphus": { "model": "openai/gpt-5.3-codex" }
+
+# 3. Salvar o arquivo (Ctrl+O, Enter, Ctrl+X no nano)
+
+# 4. O OpenCode detecta a mudanca automaticamente
+# O Sisyphus continua trabalhando com o novo modelo!
+# Nenhum progresso e perdido.</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Caso real da aula</h3>
+        <p class="text-neutral-300">Na aula ao vivo, isso aconteceu de verdade: os creditos de Claude acabaram no meio de um projeto. Trocamos o modelo do Sisyphus para GPT em 10 segundos e a execucao continuou normalmente. O resultado final manteve a qualidade porque o plano ja estava feito.</p>
+      </div>
+    </section>
+
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span><h2 class="text-2xl font-bold">💰 Passo 4: estrategia para quem so tem gratuitos</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Se voce nao tem assinaturas pagas, nao se preocupe — o swarm funciona com modelos gratuitos. A qualidade sera menor (especialmente em tarefas complexas), mas voce consegue completar todo o curso e ter uma experiencia real com swarms.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Configuracao 100% gratuita</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400">{
+  // Estrategia 100% gratuita
+  // Funciona, mas qualidade significativamente menor
+
+  "sisyphus":   { "model": "opencode/big-pickle" },
+  "hephaestus": { "model": "opencode/big-pickle" },
+  "prometheus": { "model": "opencode/big-pickle" },
+  "oracle":     { "model": "opencode/gpt-5-nano" },
+  "librarian":  { "model": "opencode/gpt-5-nano" },
+  "explore":    { "model": "opencode/gpt-5-nano" }
+}</code></pre>
+      </div>
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">⚠️</span> Limitacoes dos modelos gratuitos</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span>Tarefas complexas podem ter resultados incompletos ou com erros</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span>O modo Prometheus pode fazer perguntas menos profundas na entrevista</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span>A autocorrecao pode nao funcionar tao bem quanto com modelos pagos</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span>Para projetos serios, investir em pelo menos uma assinatura Claude faz muita diferenca</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span><h2 class="text-2xl font-bold">✅ Checkpoint: configuracao validada</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Hora de validar que tudo esta configurado corretamente. Abra o OpenCode e confirme que cada agente esta usando o modelo que voce definiu.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Validando a configuracao</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># 1. Abrir o OpenCode no projeto
+cd ~/meu-primeiro-swarm
+opencode
+
+# 2. Verificar na interface que os modelos mudaram
+# Cada agente deve mostrar o modelo que voce definiu
+
+# 3. Teste rapido: envie uma mensagem simples para o Sisyphus
+# "Ola, me diga qual modelo voce esta usando"
+# Ele deve responder identificando o modelo configurado
+
+# 4. Se os modelos estao corretos, voce esta pronto!
+# Proximo passo: sua primeira execucao real (Modulo 4.4)</code></pre>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📚</span> Resumo do Modulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Estrategia definida</strong><span class="text-neutral-400"> - Modelo potente para criticos, gratuito para suporte</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Arquivo criado</strong><span class="text-neutral-400"> - .opencode/oh-my-opencode.jsonc na raiz do projeto</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Modelos definidos</strong><span class="text-neutral-400"> - JSON com mapeamento agente → modelo</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Hot-swap aprendido</strong><span class="text-neutral-400"> - Trocar modelos em tempo real sem perder progresso</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Estrategia gratuita</strong><span class="text-neutral-400"> - Configuracao para quem nao tem assinaturas pagas</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Configuracao validada</strong><span class="text-neutral-400"> - Modelos corretos confirmados no OpenCode</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8"><h3 class="font-semibold text-amber-400 mb-2">Proximo Modulo:</h3><p class="text-neutral-300">4.4 - Primeira execucao: modo linguagem natural</p></div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Modulo 4.2</a>
+          <a href="modulo-4-4.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Modulo 4.4 →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm"><a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a><a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a><a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a><a href="index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a></div><div class="text-center text-neutral-500 text-sm"><p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p></div></div></footer>
+
+  <script>const themeToggle=document.getElementById('theme-toggle'),themeToggleDarkIcon=document.getElementById('theme-toggle-dark-icon'),themeToggleLightIcon=document.getElementById('theme-toggle-light-icon'),html=document.documentElement;if(localStorage.getItem('theme')==='light'||(!localStorage.getItem('theme')&&!html.classList.contains('dark'))){themeToggleDarkIcon.classList.remove('hidden');html.classList.remove('dark');}else{themeToggleLightIcon.classList.remove('hidden');}themeToggle.addEventListener('click',()=>{themeToggleDarkIcon.classList.toggle('hidden');themeToggleLightIcon.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});</script>
+</body>
+</html>

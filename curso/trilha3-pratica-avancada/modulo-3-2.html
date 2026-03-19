@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3.2: Equipe de Desenvolvimento Autonoma | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#A855F7',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%); }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-purple-400 hover:text-purple-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Tecnicas</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Pratica Avancada</span></a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Mao na Massa</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a><span>/</span>
+      <span class="text-purple-400">Modulo 3.2</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MODULO 3.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏗️ Projeto 2: Equipe de Desenvolvimento Autonoma</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Construa um swarm de desenvolvimento completo com planejamento, coding paralelo, revisao cross-model, testes automatizados e documentacao — replicando a arquitetura do oh-my-openagent.
+      </p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">60</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Avancado</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Projeto</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🏗️ Arquitetura: replicando oh-my-openagent</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O oh-my-openagent (OMO) e um dos sistemas multiagentes mais sofisticados em producao. Sua arquitetura e um <strong class="text-purple-400">pipeline hierarquico</strong> onde um orquestrador central — chamado <strong>Sisyphus</strong> — coordena uma equipe de agentes especializados: o <strong>Prometheus</strong> (planejador) que cria a spec, o <strong>Hephaestus</strong> (coder) que implementa, o <strong>Reviewer</strong> que avalia a qualidade e o <strong>Test Engineer</strong> que valida o resultado. Cada agente usa um modelo de IA diferente deliberadamente, criando uma diversidade cognitiva que captura erros que um unico modelo ignoraria.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Neste projeto, voce vai replicar essa arquitetura do zero. O objetivo nao e copiar o OMO linha por linha, mas <strong class="text-purple-400">entender os principios</strong> que fazem ele funcionar e construir sua propria versao. O Sisyphus e um "loop incansavel" — ele delega, recebe resultado, avalia, e se nao estiver satisfeito, delega novamente. Ele nunca para ate que a tarefa esteja completa e aprovada. Esse padrao de persistencia e o que diferencia swarms de producao de demos.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mapa de Agentes
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Sisyphus (Orquestrador):</strong> Recebe a tarefa do usuario, decompoe em subtarefas, delega para agentes especializados e nao para ate completar. Usa o modelo mais potente disponivel (Claude Opus, GPT-5.3)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Prometheus (Planejador):</strong> Faz discovery questions, identifica requisitos e gera spec.md detalhada com criterios de aceitacao claros</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Hephaestus (Coder):</strong> Implementa o codigo seguindo a spec. Trabalha em tarefas atomicas com file ownership para evitar conflitos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Reviewer + Test Engineer:</strong> Revisam o codigo usando modelo diferente do coder (anti-blindspot) e geram testes automatizados</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Fluxo de execucao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>1. Receber tarefa:</strong> Sisyphus analisa o pedido do usuario e decide se precisa de planejamento ou pode executar diretamente</li>
+          <li><strong>2. Planejar:</strong> Prometheus faz perguntas de clarificacao e gera spec.md com tasks atomicas e criterios de aceitacao</li>
+          <li><strong>3. Executar:</strong> Hephaestus implementa cada task em sequencia (ou paralelo se nao houver dependencias)</li>
+          <li><strong>4. Revisar:</strong> Reviewer avalia o codigo — APPROVED ou NEEDS_REVISION com feedback especifico</li>
+          <li><strong>5. Testar:</strong> Test Engineer gera e executa testes unitarios, de integracao e adversariais</li>
+          <li><strong>6. Iterar:</strong> Se revisao ou testes falharem, Sisyphus envia de volta para correcao ate atingir qualidade aceitavel</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📋 Fase de planejamento: entrevista e spec</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A fase de planejamento e onde a maioria dos projetos de software falha — e com swarms nao e diferente. Um agente coder que recebe uma instrucao vaga vai produzir codigo vago. O agente planejador (<strong class="text-purple-400">Prometheus</strong>) resolve isso fazendo <strong>discovery questions</strong> — perguntas de clarificacao que forcam o usuario a definir exatamente o que quer. "Qual framework usar?", "Precisa de autenticacao?", "Qual banco de dados?" — cada pergunta elimina ambiguidade que geraria retrabalho na execucao.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O resultado do planejamento e um arquivo <strong class="text-purple-400">spec.md</strong> que contem: descricao do projeto, requisitos funcionais e nao-funcionais, stack tecnologica escolhida, lista de tasks atomicas (cada uma com escopo claro e criterios de aceitacao) e dependencias entre tasks. Esse arquivo e o "contrato" entre o planejador e o coder — tudo que nao esta na spec nao sera implementado, e tudo que esta na spec deve ser implementado completamente.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Componentes do Planejamento
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Discovery Questions:</strong> 5-10 perguntas que eliminam ambiguidade — stack, escopo, dependencias, constraints, prioridades</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>spec.md:</strong> Documento estruturado com requisitos, tasks, criterios de aceitacao e dependencias entre tasks</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Task Decomposition:</strong> Cada task deve ser atomica (completavel por um agente em uma sessao), testavel e independente quando possivel</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Acceptance Criteria:</strong> Cada task tem criterios claros do que significa "feito" — sem criterios, e impossivel saber quando parar</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center">
+          <span class="mr-2">⚠️</span> Armadilha: "plano perfeito"
+        </h3>
+        <p class="text-neutral-300">O planejamento deve ser <strong>bom o suficiente</strong>, nao perfeito. Gastar 30 minutos planejando uma tarefa de 5 minutos e desperdicio. A regra pratica: se a tarefa leva menos de 10 interacoes, o Sisyphus pode pular o planejamento e delegar diretamente para o coder. O Prometheus so e acionado para tarefas complexas que envolvem multiplos arquivos ou decisoes de arquitetura.</p>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">💻 Fase de execucao: coding com zonas seguras</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A execucao paralela e o santo graal dos swarms de desenvolvimento — multiplos agentes codificando simultaneamente, cada um em sua tarefa, produzindo em minutos o que levaria horas sequencialmente. Mas paralelismo sem coordenacao e receita para desastre: dois agentes editando o mesmo arquivo geram conflitos de merge, um agente importando um modulo que outro esta modificando causa erros em cascata. A solucao e o conceito de <strong class="text-purple-400">zonas seguras</strong>.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Zonas seguras significam que cada agente tem <strong class="text-purple-400">ownership exclusivo</strong> sobre os arquivos que esta modificando. O orquestrador distribui tasks de forma que dois agentes nunca editem o mesmo arquivo simultaneamente. Quando isso nao e possivel (ex: dois agentes precisam adicionar rotas no mesmo router.ts), a task e dividida em sub-tasks sequenciais ou o arquivo conflitante e tratado por um unico agente. Cada task atomica define explicitamente quais arquivos serao criados ou modificados, e o sistema valida que nao ha sobreposicao antes de iniciar a execucao paralela.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrategias de Paralelismo Seguro
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>File Ownership:</strong> Cada task lista os arquivos que vai criar/modificar. O scheduler garante que nao ha sobreposicao entre tasks paralelas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Atomic Tasks:</strong> Cada task e autossuficiente — cria os arquivos necessarios, escreve testes e valida localmente antes de marcar como completa</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Merge Strategy:</strong> Tasks paralelas sao mergeadas na ordem de conclusao. Se houver conflito, o orquestrador resolve com um merge agent dedicado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Dependency Graph:</strong> Tasks com dependencias rodam sequencialmente; tasks independentes rodam em paralelo — o scheduler otimiza automaticamente</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Ganhos de paralelismo
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>3-5x mais rapido:</strong> Projetos com 10+ tasks independentes completam em 1/3 a 1/5 do tempo sequencial</li>
+          <li><strong>Custo proporcional:</strong> Paralelismo nao aumenta custo total de tokens — as mesmas tasks sao executadas, apenas simultaneamente</li>
+          <li><strong>Limite pratico:</strong> Alem de 5-7 agentes paralelos, a overhead de coordenacao comeca a superar o ganho de velocidade</li>
+          <li><strong>Quando evitar:</strong> Tasks altamente interdependentes ou que modificam muitos arquivos compartilhados sao melhor executadas sequencialmente</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔍 Fase de revisao: cross-model review</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A revisao cross-model e uma das tecnicas mais poderosas e menos intuitivas dos swarms: usar um <strong class="text-purple-400">modelo de IA diferente</strong> do que escreveu o codigo para revisao-lo. Se o Hephaestus codou usando Claude Sonnet, o Reviewer usa GPT-5.3 (ou vice-versa). A razao e que modelos do mesmo provider tendem a ter os mesmos <strong>blindspots</strong> — padroes que eles nao conseguem detectar em seu proprio output porque sao inerentes ao seu treinamento. Usar um modelo de provider diferente introduz uma "perspectiva alternativa" que captura erros que o modelo original nunca veria.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O Reviewer nao faz apenas code review tradicional. Ele avalia contra uma <strong class="text-purple-400">checklist estruturada</strong>: corretude (o codigo faz o que a spec pede?), seguranca (ha vulnerabilidades OWASP?), performance (ha gargalos obvios?), manutenibilidade (o codigo e legivel e bem estruturado?) e completude (ha TODOs, stubs ou placeholders?). O resultado e binario: <strong>APPROVED</strong> ou <strong>NEEDS_REVISION</strong> com feedback especifico sobre o que precisa ser corrigido.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Checklist de Revisao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Corretude:</strong> O codigo implementa todos os requisitos da spec? Os criterios de aceitacao sao atendidos?</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Seguranca:</strong> Ha injection, XSS, secrets hardcoded, path traversal ou outras vulnerabilidades OWASP Top 10?</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Manutenibilidade:</strong> Funcoes com mais de 50 linhas? Complexidade ciclomatica alta? Nomes de variaveis obscuros?</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Completude:</strong> Ha TODOs, stubs, funcoes vazias, imports nao utilizados ou placeholders nao resolvidos?</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Eficacia do cross-model review
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Reducao de 60% em bugs:</strong> Modelos diferentes capturam classes de erros que o modelo original nunca detectaria</li>
+          <li><strong>Custo adicional minimo:</strong> A revisao tipicamente consome 10-20% dos tokens da implementacao — investimento com ROI altissimo</li>
+          <li><strong>Pares comprovados:</strong> Claude + GPT, Gemini + Claude, Codex + Sonnet — diversidade de treinamento e o que importa</li>
+          <li><strong>Limite de iteracoes:</strong> Se o codigo nao e aprovado apos 3 revisoes, escala para humano — evita loops infinitos de correcao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🧪 Fase de teste: testes automatizados</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O agente testador (<strong class="text-purple-400">Test Engineer</strong>) e responsavel por gerar e executar testes que provam que o codigo funciona corretamente. Mas ha uma armadilha fundamental: IAs sao excelentes em gerar testes que <strong>parecem</strong> corretos mas nao testam nada de verdade. O fenomeno do <strong>"testing theater"</strong> — 268 assertions testando strings de prompt em vez de comportamento real — e um caso real documentado em projetos open-source gerados por IA.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para evitar testing theater, o Test Engineer deve gerar tres tipos de testes: <strong class="text-purple-400">testes unitarios</strong> que verificam funcoes individuais com inputs variados (incluindo edge cases), <strong class="text-purple-400">testes de integracao</strong> que verificam que componentes funcionam juntos e <strong class="text-purple-400">testes adversariais</strong> que tentam deliberadamente quebrar o codigo com inputs maliciosos, volumes extremos e condicoes de corrida. Os testes devem verificar <strong>comportamento</strong>, nao implementacao — testar que a funcao retorna o resultado correto, nao que ela usa determinada variavel interna.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Tipos de Testes
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Unit Tests:</strong> Testar funcoes isoladas com inputs normais, edge cases (null, vazio, overflow) e tipos invalidos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Integration Tests:</strong> Verificar que modulos interagem corretamente — API retorna dados certos, DB persiste corretamente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Adversarial Tests:</strong> Inputs maliciosos (SQL injection, XSS payloads), volumes extremos (100k registros), race conditions</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Mutation Testing:</strong> Introduzir erros deliberados no codigo e verificar que os testes falham — se nao falharem, os testes sao fracos</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-4 flex items-center">
+          <span class="mr-2">🚨</span> Anti-padrao: Testing Theater
+        </h3>
+        <p class="text-neutral-300 mb-4">Sinais de que seus testes nao testam nada real:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Testes verificam strings fixas de prompts em vez de outputs funcionais</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>100% de cobertura mas nenhuma assertion de valor — apenas "expect(fn).not.toThrow()"</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mocks que retornam exatamente o que o teste espera — sem testar logica real</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Testes que passam mesmo quando voce introduz bugs deliberados no codigo</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📝 Fase de documentacao: docs automaticos</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A documentacao automatica e o ultimo elo da cadeia de desenvolvimento autonomo. O agente documentador (<strong class="text-purple-400">Documenter</strong>) nao apenas gera README e docstrings — ele registra o <strong>racional de decisoes</strong> tomadas durante o desenvolvimento. Por que escolhemos Redis em vez de PostgreSQL para o cache? Por que o endpoint usa POST em vez de GET? Essas decisoes sao obvias no momento mas esquecidas em semanas. O decision log preserva esse conhecimento.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O Documenter gera tres artefatos: <strong class="text-purple-400">changelog</strong> (o que mudou e por que), <strong class="text-purple-400">decision log</strong> (decisoes de arquitetura com contexto e alternativas consideradas) e <strong class="text-purple-400">API docs</strong> (documentacao tecnica dos endpoints, funcoes e modulos). Cada artefato e gerado automaticamente a partir das tasks completadas, do historico de revisao e dos testes executados. O resultado e documentacao que nasce junto com o codigo, nao como afterthought.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Artefatos de Documentacao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Changelog:</strong> Registro estruturado de cada mudanca — o que, quando, por que, e quem (qual agente) fez</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Decision Log:</strong> Decisoes de arquitetura com contexto ("Escolhemos X porque Y, alternativas eram Z")</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>API Documentation:</strong> Endpoints, parametros, exemplos de request/response, codigos de erro</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Setup Guide:</strong> Como instalar, configurar e executar o projeto — gerado automaticamente a partir do ambiente de desenvolvimento</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📚</span> Resumo do Modulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Arquitetura OMO</strong><span class="text-neutral-400"> - Sisyphus, Prometheus, Hephaestus, Reviewer, Test Engineer em pipeline hierarquico</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Planejamento com spec.md</strong><span class="text-neutral-400"> - Discovery questions, tasks atomicas, criterios de aceitacao</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Zonas seguras</strong><span class="text-neutral-400"> - File ownership, paralelismo sem conflitos, dependency graph</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Cross-model review</strong><span class="text-neutral-400"> - Modelos de providers diferentes para capturar blindspots</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Testes reais</strong><span class="text-neutral-400"> - Unit, integration, adversarial — evitar testing theater</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Auto-documentacao</strong><span class="text-neutral-400"> - Changelog, decision log, API docs gerados automaticamente</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">3.3 - Memoria e Persistencia em Swarms</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-3-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Modulo 3.1</a>
+          <a href="modulo-3-3.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Modulo 3.3 →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

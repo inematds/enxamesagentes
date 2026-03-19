@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.5: Modo Prometheus: entrevista antes de executar | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#F59E0B',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif;}.dark body{background-color:#111827;}html:not(.dark) body{background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 50%,#f1f5f9 100%);}html:not(.dark) .bg-dark-900{background-color:#ffffff;}html:not(.dark) .bg-dark-800{background-color:#f9fafb;}html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}html:not(.dark) .text-neutral-100{color:#111827;}html:not(.dark) .text-neutral-300{color:#4b5563;}html:not(.dark) .text-neutral-400{color:#6b7280;}html:not(.dark) .text-neutral-500{color:#9ca3af;}html:not(.dark) .border-dark-600{border-color:#d1d5db;}html:not(.dark) .border-dark-700{border-color:#e5e7eb;}</style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="flex justify-between items-center h-14"><div class="flex items-center space-x-4"><a href="../../index.html" class="flex items-center space-x-2 text-amber-400 hover:text-amber-300"><span class="text-2xl">🐝</span><span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span></a><span class="text-neutral-600">|</span><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a></div><div class="flex items-center space-x-1 sm:space-x-2"><a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a><a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Tecnicas</span></a><a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Pratica Avancada</span></a><a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Mao na Massa</span></a><button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2"><svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg><svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg></button></div></div></div></nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4"><div class="flex items-center space-x-2 text-sm text-neutral-400"><a href="../../index.html" class="hover:text-amber-400">Inicio</a><span>/</span><a href="index.html" class="hover:text-amber-400">Trilha 4</a><span>/</span><span class="text-amber-400">Modulo 4.5</span></div></nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MODULO 4.5</span><h1 class="text-3xl sm:text-4xl font-bold mb-4">📋 Modo Prometheus: entrevista antes de executar</h1><p class="text-lg text-neutral-400 max-w-3xl">A entrevista previa faz toda a diferenca — Prometheus extrai requisitos completos antes de uma linha de codigo.</p><div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl"><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">45</div><div class="text-xs text-neutral-400">Minutos</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Intermediario</div><div class="text-xs text-neutral-400">Nivel</div></div><div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Passo a passo</div><div class="text-xs text-neutral-400">Tipo</div></div></div></div></header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span><h2 class="text-2xl font-bold">📋 Por que a entrevista faz toda a diferenca</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">No modulo anterior, voce fez um pedido direto e o Sisyphus executou. Funciona para tarefas simples, mas para projetos maiores (uma landing page completa, um app, um dashboard), a qualidade cai drasticamente se voce nao definir bem o escopo. O <strong class="text-amber-400">Prometheus</strong> resolve isso: ele faz uma <strong>entrevista estruturada</strong> que extrai todos os requisitos antes de escrever uma unica linha de codigo.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Discovery: a fase mais importante</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Sem entrevista:</strong> O swarm "adivinha" o que voce quer — resultado generico, muitos ajustes depois</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Com entrevista:</strong> O swarm sabe exatamente o que voce quer — resultado personalizado, poucos ajustes</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Na pratica:</strong> 5 minutos respondendo perguntas economiza 30+ minutos de ajustes depois</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span><h2 class="text-2xl font-bold">🔄 Passo 1: trocar para o agente Prometheus</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O Prometheus nao e ativado automaticamente — voce precisa mudar para ele manualmente. Isso e intencional: o modo padrao (Sisyphus) e otimizado para tarefas diretas. O Prometheus e para quando voce quer qualidade maxima.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Como ativar o Prometheus</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Dentro do OpenCode, pressione Tab
+# Uma lista de agentes aparece:
+#   Sisyphus (padrao)
+#   Hephaestus
+#   Prometheus / Plan Builder  ← selecione este
+#   Plan Executor
+
+# Selecione "Prometheus" ou "Plan Builder"
+# O indicador no topo do chat muda para Prometheus
+# Agora voce esta conversando com o planejador!</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span><h2 class="text-2xl font-bold">✍️ Passo 2: descrever o projeto e pedir entrevista</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Com o Prometheus ativo, descreva o que voce quer construir e explicitamente peca que ele te entreviste primeiro. O Prometheus vai fazer perguntas estruturadas para entender completamente o escopo.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Prompt para iniciar a entrevista</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Exemplo de prompt para o Prometheus:
+
+Quero construir uma landing page profissional para uma
+consultoria de IA. Me entreviste antes de comecar.
+
+# O Prometheus vai responder com perguntas como:
+# - Qual o nome da empresa?
+# - Quais servicos voce oferece?
+# - Quem e o publico-alvo?
+# - Que secoes a pagina deve ter?
+# - Qual o tom de voz (formal, informal, tecnico)?
+# - Qual stack tecnico preferido?
+# - Precisa de formulario de contato?
+# - Tem referencias visuais?</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span><h2 class="text-2xl font-bold">🗣️ Passo 3: responder as perguntas do Prometheus</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cada resposta que voce da refina o plano. Quanto mais contexto e detalhes voce fornece, melhor sera o resultado final. Nao economize nas respostas — este e o momento em que voce molda o projeto.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Exemplo de respostas</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Prometheus pergunta: "Qual o nome da empresa e servicos?"
+# Sua resposta:
+A empresa se chama "SoluTech IA". Oferecemos consultoria em
+automacao com IA, desenvolvimento de chatbots, e treinamentos
+corporativos sobre agentes de IA.
+
+# Prometheus pergunta: "Quais secoes quer na pagina?"
+# Sua resposta:
+Hero com titulo impactante, secao de 6 servicos com icones,
+como trabalhamos (4 etapas), depoimentos de 3 clientes,
+FAQ com 5 perguntas, formulario de contato e footer.
+
+# Prometheus pergunta: "Stack e tom de voz?"
+# Sua resposta:
+HTML, CSS e JavaScript vanilla. Tema escuro. Tom profissional
+mas acessivel, sem ser informal demais.</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Categorias tipicas de perguntas</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Identidade:</strong> Nome, logo, cores, marca</li>
+          <li><strong>Conteudo:</strong> Servicos, secoes, textos, depoimentos</li>
+          <li><strong>Tecnico:</strong> Stack, frameworks, responsividade</li>
+          <li><strong>Tom:</strong> Formal, casual, tecnico, inspiracional</li>
+          <li><strong>Funcionalidade:</strong> Formularios, animacoes, links</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span><h2 class="text-2xl font-bold">📊 Passo 4: revisar o resumo e confirmar</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Apos todas as perguntas, o Prometheus compila tudo em um <strong class="text-amber-400">resumo estruturado</strong>. Revise com cuidado — esta e sua ultima chance de corrigir antes da execucao.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> O resumo do Prometheus</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Prometheus mostra algo como:
+#
+# RESUMO DO PROJETO
+# ─────────────────
+# Nome: SoluTech IA
+# Tipo: Landing page profissional
+# Servicos: Consultoria IA, Chatbots, Treinamentos
+# Secoes: Hero, Servicos(6), Processo(4), Depoimentos(3),
+#          FAQ(5), Formulario, Footer
+# Stack: HTML + CSS + JS vanilla
+# Tema: Escuro
+# Tom: Profissional acessivel
+# Formulario: nome, email, empresa, telefone, mensagem
+#
+# "Confirma? Arrancamos com o plano de implementacao?"
+
+# Sua resposta:
+Sim, correto. Pode comecar!</code></pre>
+      </div>
+    </section>
+
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span><h2 class="text-2xl font-bold">🚀 Passo 5: executar com /start-work</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Apos confirmar, o plano esta pronto. Agora voce aciona a execucao com o comando <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400">/start-work</code>. O Sisyphus assume o controle e comeca a delegar tarefas para todos os agentes em paralelo.</p>
+      <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Lancando a execucao</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400"># Digite no chat:
+/start-work
+
+# O que acontece:
+# 1. Sisyphus assume o controle
+# 2. Plan Executor ativa as waves de implementacao
+# 3. Wave 1: Estrutura HTML base
+# 4. Wave 2: Conteudo de cada secao
+# 5. Wave 3: Estilizacao CSS
+# 6. Wave 4: JavaScript e interatividade
+# 7. Wave 5: Revisao automatica
+# 8. Wave 6: Polish final
+#
+# Agentes trabalham em PARALELO!
+# Voce nao precisa fazer mais nada ate terminar.</code></pre>
+      </div>
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> O poder do planejamento previo</h3>
+        <p class="text-neutral-300">Compare os resultados: a landing page criada com entrevista Prometheus tera secoes personalizadas, conteudo especifico da sua marca, tom de voz correto e todas as funcionalidades que voce pediu. Sem entrevista, o resultado seria generico com placeholder "Lorem ipsum". A diferenca e dramatica.</p>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📚</span> Resumo do Modulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Importancia da entrevista</strong><span class="text-neutral-400"> - 5 min de perguntas economizam 30+ min de ajustes</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Tab para Prometheus</strong><span class="text-neutral-400"> - Trocar manualmente para o agente planejador</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Pedir entrevista</strong><span class="text-neutral-400"> - Descrever + "me entreviste antes de comecar"</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Respostas detalhadas</strong><span class="text-neutral-400"> - Secoes, stack, tom, conteudo especifico</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Resumo revisado</strong><span class="text-neutral-400"> - Ultima chance de corrigir antes da execucao</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">/start-work executado</strong><span class="text-neutral-400"> - Swarm trabalhando em waves paralelas</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8"><h3 class="font-semibold text-amber-400 mb-2">Proximo Modulo:</h3><p class="text-neutral-300">4.6 - Modo ultrawork: execucao autonoma completa</p></div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-4.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Modulo 4.4</a>
+          <a href="modulo-4-6.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Modulo 4.6 →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm"><a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a><a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a><a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a><a href="index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a></div><div class="text-center text-neutral-500 text-sm"><p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p></div></div></footer>
+  <script>const themeToggle=document.getElementById('theme-toggle'),themeToggleDarkIcon=document.getElementById('theme-toggle-dark-icon'),themeToggleLightIcon=document.getElementById('theme-toggle-light-icon'),html=document.documentElement;if(localStorage.getItem('theme')==='light'||(!localStorage.getItem('theme')&&!html.classList.contains('dark'))){themeToggleDarkIcon.classList.remove('hidden');html.classList.remove('dark');}else{themeToggleLightIcon.classList.remove('hidden');}themeToggle.addEventListener('click',()=>{themeToggleDarkIcon.classList.toggle('hidden');themeToggleLightIcon.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});</script>
+</body>
+</html>

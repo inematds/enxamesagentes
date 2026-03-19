@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.4: Papeis e Especializacao de Agentes | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Modulo 1.4</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 1.4
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">👔 Papeis e Especializacao de Agentes</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Conheca os papeis fundamentais de um swarm — do orquestrador ao testador — e entenda como a especializacao de cada agente eleva a qualidade do resultado coletivo.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">40</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Iniciante</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-emerald-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">👔 O Orquestrador: cerebro do swarm</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">orquestrador</strong> e o agente mais importante de qualquer swarm. Ele e o cerebro central que recebe a tarefa do usuario, analisa a complexidade, cria um plano de execucao, seleciona os agentes adequados, delega subtarefas, monitora o progresso e garante que o resultado final atenda ao objetivo original. Sem um bom orquestrador, um swarm com os melhores agentes especializados do mundo seria apenas caos — como uma orquestra sem maestro, onde cada musico toca no seu tempo e tom.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Em sistemas reais, o orquestrador recebe nomes diferentes: no <strong class="text-emerald-400">oh-my-openagent (OMO)</strong> e o <strong>Sisyphus</strong> — nomeado pelo mito grego porque "empurra a pedra morro acima" sem desistir, iterando ate a tarefa estar completa. No <strong>OpenCode Swarm</strong> e o <strong>Architect</strong>, que projeta a solucao e coordena a cadeia de agentes. Em frameworks como CrewAI e o <strong>Manager Agent</strong>, e no LangGraph e o <strong>Supervisor Node</strong>. Independente do nome, o orquestrador sempre usa o modelo mais potente disponivel (Claude Opus, GPT-5.3) porque precisa de raciocinio sofisticado para decompor problemas e tomar decisoes de delegacao.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Responsabilidades do Orquestrador
+        </h3>
+        <p class="text-neutral-300 mb-4">O orquestrador acumula funcoes criticas que nenhum outro agente pode assumir:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Analise de tarefa:</strong> Entende o pedido do usuario, identifica ambiguidades, formula perguntas de clarificacao quando necessario</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Decomposicao e planejamento:</strong> Divide a tarefa em subtarefas atomicas que podem ser delegadas a agentes especializados</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Delegacao inteligente:</strong> Seleciona qual agente e o mais adequado para cada subtarefa com base em capacidades e disponibilidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Monitoramento e correcao:</strong> Acompanha o progresso, detecta falhas, pede retrabalho quando necessario e nao para ate o objetivo ser atingido</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Orquestradores em sistemas reais
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sisyphus (OMO):</strong> "Nao para ate terminar" — itera automaticamente, corrigindo erros e ajustando o plano. Usa o modelo mais potente disponivel</li>
+          <li><strong>Architect (OpenCode Swarm):</strong> Cria design decisions documentadas, projeta a arquitetura e coordena o pipeline de 8 agentes</li>
+          <li><strong>Custo do orquestrador:</strong> Tipicamente 30-40% do custo total de tokens do swarm porque precisa manter contexto amplo e fazer raciocinio complexo</li>
+          <li><strong>Regra de ouro:</strong> Use o melhor modelo disponivel para o orquestrador — economizar aqui degrada todo o swarm</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📐 O Planejador: antes de executar</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">agente planejador</strong> e responsavel por transformar requisitos vagos em planos de execucao detalhados. Enquanto o orquestrador decide <em>o que</em> precisa ser feito em alto nivel, o planejador detalha <em>como</em> — definindo a ordem das tarefas, as dependencias entre elas, os criterios de aceitacao e os riscos potenciais. Em muitos swarms, o planejador atua antes de qualquer agente executor, garantindo que o trabalho comece com direcao clara e objetivos mensuraveis.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        No OMO, o planejador se chama <strong class="text-emerald-400">Prometheus</strong> — nomeado pelo tita que deu fogo (conhecimento) a humanidade. O Prometheus faz algo que a maioria dos agentes nao faz: antes de planejar, ele <strong>faz perguntas de descoberta (discovery questions)</strong> ao usuario para entender restricoes, preferencias e contexto que nao estao explicitos no pedido original. Depois, ele produz um <strong>spec file</strong> (arquivo de especificacao) detalhado que serve como contrato entre o planejador e os executores. Esse spec file inclui objetivos, escopo, tarefas numeradas, criterios de aceitacao e riscos identificados.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Processo de Planejamento
+        </h3>
+        <p class="text-neutral-300 mb-4">O planejador segue um fluxo estruturado que transforma ambiguidade em clareza:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Discovery questions:</strong> Antes de planejar, o agente faz perguntas ao usuario — "Qual framework usar?", "Precisa de autenticacao?", "Qual banco de dados?" — reduzindo ambiguidades</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Analise de codebase:</strong> O planejador usa dados do Explorer para entender o estado atual do projeto — padroes existentes, tecnologias usadas, convencoes do time</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Spec file:</strong> Documento estruturado com objetivo, escopo, lista de tarefas numeradas, dependencias entre tarefas e criterios de aceitacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Validacao do plano:</strong> O spec file e revisado (por um Critic ou pelo usuario) antes de qualquer execucao — plano ruim detectado cedo economiza muito retrabalho</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto do planejamento no swarm
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Prometheus (OMO):</strong> Gera 5-10 discovery questions e produz spec files de 200-500 linhas que guiam toda a execucao posterior</li>
+          <li><strong>Taxa de sucesso:</strong> Swarms com fase de planejamento explicita tem taxa de sucesso 40-60% maior do que swarms que pula direto para a execucao</li>
+          <li><strong>Custo do planejamento:</strong> Tipicamente 10-15% do custo total de tokens, mas evita retrabalho que custaria 3-5x mais</li>
+          <li><strong>"Measure twice, cut once":</strong> Planejar bem antes de executar e o principio mais impactante na qualidade de qualquer swarm</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">💻 O Executor: mao na massa</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">agente executor</strong> (ou coder) e onde o trabalho concreto acontece. Enquanto o orquestrador planeja e o planejador especifica, o executor <strong>escreve codigo, cria arquivos, modifica configuracoes e implementa solucoes reais</strong>. Ele recebe uma tarefa atomica bem definida — "crie o endpoint POST /api/users com validacao de email" — e a implementa com foco total, sem se preocupar com o contexto macro do projeto. Essa focalizacao e intencional: quanto mais restrita a tarefa, maior a qualidade do output.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        No OMO, o executor se chama <strong class="text-emerald-400">Hephaestus</strong> — o deus grego da forja e do artesanato, que constroi coisas concretas. Multiplas instancias de Hephaestus podem rodar em paralelo, cada uma trabalhando em uma tarefa atomica diferente em sua zona segura de arquivos. No OpenCode Swarm, o papel equivalente e o <strong>Coder</strong>, que recebe a especificacao do Architect e implementa exatamente o que foi pedido. Uma pratica comum e usar modelos de custo medio para executores (Claude Sonnet, GPT-4o) porque as tarefas sao bem definidas e nao exigem o raciocinio sofisticado de um Opus ou GPT-5.3.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Principios do Agente Executor
+        </h3>
+        <p class="text-neutral-300 mb-4">O executor eficaz segue principios que maximizam qualidade e minimizam conflitos:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Tarefas atomicas:</strong> Cada tarefa deve ser pequena o suficiente para ser completada em uma unica sessao sem perda de contexto — idealmente 1-3 arquivos modificados</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Contexto minimo:</strong> O executor recebe apenas as informacoes necessarias para sua tarefa especifica — nada mais. Isso mantem o foco e reduz custos de tokens</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Zona segura:</strong> Cada executor trabalha em arquivos designados exclusivamente para ele, evitando conflitos com outros executores paralelos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Output estruturado:</strong> O executor retorna nao apenas o codigo, mas tambem metadados sobre o que fez — arquivos modificados, decisoes tomadas, dependencias criadas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Executores na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Hephaestus (OMO):</strong> Multiplas instancias paralelas por categoria (Frontend, Backend, Database). Cada uma implementa tarefas atomicas do spec file</li>
+          <li><strong>Coder (OpenCode Swarm):</strong> Recebe especificacao do Architect e implementa em sequencia. Resultado passa por Reviewer antes de avancar</li>
+          <li><strong>Modelo recomendado:</strong> Claude Sonnet ou GPT-4o — custo-beneficio ideal para tarefas bem definidas que nao exigem raciocinio de fronteira</li>
+          <li><strong>Produtividade:</strong> Um executor focado em tarefa atomica produz codigo 2-3x mais consistente do que um agente generico tentando fazer tudo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔍 O Revisor: olhar critico</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">agente revisor</strong> (reviewer ou critic) e o guardiao da qualidade do swarm. Ele recebe o output do executor e avalia com olhar critico: o codigo esta correto? Segue os padroes do projeto? Tem vulnerabilidades de seguranca? E eficiente? Trata erros adequadamente? O revisor nao implementa — ele julga, critica e, quando necessario, rejeita o trabalho com feedback especifico sobre o que precisa ser corrigido. A separacao entre quem cria e quem revisa e um dos principios mais poderosos dos swarms.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma tecnica fundamental e usar um <strong class="text-emerald-400">modelo diferente do executor</strong> para a revisao — o chamado padrao <strong>anti-blindspot</strong>. Se o Coder usa Claude Sonnet, o Reviewer usa GPT-4o (ou vice-versa). A logica e que modelos diferentes, treinados com dados diferentes, capturam tipos diferentes de erros. Um modelo pode ter pontos cegos que outro nao tem. O resultado da revisao e binario e claro: <strong class="text-emerald-400">APPROVED</strong> (o codigo avanca para a proxima etapa) ou <strong class="text-red-400">NEEDS_REVISION</strong> (o codigo retorna ao executor com lista de correcoes). Esse gate de qualidade impede que codigo ruim avance no pipeline.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mecanismo de Revisao
+        </h3>
+        <p class="text-neutral-300 mb-4">O revisor opera com criterios explicitos e resultado binario que nao deixa margem para ambiguidade:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Anti-blindspot:</strong> Usar provider diferente do executor (Claude revisa GPT, GPT revisa Claude) — dados de treinamento distintos capturam erros complementares</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Checklist de revisao:</strong> Corretude logica, seguranca, performance, tratamento de erros, aderencia ao plano original, convencoes do projeto</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>APPROVED / NEEDS_REVISION:</strong> Resultado binario — ou o codigo avanca, ou retorna ao executor com lista detalhada de correcoes necessarias</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Feedback construtivo:</strong> O revisor nao apenas aponta erros — ele explica por que e como corrigir, fornecendo contexto que ajuda o executor a melhorar</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto da revisao automatica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Reducao de bugs:</strong> Swarms com revisao automatica detectam 60-80% mais defeitos do que swarms sem revisor dedicado</li>
+          <li><strong>Anti-blindspot em numeros:</strong> Cross-provider review detecta 15-25% mais erros do que same-provider review — cada modelo tem pontos cegos diferentes</li>
+          <li><strong>Ciclos de correcao:</strong> Em media, 30-40% dos outputs do executor sao rejeitados na primeira revisao e aprovados na segunda apos correcoes</li>
+          <li><strong>ROI claro:</strong> O custo de um agente revisor (10-15% do total de tokens) evita bugs que custariam 5-10x mais para corrigir em producao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🧪 O Testador: prova que funciona</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">agente testador</strong> (Test Engineer) e o que garante que o codigo nao apenas parece correto mas <strong>realmente funciona</strong>. Enquanto o revisor avalia qualidade estatica (lendo o codigo), o testador valida dinamicamente — escrevendo e executando testes que provam que o codigo se comporta como esperado. Isso inclui <strong>testes unitarios</strong> que verificam funcoes individuais, <strong>testes de integracao</strong> que validam como componentes interagem e, crucialmente, <strong>testes adversariais</strong> que tentam deliberadamente quebrar o codigo com inputs inesperados.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A contribuicao mais valiosa do testador e a capacidade de gerar <strong class="text-emerald-400">testes adversariais</strong> — cenarios que o executor nunca pensaria em cobrir. O que acontece se o usuario enviar um campo vazio? E se o email tiver 500 caracteres? E se duas requisicoes chegarem ao mesmo tempo? O testador pensa como um adversario que quer quebrar o sistema. Em swarms maduros, o testador tambem valida que as correcoes do executor nao introduziram regressoes — ou seja, que ao corrigir um bug, outros bugs nao foram criados. Esse ciclo de codigo → revisao → teste → correcao e o que produz software de qualidade profissional.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Tipos de Teste no Swarm
+        </h3>
+        <p class="text-neutral-300 mb-4">O agente testador gera e executa diferentes categorias de testes para cobertura completa:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Testes unitarios:</strong> Validam funcoes e metodos individuais isoladamente — entrada X deve produzir saida Y. Rapidos e precisos para detectar bugs logicos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Testes de integracao:</strong> Verificam como componentes interagem — o endpoint chama o servico que consulta o banco corretamente?</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Testes adversariais:</strong> Inputs maliciosos, edge cases extremos, concorrencia, campos vazios, payloads enormes — tentam deliberadamente quebrar o sistema</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Testes de regressao:</strong> Verificam que correcoes nao quebraram funcionalidades existentes — rodam a suite completa apos cada mudanca</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Testes em swarms reais
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Cobertura tipica:</strong> Agentes testadores bem configurados geram 80-95% de cobertura de codigo em funcoes criticas</li>
+          <li><strong>Testes adversariais:</strong> Detectam 20-30% mais vulnerabilidades do que testes unitarios tradicionais — essenciais para seguranca</li>
+          <li><strong>Ciclo de feedback:</strong> Quando testes falham, o resultado volta ao executor com o stack trace e sugestoes de correcao — fechando o loop automaticamente</li>
+          <li><strong>Modelo recomendado:</strong> Modelos de custo medio funcionam bem para geracao de testes — a tarefa e estruturada e nao exige raciocinio de fronteira</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔎 Agentes de suporte: explorador, pesquisador, visual</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Alem dos papeis centrais (orquestrador, planejador, executor, revisor, testador), swarms eficazes contam com <strong class="text-emerald-400">agentes de suporte</strong> que fornecem contexto e inteligencia aos demais. Esses agentes nao produzem codigo diretamente, mas o trabalho que fazem melhora dramaticamente a qualidade de tudo que vem depois. O mais fundamental e o <strong>Explorer</strong> — um agente <strong>read-only</strong> que escaneia toda a codebase, identifica padroes, mapeia dependencias e cria um "mapa" do projeto que outros agentes consultam. Sem o Explorer, cada agente teria que redescobrir a estrutura do projeto sozinho.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-emerald-400">Librarian</strong> (pesquisador) vai alem da codebase e busca informacoes externas: documentacao de APIs, artigos tecnicos, exemplos de implementacao, melhores praticas. Quando o executor precisa integrar uma API que nunca usou, o Librarian ja preparou um resumo com os endpoints relevantes, formatos de resposta e exemplos funcionais. O <strong class="text-emerald-400">Multimodal Looker</strong> traz uma capacidade unica: analise visual. Ele pode analisar screenshots de UI, diagramas de arquitetura, wireframes de design e extrair informacoes que agentes baseados apenas em texto nao conseguem captar — como "o botao de login esta desalinhado 3px a esquerda".
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Papeis de Suporte
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada agente de suporte fornece um tipo especifico de inteligencia que melhora o trabalho dos agentes centrais:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Explorer (read-only):</strong> Escaneia codebase, identifica padroes, mapeia dependencias, lista arquivos relevantes. Nunca modifica nada — opera exclusivamente em modo leitura</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Librarian (pesquisador):</strong> Busca documentacao externa, exemplos de implementacao, artigos tecnicos e melhores praticas. Cria resumos contextualizados para os executores</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>Multimodal Looker (visual):</strong> Analisa imagens — screenshots de UI, diagramas, wireframes. Extrai informacoes visuais que agentes de texto nao captam</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-1">•</span>
+            <span><strong>SME — Subject Matter Expert:</strong> Especialista de dominio que fornece contexto profundo sobre a area de negocio — regulamentacoes, padroes da industria, terminologia especifica</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto dos agentes de suporte
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Explorer:</strong> Reduz o tempo de "entendimento do projeto" de 5-10 minutos por agente para menos de 1 minuto — o mapa ja esta pronto</li>
+          <li><strong>Librarian:</strong> Evita que executores "inventem" integracoes com APIs — pesquisa previa reduz erros de integracao em 50-70%</li>
+          <li><strong>Multimodal Looker:</strong> Essencial para tarefas de frontend — detecta discrepancias visuais entre design e implementacao que revisao de codigo puro nao pega</li>
+          <li><strong>Custo baixo:</strong> Agentes de suporte podem usar modelos gratuitos ou de baixo custo porque suas tarefas sao predominantemente de leitura e pesquisa</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Orquestrador</strong>
+              <span class="text-neutral-400"> - Cerebro do swarm: decompoe tarefas, delega, monitora e nao para ate completar (Sisyphus, Architect)</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Planejador</strong>
+              <span class="text-neutral-400"> - Faz discovery questions, cria spec files detalhados, valida antes de executar (Prometheus)</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Executor</strong>
+              <span class="text-neutral-400"> - Implementa tarefas atomicas com foco total em zonas seguras de arquivos (Hephaestus, Coder)</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Revisor</strong>
+              <span class="text-neutral-400"> - Avalia qualidade com modelo diferente (anti-blindspot), emite APPROVED ou NEEDS_REVISION</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Testador</strong>
+              <span class="text-neutral-400"> - Gera testes unitarios, de integracao e adversariais que provam que o codigo funciona</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Agentes de suporte</strong>
+              <span class="text-neutral-400"> - Explorer (read-only), Librarian (pesquisa), Multimodal Looker (visual) fornecem contexto</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">1.5 - Comunicacao entre Agentes</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-3.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 1.3
+          </a>
+          <a href="modulo-1-5.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">
+            Modulo 1.5 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

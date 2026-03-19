@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3.3: Memoria e Persistencia em Swarms | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#A855F7',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%); }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-purple-400 hover:text-purple-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Tecnicas</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Pratica Avancada</span></a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Mao na Massa</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a><span>/</span>
+      <span class="text-purple-400">Modulo 3.3</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MODULO 3.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">💾 Memoria e Persistencia em Swarms</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Do problema stateless dos LLMs as solucoes praticas: memoria em disco, Redis para estado efemero, Vector DB para longo prazo, rastreabilidade de decisoes e a evolucao RAG para Agent Memory.
+      </p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">45</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Avancado</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">💾 O problema: LLMs sao stateless</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Todo LLM tem uma limitacao fundamental: ele e <strong class="text-purple-400">stateless</strong>. Cada chamada de API e uma interacao independente — o modelo nao "lembra" do que aconteceu na chamada anterior. O que simula memoria e o <strong>contexto da conversa</strong> (o historico de mensagens enviado junto com cada request), mas isso tem limites severos: a janela de contexto e finita (128k-1M tokens dependendo do modelo), o custo cresce linearmente com o tamanho do contexto e informacoes antigas sao progressivamente "esquecidas" a medida que o contexto cresce.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para um chatbot simples, isso nao e problema. Mas para um <strong class="text-purple-400">swarm em producao</strong> que trabalha em projetos ao longo de dias ou semanas, a falta de memoria e fatal. O orquestrador precisa lembrar do plano, das decisoes tomadas, dos resultados de tasks anteriores e do estado atual de cada agente. Sem memoria persistente, o swarm comeca cada sessao do zero, repetindo trabalho, contradizendo decisoes e perdendo contexto critico. Memoria e o que transforma um demo em ferramenta de producao.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> O Problema Concreto
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Janela de contexto finita:</strong> Mesmo com 1M tokens, um projeto real com centenas de arquivos e decisoes excede rapidamente o limite</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Custo crescente:</strong> Enviar todo o historico a cada chamada multiplica custos — 100k tokens de contexto a cada interacao nao e sustentavel</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Perda de sessao:</strong> Se o processo do swarm morre (crash, timeout, reinicio), todo o estado em memoria e perdido permanentemente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Multiplos agentes:</strong> Em um swarm, cada agente tem seu proprio contexto — nao ha forma nativa de compartilhar "memorias" entre agentes diferentes</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto real
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sem memoria:</strong> Swarm demora 3x mais em projetos longos porque repete analises e decisoes a cada sessao</li>
+          <li><strong>Inconsistencia:</strong> Sem registro de decisoes, o agente pode escolher uma abordagem diferente a cada sessao, gerando codigo inconsistente</li>
+          <li><strong>Custo desnecessario:</strong> Reconstruir contexto consome tokens que poderiam ser usados para trabalho real</li>
+          <li><strong>Impossibilidade de auditoria:</strong> Sem logs de decisao, e impossivel saber por que o swarm tomou determinada decisao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📁 Memoria em disco: padrao .swarm/</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A solucao mais pragmatica e elegante para memoria em swarms e o <strong class="text-purple-400">padrao .swarm/</strong> — um diretorio persistente no projeto que armazena todo o estado do swarm em arquivos estruturados. Essa abordagem, usada pelo opencode-swarm, nao requer nenhuma infraestrutura extra: funciona com arquivos no disco local, e versionavel com Git e legivel por humanos. O diretorio tipicamente contem: <strong>plan.md</strong> (o plano atual com status de cada task), <strong>context.md</strong> (resumo do estado do projeto), <strong>evidence/</strong> (resultados de testes e revisoes) e <strong>history/</strong> (log de todas as acoes).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Cada vez que o swarm inicia uma sessao, ele le o .swarm/ para reconstruir o contexto. Em vez de enviar todo o historico de conversas, o orquestrador le o plan.md (que tem apenas as tasks e seus status) e o context.md (que tem um resumo conciso do projeto). Isso reduz drasticamente o contexto necessario — de milhares de mensagens para algumas centenas de tokens. E como manter um "caderno de notas" que o swarm consulta antes de comecar a trabalhar.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrutura do .swarm/
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>plan.md / plan.json:</strong> Lista de tasks com status (pending, in_progress, done, failed), responsavel, dependencias e criterios de aceitacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>context.md:</strong> Resumo executivo do projeto — stack, decisoes-chave, estado atual, proximos passos. Atualizado a cada sessao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>evidence/:</strong> Resultados de revisoes (APPROVED/NEEDS_REVISION), outputs de testes, screenshots — provas de que o trabalho foi feito</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>history/:</strong> Log cronologico de acoes — qual agente fez o que, quando, com qual resultado. Essencial para debugging</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Vantagens do .swarm/
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Zero infraestrutura:</strong> Nao precisa de banco de dados, Redis ou servico externo — funciona com arquivos no disco</li>
+          <li><strong>Versionavel:</strong> Todo o estado e versionado com Git — voce pode fazer checkout de qualquer ponto no tempo</li>
+          <li><strong>Legivel por humanos:</strong> Arquivos Markdown e JSON que qualquer pessoa pode abrir e entender</li>
+          <li><strong>Validacao com Zod:</strong> Schemas Zod garantem que plan.json mantém estrutura consistente — agentes nao corrompem o estado</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">⚡ Memoria efemera: Redis para estado de execucao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Enquanto o .swarm/ cuida da memoria persistente, <strong class="text-purple-400">Redis</strong> resolve o problema da memoria efemera — dados que precisam estar disponiveis rapidamente durante a execucao do swarm mas nao precisam sobreviver apos o processo terminar. Exemplos incluem: locks de arquivos (para evitar conflitos em escrita paralela), estado de tasks em execucao (para que o dashboard saiba o que esta acontecendo em tempo real), cache de resultados de API (para evitar chamadas duplicadas) e filas de mensagens entre agentes.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Redis e ideal para swarms porque e <strong class="text-purple-400">extremamente rapido</strong> (operacoes em microsegundos), suporta <strong>TTL</strong> (time-to-live — dados expiram automaticamente) e oferece <strong>pub/sub</strong> (agentes podem publicar e assinar eventos em tempo real). Um padrao comum e usar Redis como "quadro branco" compartilhado: o orquestrador escreve tarefas na fila, agentes pegam tarefas e atualizam status, e o dashboard le o estado em tempo real sem precisar consultar cada agente individualmente.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Casos de Uso do Redis em Swarms
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>File Locks:</strong> SET file:src/app.ts LOCKED EX 300 — lock com expiracao automatica de 5 minutos para evitar deadlocks</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Task Queue:</strong> LPUSH tasks task_json / RPOP tasks — fila FIFO de tarefas para agentes consumirem</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>API Cache:</strong> Cache de resultados de ferramentas externas — se dois agentes precisam da mesma info, so chama API uma vez</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Pub/Sub Events:</strong> Agente publica "task_completed" → orquestrador recebe e decide proximo passo em tempo real</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🧠 Memoria de longo prazo: Vector DB</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A memoria de longo prazo vai alem do projeto atual — e o <strong class="text-purple-400">conhecimento acumulado</strong> que sobrevive entre projetos e sessoes. Enquanto .swarm/ armazena o estado de um projeto especifico, um Vector Database armazena <strong>embeddings</strong> (representacoes numericas de texto) que permitem busca por similaridade semantica. Isso significa que o swarm pode "lembrar" de solucoes que funcionaram em projetos anteriores, padroes de arquitetura recorrentes e preferencias do usuario.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Na pratica, o swarm gera embeddings de decisoes, snippets de codigo e resultados de revisoes, e os armazena em um Vector DB como <strong class="text-purple-400">ChromaDB</strong> (local, simples) ou <strong class="text-purple-400">Pinecone</strong> (cloud, escalavel). Quando um novo projeto comeca, o orquestrador pode buscar "projetos similares que usaram React + Prisma" e recuperar patterns que funcionaram. E como ter um colega experiente que lembra de tudo que a equipe ja fez.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Componentes do Vector DB
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Embeddings:</strong> Texto convertido em vetores numericos (1536 dimensoes tipicamente) usando modelos como text-embedding-3-small</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Semantic Search:</strong> Busca por similaridade — "como implementamos autenticacao?" retorna snippets relevantes mesmo com palavras diferentes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>ChromaDB (local):</strong> Banco vetorial que roda localmente sem infraestrutura — ideal para projetos individuais e desenvolvimento</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Pinecone (cloud):</strong> Servico gerenciado que escala para milhoes de vetores — ideal para equipes e producao enterprise</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Exemplos praticos
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Code patterns:</strong> "Como fizemos paginacao no projeto Y?" → Recupera implementacao completa com contexto</li>
+          <li><strong>Decision recall:</strong> "Por que nao usamos MongoDB neste tipo de projeto?" → Recupera decisao com racional</li>
+          <li><strong>Bug patterns:</strong> "Quais bugs comuns aparecem em integracao com Stripe?" → Recupera issues resolvidos anteriormente</li>
+          <li><strong>User preferences:</strong> "Este usuario prefere TypeScript com Vitest" → Personaliza stack sem perguntar de novo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📊 Decision Trace: rastreabilidade</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Em sistemas criticos, nao basta que o swarm produza resultado — e preciso <strong class="text-purple-400">rastrear como e por que</strong> cada decisao foi tomada. O Decision Trace e um log estruturado que registra, para cada acao significativa: qual agente executou, qual prompt foi enviado, qual resposta foi recebida, qual resultado foi produzido e como foi avaliado. Esse log e essencial para <strong>debugging</strong> ("por que o swarm escolheu essa abordagem?"), <strong>auditoria</strong> ("quem aprovou esse codigo?") e <strong>reproducibilidade</strong> ("consigo replicar o mesmo resultado?").
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A coleta de evidencias vai alem de logs de texto. O evidence/ directory armazena resultados de testes (stdout/stderr), screenshots de UI, diffs de revisao (o que o reviewer encontrou), metricas de qualidade (complexity scores, coverage) e timestamps de cada operacao. Em ambientes enterprise com requisitos de compliance, o Decision Trace prova que o processo de desenvolvimento seguiu os controles necessarios — cada linha de codigo foi revisada, testada e aprovada por um agente com credenciais especificas.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Componentes do Decision Trace
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Action Log:</strong> Timestamp + agente + acao + input + output para cada operacao significativa</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Evidence Collection:</strong> Artefatos que comprovam o resultado — test outputs, review diffs, build logs, screenshots</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Decision Rationale:</strong> Para decisoes de arquitetura, registrar alternativas consideradas e motivo da escolha</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Reproducibility Hash:</strong> Hash do prompt + modelo + temperatura para cada chamada — permite reproduzir resultados identicos</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 Progressao: RAG → Agentic RAG → Agent Memory</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A evolucao da memoria em sistemas de IA segue uma progressao clara de tres estagios. O primeiro estagio e <strong class="text-purple-400">RAG basico</strong> (Retrieval-Augmented Generation): o sistema busca documentos relevantes em um banco vetorial e injeta no contexto do LLM antes de gerar a resposta. E eficaz mas <strong>passivo</strong> — o sistema so busca quando solicitado e nao decide o que lembrar ou esquecer. A maioria dos chatbots com base de conhecimento usa RAG basico.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O segundo estagio e <strong class="text-purple-400">Agentic RAG</strong>: o agente decide <strong>quando, o que e onde</strong> buscar. Em vez de uma busca fixa, o agente avalia se precisa de informacao adicional, formula a query otima, busca em multiplas fontes e avalia a relevancia dos resultados antes de usar. O terceiro estagio — <strong class="text-purple-400">Agent Memory</strong> — vai alem: o agente nao apenas busca, mas tambem <strong>decide o que lembrar</strong>. Apos cada projeto, o agente avalia quais decisoes e patterns foram uteis e os armazena proativamente. Ele tambem <strong>esquece</strong> informacoes obsoletas (versoes antigas de APIs, patterns deprecados). E memoria curada, nao acumulacao bruta.
+      </p>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Os Tres Estagios
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>RAG Basico:</strong> Busca passiva em documentos. O sistema recupera chunks relevantes e injeta no contexto. Funciona para FAQs e bases de conhecimento</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Agentic RAG:</strong> O agente controla a busca. Decide quando buscar, formula queries otimas, avalia resultados e faz buscas iterativas se necessario</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Agent Memory:</strong> O agente cura sua propria memoria. Armazena proativamente o que aprendeu, esquece o que ficou obsoleto, melhora com o tempo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Memoria Episodica:</strong> Lembrar de "experiencias" — "da ultima vez que tentei essa abordagem, deu errado porque..." — muda o comportamento futuro</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Estado da arte em 2026
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>RAG Basico:</strong> Maduro e amplamente adotado — funciona bem para 80% dos casos de uso</li>
+          <li><strong>Agentic RAG:</strong> Emergente — IBM, LangChain e CrewAI oferecem implementacoes de referencia</li>
+          <li><strong>Agent Memory:</strong> Experimental — projetos como MemGPT e Letta exploram memoria curada por agentes</li>
+          <li><strong>Proximo passo:</strong> Memoria compartilhada entre swarms de diferentes organizacoes via protocolos abertos (MCP + A2A)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📚</span> Resumo do Modulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">LLMs sao stateless</strong><span class="text-neutral-400"> - Sem memoria explicita, cada interacao comeca do zero</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Padrao .swarm/</strong><span class="text-neutral-400"> - Memoria em disco com plan.md, context.md, evidence/, history/</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Redis efemero</strong><span class="text-neutral-400"> - Locks, filas, cache e pub/sub para estado de execucao em tempo real</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Vector DB longo prazo</strong><span class="text-neutral-400"> - Embeddings e busca semantica para conhecimento entre projetos</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Decision Trace</strong><span class="text-neutral-400"> - Logs estruturados para debugging, auditoria e reproducibilidade</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">RAG → Agent Memory</strong><span class="text-neutral-400"> - Evolucao de busca passiva para agentes que curam sua propria memoria</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">3.4 - Qualidade e Seguranca em Swarms</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-3-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Modulo 3.2</a>
+          <a href="modulo-3-4.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Modulo 3.4 →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

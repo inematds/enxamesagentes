@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3.5: Projeto 3 - Pesquisa Profunda Multiagente | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#A855F7',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-purple-400 hover:text-purple-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a>
+      <span>/</span>
+      <span class="text-purple-400">Modulo 3.5</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 3.5
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔬 Projeto 3: Pesquisa Profunda Multiagente</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Construa um sistema completo de Deep Research onde multiplos agentes pesquisam, sintetizam, escrevem e verificam informacoes — substituindo horas de pesquisa manual por um pipeline inteligente.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">50</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Avancado</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Projeto</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔬 Deep Research: o conceito</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Deep Research e um paradigma onde <strong class="text-purple-400">multiplos agentes de IA colaboram para realizar pesquisas abrangentes e profundas</strong> sobre qualquer topico. Em vez de depender de um unico modelo gerando texto com base apenas em seu treinamento (e possivelmente alucinando), um sistema de Deep Research envia agentes especializados para buscar informacoes em fontes reais, consolidar resultados, gerar relatorios estruturados e verificar a veracidade das afirmacoes. O resultado e uma pesquisa com qualidade comparavel a de um analista humano experiente — mas produzida em minutos em vez de horas.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Este paradigma ja esta em producao em empresas como Google (com o Deep Research do Gemini), Perplexity e diversas consultorias de inteligencia de mercado. A arquitetura tipica envolve entre <strong class="text-purple-400">4 e 7 agentes</strong> trabalhando em pipeline: buscadores paralelos, um sintetizador, um escritor e um critico. Cada agente opera com contexto limpo e foco total em sua funcao, e o resultado final e exponencialmente superior ao que qualquer agente individual produziria sozinho.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Fundamental
+        </h3>
+        <p class="text-neutral-300 mb-4">Deep Research transforma pesquisa de "uma pergunta para um LLM" em "uma missao para uma equipe de agentes especializados":</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Multi-source research:</strong> Agentes buscam em multiplas fontes simultaneamente — web, documentacao tecnica, repositorios de codigo, bases academicas — garantindo cobertura ampla</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Sintese inteligente:</strong> Resultados brutos sao consolidados, deduplicados e hierarquizados antes de virar texto final</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Verificacao cruzada:</strong> Um agente critico compara informacoes de fontes diferentes, identifica contradicoes e verifica fatos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Output estruturado:</strong> O relatorio final inclui executive summary, secoes detalhadas, citacoes rastreadas e nivel de confianca por afirmacao</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Arquitetura tipica de Deep Research
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Fase 1 — Decomposicao:</strong> O orquestrador recebe a pergunta e gera 3-8 sub-perguntas mais especificas para maximizar cobertura</li>
+          <li><strong>Fase 2 — Busca paralela:</strong> Agentes de busca (web, docs, GitHub) trabalham simultaneamente em cada sub-pergunta</li>
+          <li><strong>Fase 3 — Sintese:</strong> O sintetizador consolida todos os resultados, remove duplicatas e organiza hierarquicamente</li>
+          <li><strong>Fase 4 — Escrita:</strong> O agente escritor transforma a sintese em relatorio formatado com citacoes</li>
+          <li><strong>Fase 5 — Verificacao:</strong> O agente critico verifica fatos, identifica gaps e pode disparar novas buscas se necessario</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔎 Agentes de busca: web, docs, GitHub</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A forca de um sistema de Deep Research esta nos seus <strong class="text-purple-400">agentes de busca especializados</strong>. Em vez de um unico agente tentando pesquisar em todos os lugares, cada buscador e otimizado para uma fonte especifica. O agente de busca web usa APIs como Tavily, Serper ou Brave Search para encontrar artigos, blog posts e noticias recentes. O agente de documentacao navega por docs oficiais, RFCs e papers academicos. O agente de GitHub busca repositorios, issues, pull requests e codigo fonte relevante. Trabalhando em paralelo, eles cobrem em segundos o que um humano levaria horas para pesquisar.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A chave para buscadores eficazes e a <strong class="text-purple-400">especializacao do prompt e das ferramentas</strong>. Cada agente recebe instrucoes especificas sobre como formular queries para sua fonte, como avaliar relevancia dos resultados e como estruturar o output para o sintetizador. O agente de web search, por exemplo, sabe reformular uma pergunta tecnica em termos que maximizam resultados em motores de busca. O agente de GitHub sabe combinar linguagem + topico + estrelas para encontrar repositorios relevantes. Essa especializacao produz resultados drasticamente melhores do que um agente generico tentando fazer tudo.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Buscadores Especializados
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada agente de busca opera com ferramentas e estrategias otimizadas para sua fonte:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Web Search Agent:</strong> Usa Tavily/Serper API, reformula queries para SEO reverso, filtra por data e relevancia, extrai snippets estruturados</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Documentation Agent:</strong> Navega docs oficiais via sitemap, busca em bases como arXiv e Semantic Scholar, entende estrutura de papers academicos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>GitHub Agent:</strong> Usa GitHub Search API, analisa README, issues e discussions, identifica projetos ativos vs abandonados pelo historico de commits</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Execucao paralela:</strong> Todos os buscadores recebem as sub-perguntas simultaneamente, reduzindo o tempo total de pesquisa de minutos para segundos</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Implementacao pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Output padronizado:</strong> Cada buscador retorna resultados no mesmo schema JSON — {titulo, fonte, url, relevancia, resumo, data} — para facilitar a sintese</li>
+          <li><strong>Controle de qualidade:</strong> Cada resultado recebe um score de relevancia (0-1) baseado na query original, e resultados abaixo de 0.3 sao descartados automaticamente</li>
+          <li><strong>Limite de resultados:</strong> Cada buscador retorna no maximo 10-15 resultados por sub-pergunta, evitando sobrecarga no sintetizador</li>
+          <li><strong>Retry com reformulacao:</strong> Se um buscador retorna menos de 3 resultados relevantes, ele reformula a query automaticamente e tenta novamente</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📊 Agente sintetizador: reunir e filtrar</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Dados brutos sem sintese sao inuteis. O <strong class="text-purple-400">agente sintetizador</strong> e o coracao intelectual do pipeline de Deep Research. Ele recebe dezenas (as vezes centenas) de resultados dos agentes de busca e precisa: identificar informacoes duplicadas vindas de fontes diferentes, resolver contradicoes entre fontes, hierarquizar por relevancia e confiabilidade, e organizar tudo em uma estrutura logica que o agente escritor possa transformar em relatorio. Este agente exige o modelo mais capaz do sistema — geralmente Claude Opus ou GPT-4o — porque a tarefa de sintese demanda raciocinio sofisticado.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A estrategia de sintese mais eficaz usa <strong class="text-purple-400">map-reduce sobre chunks</strong>: primeiro, cada conjunto de resultados e resumido individualmente (map), depois os resumos sao consolidados em um unico documento hierarquico (reduce). Isso permite que o sintetizador processe volumes enormes de informacao sem estourar a janela de contexto. O output e um documento estruturado com secoes tematicas, pontos-chave rankeados por frequencia e confiabilidade, e gaps identificados (areas onde nenhuma fonte forneceu informacao satisfatoria).
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrategias de Sintese
+        </h3>
+        <p class="text-neutral-300 mb-4">O sintetizador aplica tecnicas especificas para transformar caos em clareza:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Deduplicacao semantica:</strong> Identifica informacoes identicas de fontes diferentes usando similaridade de embeddings, nao apenas texto exato</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Ranking por confiabilidade:</strong> Fontes oficiais (docs, papers) pesam mais que blog posts; informacoes confirmadas por 3+ fontes sobem no ranking</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Resolucao de contradicoes:</strong> Quando fontes discordam, o sintetizador registra ambas as versoes com suas respectivas fontes e nivel de confianca</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Gap analysis:</strong> Identifica sub-perguntas que nao foram adequadamente respondidas e pode disparar uma segunda rodada de buscas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Map-Reduce para sintese
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Fase Map:</strong> Cada bloco de 5-10 resultados e resumido individualmente, extraindo pontos-chave, dados quantitativos e citacoes relevantes</li>
+          <li><strong>Fase Reduce:</strong> Os resumos parciais sao consolidados em um documento unico, agrupando informacoes por tema e eliminando redundancias</li>
+          <li><strong>Output estruturado:</strong> O sintetizador produz JSON com {secoes: [{titulo, pontos_chave, fontes, confianca, gaps}]} para consumo pelo escritor</li>
+          <li><strong>Metricas de qualidade:</strong> Cobertura (% de sub-perguntas respondidas), diversidade de fontes (minimo 3 tipos), e confianca media por secao</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">✍️ Agente escritor: relatorio final</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-purple-400">agente escritor</strong> transforma a sintese estruturada em um relatorio consumivel por humanos. Este nao e um simples "reescreva em prosa" — o escritor precisa tomar decisoes editoriais: qual nivel de detalhe e apropriado para o publico-alvo? Quais dados merecem destaque visual? Como organizar a narrativa para que as conclusoes mais importantes aparecam primeiro? O agente escritor recebe um template de output (executive summary, secoes detalhadas, conclusoes, referencias) e preenche cada secao usando os dados do sintetizador, mantendo consistencia de tom e estilo ao longo de todo o documento.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma das funcoes mais criticas do escritor e a <strong class="text-purple-400">gestao de citacoes</strong>. Cada afirmacao factual no relatorio precisa ser rastreavel ate sua fonte original. O escritor insere citacoes inline usando o formato [1], [2], etc., e gera uma secao de referencias ao final com URLs e datas de acesso. Isso nao e apenas boa pratica — e o que separa um relatorio util de uma alucinacao bem formatada. Em sistemas de producao, cada citacao e um link clicavel que permite ao leitor verificar a informacao na fonte original.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Anatomia do Relatorio
+        </h3>
+        <p class="text-neutral-300 mb-4">O agente escritor produz um documento completo com estrutura profissional:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Executive Summary:</strong> 3-5 paragrafos com as conclusoes mais importantes — para quem tem 2 minutos para ler</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Secoes detalhadas:</strong> Cada tema em profundidade, com dados quantitativos, comparacoes e exemplos praticos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Citacoes rastreadas:</strong> Toda afirmacao factual linkada a fonte original com [N], permitindo verificacao independente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Nivel de confianca:</strong> Cada secao recebe um indicador de confianca (alto/medio/baixo) baseado na qualidade e concordancia das fontes</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Boas praticas de geracao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Template-driven:</strong> O escritor recebe um template Jinja2/Markdown com secoes pre-definidas, garantindo consistencia entre relatorios</li>
+          <li><strong>Adaptacao ao publico:</strong> Via parametro no prompt, o escritor ajusta linguagem — tecnica para engenheiros, executiva para C-level, simplificada para geral</li>
+          <li><strong>Formatacao rica:</strong> Tabelas comparativas, listas de pros/cons, callout boxes para dados criticos — nao apenas prosa corrida</li>
+          <li><strong>Anti-alucinacao:</strong> O escritor e instruido a nunca inventar dados — se a sintese nao contem a informacao, o relatorio diz "dados insuficientes"</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔍 Agente critico: verificacao de fatos</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-purple-400">agente critico</strong> e a ultima linha de defesa contra desinformacao no seu pipeline de Deep Research. Ele recebe o relatorio gerado pelo escritor e executa uma verificacao sistematica: cada afirmacao factual e checada contra as fontes originais, dados numericos sao cruzados entre fontes, e contradicoes sao sinalizadas com destaque. Este agente e o equivalente do fact-checker em uma redacao jornalistica — nao gera conteudo novo, apenas valida (ou invalida) o conteudo existente.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A implementacao mais robusta do agente critico usa um <strong class="text-purple-400">checklist de verificacao por categoria</strong>: dados numericos sao comparados com fontes primarias, datas sao validadas, nomes e titulos sao conferidos, e relacoes causais sao examinadas para garantir que o relatorio nao implica causalidade onde ha apenas correlacao. O agente produz um "report card" com cada afirmacao classificada como Verificada, Parcialmente Verificada, Nao Verificada ou Contraditoria. Afirmacoes nao verificadas podem disparar uma nova rodada de buscas, criando um loop de refinamento.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Framework de Verificacao
+        </h3>
+        <p class="text-neutral-300 mb-4">O agente critico aplica checagens sistematicas em multiplas dimensoes:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Verificacao de fonte:</strong> A afirmacao realmente existe na fonte citada? A URL e acessivel? A informacao esta no contexto correto?</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Verificacao cruzada:</strong> Multiplas fontes independentes confirmam a mesma informacao? Fontes que se citam mutuamente nao contam como independentes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Verificacao temporal:</strong> Os dados sao recentes o suficiente? Informacoes de 2023 sobre um mercado que muda mensalmente podem estar desatualizadas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Deteccao de bias:</strong> A fonte tem interesse comercial na informacao? Fontes de vendors sobre seus proprios produtos devem ser sinalizadas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Report card de verificacao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Verificada (verde):</strong> Afirmacao confirmada por 2+ fontes independentes com alta confiabilidade</li>
+          <li><strong>Parcialmente verificada (amarelo):</strong> Afirmacao confirmada por 1 fonte ou confirmada com ressalvas</li>
+          <li><strong>Nao verificada (cinza):</strong> Nenhuma fonte encontrada para confirmar ou negar — mantida no relatorio com aviso</li>
+          <li><strong>Contraditoria (vermelho):</strong> Fontes divergem significativamente — ambas versoes apresentadas com contexto</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 Pipeline completo: implementacao end-to-end</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Agora que entendemos cada agente individualmente, e hora de <strong class="text-purple-400">montar o pipeline completo</strong>. A implementacao end-to-end conecta todos os agentes em um grafo de execucao usando LangGraph ou CrewAI. O grafo define a ordem de execucao, as condicoes de transicao (o critico pode enviar o relatorio de volta ao buscador se encontrar gaps) e o estado compartilhado entre agentes. O resultado e um sistema que recebe uma pergunta e produz um relatorio verificado em 2-5 minutos, dependendo da complexidade.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Em <strong class="text-purple-400">LangGraph</strong>, cada agente e um no do grafo, e as arestas definem o fluxo de dados entre eles. O estado (State) carrega as sub-perguntas, resultados de busca, sintese, rascunho do relatorio e resultado da verificacao. Condicoes nas arestas permitem loops: se o critico reprova mais de 30% das afirmacoes, o pipeline volta a fase de busca com queries refinadas. Em <strong class="text-purple-400">CrewAI</strong>, a abordagem e mais declarativa: voce define agentes com roles e tasks, e o framework cuida da orquestracao. Ambos produzem resultados similares — a escolha depende de quanto controle voce quer sobre o fluxo.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Arquitetura do Pipeline
+        </h3>
+        <p class="text-neutral-300 mb-4">O fluxo completo do sistema de Deep Research:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Input → Decomposicao:</strong> Pergunta do usuario e decomposta em 3-8 sub-perguntas pelo orquestrador</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Busca paralela:</strong> 3 agentes buscadores (web, docs, GitHub) trabalham simultaneamente em todas as sub-perguntas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Sintese → Escrita:</strong> Resultados consolidados pelo sintetizador e transformados em relatorio pelo escritor</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Verificacao → Loop:</strong> Critico avalia o relatorio; se aprovacao < 70%, dispara nova rodada de busca com queries refinadas (maximo 2 iteracoes)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Decisoes de implementacao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>LangGraph:</strong> Ideal quando voce precisa de controle fino sobre condicoes de transicao, loops e estado. Melhor para pipelines com logica complexa</li>
+          <li><strong>CrewAI:</strong> Ideal quando voce quer prototipar rapido com roles declarativos. Melhor para equipes que preferem abstracoes de alto nivel</li>
+          <li><strong>Modelos recomendados:</strong> Sintetizador e critico usam o modelo mais capaz (Opus/GPT-4o); buscadores podem usar modelos menores (Haiku/GPT-4o-mini) para economizar</li>
+          <li><strong>Custo tipico:</strong> Uma pesquisa completa consome ~50-100k tokens no total ($0.30-$1.50 dependendo dos modelos), versus horas de trabalho humano</li>
+        </ul>
+      </div>
+
+      <!-- Warning Box -->
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center">
+          <span class="mr-2">⚠️</span> Cuidados na implementacao
+        </h3>
+        <p class="text-neutral-300 mb-4">
+          Armadilhas comuns ao construir seu primeiro sistema de Deep Research:
+        </p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Loops infinitos:</strong> Sempre defina um limite maximo de iteracoes (geralmente 2-3) para o loop critico-busca</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Timeout por agente:</strong> Buscadores devem ter timeout de 30-60 segundos — fontes lentas nao podem travar o pipeline inteiro</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Fallback graceful:</strong> Se um buscador falha, o pipeline continua com os resultados dos outros — degradacao graceful, nao falha total</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Deep Research</strong>
+              <span class="text-neutral-400"> - Sistema multiagente para pesquisa abrangente, sintetizada e verificada em minutos</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Agentes de busca</strong>
+              <span class="text-neutral-400"> - Buscadores especializados (web, docs, GitHub) trabalhando em paralelo para cobertura maxima</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Sintetizador</strong>
+              <span class="text-neutral-400"> - Deduplicacao, ranking e organizacao hierarquica dos resultados brutos</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Escritor</strong>
+              <span class="text-neutral-400"> - Relatorio profissional com executive summary, secoes detalhadas e citacoes rastreadas</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Critico/fact-checker</strong>
+              <span class="text-neutral-400"> - Verificacao sistematica de fatos, fontes e contradicoes com report card</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Pipeline completo</strong>
+              <span class="text-neutral-400"> - Implementacao end-to-end com LangGraph/CrewAI, incluindo loops de refinamento</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">3.6 - Deploy e infraestrutura para swarms</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-3-4.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 3.4
+          </a>
+          <a href="modulo-3-6.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">
+            Modulo 3.6 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3.6: Deploy e Infraestrutura para Swarms | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#A855F7',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-purple-400 hover:text-purple-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="../trilha2-tecnicas/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a>
+      <span>/</span>
+      <span class="text-purple-400">Modulo 3.6</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 3.6
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🐳 Deploy e Infraestrutura para Swarms</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Do laptop para producao: containerize, orquestre, monitore e proteja seus swarms com infraestrutura de nivel enterprise.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">45</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Avancado</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-purple-400">Pratica</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🐳 Containerizacao com Docker</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O primeiro passo para levar um swarm do laptop para producao e <strong class="text-purple-400">containerizar cada agente</strong>. Em vez de rodar todos os agentes no mesmo processo Python, cada agente vive em seu proprio container Docker com suas dependencias, configuracoes e limites de recursos isolados. Isso resolve tres problemas criticos de producao: conflitos de dependencia (o agente de busca pode precisar de uma versao do LangChain diferente do agente escritor), isolamento de falhas (um agente com memory leak nao derruba os outros) e reproducibilidade (o container que funciona em staging e identico ao de producao).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A arquitetura <strong class="text-purple-400">container-per-agent</strong> tambem habilita escalabilidade granular. Se o agente de busca e o gargalo, voce escala apenas ele — criando 3 replicas — sem gastar recursos duplicando o agente escritor que processa rapido. A comunicacao entre containers usa uma rede Docker interna (bridge network) com servico de mensageria (Redis, RabbitMQ) ou chamadas HTTP diretas. O orquestrador roda em seu proprio container e coordena todos os outros via API ou fila de mensagens.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Arquitetura Container-per-Agent
+        </h3>
+        <p class="text-neutral-300 mb-4">Cada agente do swarm vive em seu proprio container com isolamento total:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Isolamento de dependencias:</strong> Cada Dockerfile especifica exatamente as libs necessarias — sem conflitos entre agentes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Limites de recursos:</strong> CPU, memoria e GPU alocados por container — um agente guloso nao rouba recursos dos outros</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Health checks:</strong> Cada container expoe um endpoint /health que o orquestrador monitora para detectar falhas rapido</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Docker Compose:</strong> Para desenvolvimento e staging, docker-compose.yml define todo o swarm com um unico comando</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Estrutura pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Base image:</strong> python:3.12-slim como base, instalando apenas o necessario para manter imagens < 500MB</li>
+          <li><strong>Multi-stage build:</strong> Stage de build instala dependencias; stage final copia apenas os artefatos necessarios</li>
+          <li><strong>Networking:</strong> Rede bridge interna para comunicacao entre agentes; apenas o orquestrador expoe porta externa</li>
+          <li><strong>Volumes:</strong> Dados persistentes (cache, logs, state) em Docker volumes, nao no filesystem do container</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">☸️ Kubernetes: orquestracao de containers</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Docker Compose funciona bem para desenvolvimento e equipes pequenas, mas <strong class="text-purple-400">producao real exige Kubernetes</strong>. O Kubernetes (K8s) automatiza o deploy, scaling e gerenciamento de containers em clusters de maquinas. Para swarms de IA, as capacidades mais criticas sao: <strong>auto-scaling horizontal</strong> (criar mais replicas de um agente quando a demanda aumenta), <strong>GPU scheduling</strong> (alocar GPUs especificas para agentes que precisam de inferencia local) e <strong>self-healing</strong> (reiniciar automaticamente containers que falham).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Cada agente do swarm e definido como um <strong class="text-purple-400">Deployment</strong> com seu Service correspondente. O Horizontal Pod Autoscaler (HPA) monitora metricas customizadas — como tamanho da fila de tarefas ou latencia media — e ajusta o numero de replicas automaticamente. Para agentes que usam GPUs (por exemplo, agentes com modelos locais via Ollama), o <strong>NVIDIA GPU Operator</strong> permite scheduling inteligente de GPUs no cluster, garantindo que cada pod receba exatamente os recursos de GPU que precisa.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Kubernetes para Swarms
+        </h3>
+        <p class="text-neutral-300 mb-4">Conceitos K8s essenciais para deploy de swarms em producao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Pods:</strong> Menor unidade de deploy — cada agente roda em um pod com seus sidecars (logging, proxy)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Horizontal Pod Autoscaler:</strong> Escala automaticamente baseado em CPU, memoria ou metricas customizadas (fila de tarefas, latencia)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>GPU Scheduling:</strong> NVIDIA GPU Operator aloca GPUs por pod — essencial para agentes com modelos locais</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Service Mesh:</strong> Istio ou Linkerd para observabilidade e controle de trafego entre agentes sem mudar codigo</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Scaling na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Agentes de busca:</strong> Escalam horizontalmente (3-10 replicas) porque sao stateless e I/O-bound</li>
+          <li><strong>Sintetizador/escritor:</strong> Geralmente 1-2 replicas com mais CPU/memoria — sao compute-bound</li>
+          <li><strong>Orquestrador:</strong> Sempre 2+ replicas com leader election para alta disponibilidade</li>
+          <li><strong>Cost savings:</strong> Spot instances para agentes de busca (tolerantes a interrupcao), on-demand para orquestrador</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📊 Observabilidade: rastreamento de agentes</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Em producao, <strong class="text-purple-400">sem observabilidade, voce esta voando cego</strong>. Cada chamada de LLM num swarm precisa ser rastreada: qual agente fez a chamada, qual modelo usou, quantos tokens consumiu, qual foi a latencia, quanto custou e qual foi a qualidade do resultado. Ferramentas como <strong>LangSmith</strong>, <strong>Langfuse</strong> e <strong>Phoenix (Arize)</strong> fornecem dashboards especificos para sistemas de IA que mostram traces completos de cada tarefa — desde a entrada do usuario ate o output final, passando por cada agente intermediario.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O conceito central e o <strong class="text-purple-400">trace distribuido adaptado para LLMs</strong>. Cada tarefa do swarm recebe um trace_id unico. Dentro desse trace, cada chamada de agente e um span com metadados ricos: prompt enviado, resposta recebida, tokens de input/output, latencia, modelo utilizado e custo calculado. Quando algo da errado — um relatorio com informacao incorreta, por exemplo — voce pode navegar pelo trace ate encontrar exatamente qual agente produziu o dado errado e qual prompt causou o problema. Isso transforma debugging de "vou ler 200 logs" para "cliquei no span do agente X e vi o problema em 30 segundos".
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Stack de Observabilidade
+        </h3>
+        <p class="text-neutral-300 mb-4">Tres pilares de observabilidade adaptados para swarms de IA:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Traces:</strong> Caminho completo de cada tarefa pelo swarm — qual agente processou, em que ordem, com que resultado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Metricas:</strong> Tokens/segundo, custo/tarefa, latencia p50/p95/p99, taxa de sucesso por agente, qualidade do output</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Alertas:</strong> Notificacoes quando custo ultrapassa budget, latencia excede SLA, ou taxa de erro sobe acima do limiar</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Dashboards:</strong> Visao em tempo real do swarm — agentes ativos, filas, throughput, custo acumulado, health status</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Ferramentas recomendadas
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>LangSmith:</strong> Tracing nativo do LangChain/LangGraph — integracoes prontas, UI intuitiva, ideal para quem ja usa o ecossistema</li>
+          <li><strong>Langfuse:</strong> Open-source, self-hostable, com analytics de custo por usuario/tarefa — boa alternativa ao LangSmith</li>
+          <li><strong>Phoenix (Arize):</strong> Focado em avaliacao de qualidade de LLMs — detecta regressoes e drift em producao</li>
+          <li><strong>OpenTelemetry + Grafana:</strong> Stack generica de observabilidade com exporters customizados para metricas de LLM</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">💰 Gestao de custos em escala</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Custos de swarms escalam de forma <strong class="text-purple-400">nao-linear e frequentemente surpreendente</strong>. Um swarm com 5 agentes nao custa 5x mais que um agente unico — pode custar 10x ou 20x, porque cada agente faz multiplas chamadas de LLM por tarefa, e o orquestrador tambem consome tokens coordenando. Sem controle ativo de custos, e comum equipes descobrirem faturas de API de milhares de dolares no final do mes. A gestao de custos precisa ser parte da arquitetura do swarm, nao uma preocupacao posterior.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A abordagem mais eficaz e o <strong class="text-purple-400">token budget por tarefa e por agente</strong>. Cada tarefa submetida ao swarm recebe um orcamento maximo de tokens (por exemplo, 100k tokens). O orquestrador distribui esse orcamento entre os agentes e monitora o consumo em tempo real. Se um agente estourar seu budget, ele e interrompido e o orquestrador decide: usar um modelo mais barato, simplificar a tarefa, ou reportar resultado parcial. Alem disso, a escolha estrategica de modelos por agente e crucial: agentes de busca podem usar modelos baratos (Haiku, GPT-4o-mini), enquanto apenas o sintetizador e critico precisam de modelos premium.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrategias de Controle de Custo
+        </h3>
+        <p class="text-neutral-300 mb-4">Tecnicas comprovadas para manter custos de swarm sob controle:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Token budgets:</strong> Limite maximo de tokens por tarefa, distribuido entre agentes pelo orquestrador com fallback automatico</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Model tiering:</strong> Modelo premium (Opus/GPT-4o) apenas para agentes criticos; modelos economicos (Haiku/mini) para busca e tarefas simples</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Caching inteligente:</strong> Respostas de agentes com inputs identicos sao cacheadas — economiza 30-50% em swarms com tarefas repetitivas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Alertas de custo:</strong> Notificacao quando custo acumulado atinge 50%, 80% e 100% do budget diario/mensal</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Numeros reais
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Custo medio por tarefa:</strong> $0.10-$2.00 para swarms otimizados; $5-$20+ para swarms sem controle de custo</li>
+          <li><strong>Economia com model tiering:</strong> Usar Haiku em vez de Opus para buscadores reduz custo em 90% sem perda de qualidade</li>
+          <li><strong>Caching hit rate:</strong> Swarms bem cacheados atingem 30-60% de cache hit, cortando custos quase pela metade</li>
+          <li><strong>ROI tipico:</strong> Swarm que custa $1/tarefa substituindo 2h de trabalho humano = ROI de 100-200x</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔒 Seguranca em producao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Agentes autonomos com acesso a ferramentas sao <strong class="text-purple-400">vetores de risco significativos</strong>. Um agente com acesso a terminal pode executar comandos arbitrarios. Um agente com acesso a API pode fazer chamadas nao autorizadas. Um agente com acesso a banco de dados pode ler ou modificar dados sensiveis. Em producao, cada agente precisa operar com o <strong>principio do menor privilegio</strong>: acesso apenas ao minimo necessario para executar sua funcao, com limites explicitos em cada permissao. Seguranca em swarms nao e opcional — e pre-requisito para qualquer deploy enterprise.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Tres camadas de seguranca sao essenciais. <strong class="text-purple-400">Primeira: gestao de segredos</strong> — API keys e credenciais nunca em codigo ou variaveis de ambiente; use HashiCorp Vault, AWS Secrets Manager ou Kubernetes Secrets com encriptacao. <strong class="text-purple-400">Segunda: sandboxing</strong> — agentes que executam codigo rodam em containers isolados sem acesso a rede, filesystem ou processos do host. <strong class="text-purple-400">Terceira: auditoria</strong> — cada acao de cada agente e logada com timestamp, input, output e identidade, criando um audit trail completo que permite investigar qualquer incidente.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Camadas de Seguranca
+        </h3>
+        <p class="text-neutral-300 mb-4">Tres camadas obrigatorias para swarms em producao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Secret management:</strong> Vault/Secrets Manager para API keys, rotacao automatica, acesso auditado — nunca hardcoded</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Sandboxing:</strong> Containers com capabilities reduzidas, sem root, read-only filesystem, network policies restritivas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Audit trail:</strong> Cada acao logada com who/what/when/result — requerido para compliance (SOC2, GDPR, HIPAA)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Rate limiting:</strong> Limites por agente em chamadas de API, execucoes de codigo e acessos a dados — previne runaway agents</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Warning Box -->
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center">
+          <span class="mr-2">⚠️</span> Riscos criticos
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Prompt injection em cadeia:</strong> Um agente compromete outro via dados — validacao de input em cada agente, nao apenas no orquestrador</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Exfiltracao de dados:</strong> Agente com acesso a dados sensiveis envia informacoes para API externa — monitore trafego de rede</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-amber-400 mt-1">•</span>
+            <span><strong>Escalacao de privilegios:</strong> Agente usa tool de codigo para acessar recursos fora de seu escopo — sandboxing rigoroso</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 CI/CD para swarms</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Swarms em producao precisam ser <strong class="text-purple-400">atualizados com frequencia e seguranca</strong>. Novos prompts, novos modelos, novas ferramentas — cada mudanca pode quebrar o comportamento do sistema de formas imprevisveis. Um pipeline de CI/CD para swarms vai alem do CI/CD tradicional: alem de testes unitarios e de integracao, voce precisa de testes de comportamento de agentes (o agente ainda produz outputs corretos com o novo prompt?), testes de custo (a mudanca nao dobrou o consumo de tokens?) e testes de seguranca (a atualizacao nao abriu novas superficies de ataque?).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A estrategia de deploy mais segura para swarms e o <strong class="text-purple-400">canary deployment</strong>: voce atualiza apenas 5-10% das replicas de um agente, monitora metricas por 1-2 horas, e so entao faz rollout completo. Se as metricas degradam (custo sobe, qualidade cai, latencia aumenta), o sistema faz rollback automatico para a versao anterior. Isso e especialmente importante para mudancas em system prompts e configuracoes de modelo, que podem ter efeitos sutis e dificeis de prever. O pipeline tambem deve incluir testes de regressao com um conjunto de tarefas "golden" cujo output esperado e conhecido.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Pipeline CI/CD para Swarms
+        </h3>
+        <p class="text-neutral-300 mb-4">Etapas do pipeline adaptado para sistemas multiagente:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Testes unitarios:</strong> Cada agente testado isoladamente com inputs/outputs conhecidos — sem dependencia de outros agentes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Testes de integracao:</strong> Pipeline completo executado com tarefas "golden" e output comparado contra baseline</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Canary deploy:</strong> 5-10% do trafego para nova versao, monitorando custo, latencia e qualidade por 1-2 horas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-purple-400 mt-1">•</span>
+            <span><strong>Rollback automatico:</strong> Se metricas degradam alem do limiar durante canary, rollback instantaneo sem intervencao humana</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Boas praticas de deploy
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Versionamento de prompts:</strong> System prompts versionados no Git como codigo — cada mudanca de prompt e um commit revisavel</li>
+          <li><strong>Feature flags:</strong> Novos comportamentos de agentes atras de flags — ativar/desativar sem deploy</li>
+          <li><strong>Blue-green deploy:</strong> Dois ambientes identicos; trafego muda de um para outro instantaneamente em caso de problema</li>
+          <li><strong>Smoke tests pos-deploy:</strong> 5-10 tarefas automatizadas executadas imediatamente apos cada deploy para verificacao rapida</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Docker</strong>
+              <span class="text-neutral-400"> - Container-per-agent para isolamento, reproducibilidade e scaling granular</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Kubernetes</strong>
+              <span class="text-neutral-400"> - Auto-scaling, GPU scheduling e self-healing para producao enterprise</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Observabilidade</strong>
+              <span class="text-neutral-400"> - Traces distribuidos, metricas de LLM e alertas para cada chamada de cada agente</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Custos</strong>
+              <span class="text-neutral-400"> - Token budgets, model tiering e caching para manter ROI positivo</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Seguranca</strong>
+              <span class="text-neutral-400"> - Secret management, sandboxing e audit trail para compliance enterprise</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-purple-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">CI/CD</strong>
+              <span class="text-neutral-400"> - Testing pipeline, canary deploy e rollback automatico para atualizacoes seguras</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Proximo Modulo:</h3>
+          <p class="text-neutral-300">3.7 - Anti-padroes e armadilhas</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-3-5.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 3.5
+          </a>
+          <a href="modulo-3-7.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">
+            Modulo 3.7 →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

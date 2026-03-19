@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.4: oh-my-openagent na pratica | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Modulo 2.4</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 2.4
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔌 oh-my-openagent na pratica</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Instale, configure e use o oh-my-openagent com modos ultrawork e Prometheus, roteamento Sisyphus e modelos customizados.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">50</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Interm.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Pratica</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔌 Instalacao e configuracao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">oh-my-openagent (OMO)</strong> e um plugin que transforma o OpenCode (editor de codigo com IA) em um sistema multiagente completo. Com mais de 41 mil stars no GitHub, e uma das formas mais acessiveis de experimentar swarms sem precisar escrever uma linha de codigo de orquestracao. A instalacao e feita via <code>bunx opencode</code> — o Bun (runtime JavaScript) e a unica dependencia.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A configuracao envolve dois arquivos: <code>opencode.json</code> (na raiz do projeto) define qual provider e modelo usar como padrao, e <code>.opencode/oh-my-opencode.jsonc</code> permite customizar qual modelo cada agente do swarm utiliza. Voce pode misturar providers — Anthropic para o orquestrador, OpenAI para o coder, modelos gratuitos para exploracao — otimizando custo e performance por papel.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Setup completo
+        </h3>
+        <p class="text-neutral-300 mb-4">Os passos para comecar a usar o OMO:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Instalar Bun:</strong> Runtime JavaScript necessario — <code>curl -fsSL https://bun.sh/install | bash</code></span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Instalar OpenCode:</strong> <code>bunx opencode</code> inicia o editor com OMO integrado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Configurar provider:</strong> Adicionar API key do Anthropic, OpenAI ou Google no arquivo de config</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Customizar por agente:</strong> oh-my-opencode.jsonc permite definir modelo especifico para cada agente</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Requisitos e compatibilidade
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Bun 1.0+:</strong> Runtime principal — mais rapido que Node.js para este caso de uso</li>
+          <li><strong>Providers suportados:</strong> Anthropic, OpenAI, Google, Azure, Ollama, modelos gratuitos via OpenCode Zen</li>
+          <li><strong>Plataformas:</strong> Linux, macOS, Windows (via WSL) — qualquer terminal moderno</li>
+          <li><strong>Projeto qualquer:</strong> Funciona em qualquer diretorio de projeto — nao requer framework especifico</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">⚡ Modo ultrawork: velocidade maxima</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">modo ultrawork</strong> e o modo de execucao mais agressivo do OMO. Voce simplesmente escreve <code>ultrawork</code> seguido da descricao da tarefa, e o swarm inteiro e ativado: o orquestrador Sisyphus analisa a tarefa, classifica o tipo de trabalho, aciona os agentes relevantes e executa ate completar — tudo sem intervencao humana. E o equivalente a dizer "faca tudo e me avise quando terminar".
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        No modo ultrawork, todos os agentes operam em paralelo quando possivel. O Sisyphus coordena, o Hephaestus escreve codigo, o Explorer escaneia o codebase para fornecer contexto, o Librarian busca documentacao e o Multimodal Looker analisa screenshots se necessario. O resultado e velocidade maxima para tarefas onde voce tem clareza total do que quer — landing pages, refatoracoes, implementacoes de features com spec clara.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Como ultrawork funciona
+        </h3>
+        <p class="text-neutral-300 mb-4">O fluxo interno do modo ultrawork:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Classificacao automatica:</strong> Sisyphus analisa a tarefa e determina a categoria (Visual, Research, Quick, UltraBrain)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Ativacao de agentes:</strong> Todos os agentes relevantes sao ativados em paralelo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Execucao continua:</strong> Sem pausas para confirmacao — executa ate concluir ou atingir limite</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Auto-correcao:</strong> Se algo falha, o swarm tenta corrigir automaticamente antes de reportar erro</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Quando usar ultrawork
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Ideal para:</strong> Tarefas com spec clara, refatoracoes, implementacoes padrao, landing pages</li>
+          <li><strong>Evitar quando:</strong> Projetos novos sem definicao clara — use Prometheus para explorar primeiro</li>
+          <li><strong>Tempo tipico:</strong> Uma landing page completa em 5-15 minutos vs horas manualmente</li>
+          <li><strong>Custo tipico:</strong> US$ 0.50-2.00 por tarefa dependendo da complexidade e modelos usados</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📋 Modo Prometheus: entrevista + plano</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">modo Prometheus</strong> e o oposto do ultrawork: em vez de executar imediatamente, o agente Prometheus inicia uma <strong>entrevista detalhada</strong> para entender completamente o que voce precisa antes de comecar. Ele faz perguntas sobre escopo, restricoes, tecnologias preferidas, publico-alvo e criterios de sucesso. Somente depois de construir um plano completo e obter sua aprovacao e que o Sisyphus comeca a executar.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para ativar o Prometheus, basta pressionar Tab no OpenCode. O agente planificador assume e comeca o questionario. Depois de 5-10 perguntas (geralmente), ele apresenta um plano estruturado com etapas, agentes responsaveis e estimativa de tempo. Voce revisa, ajusta se necessario e digita <code>/start-work</code> para iniciar a execucao. Essa abordagem e ideal para projetos novos, tarefas ambiguas ou quando voce ainda esta explorando possibilidades.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Fluxo do Prometheus
+        </h3>
+        <p class="text-neutral-300 mb-4">As etapas da entrevista e planejamento:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Ativacao:</strong> Pressione Tab para alternar para Prometheus no OpenCode</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Entrevista:</strong> O agente faz perguntas sobre escopo, requisitos, restricoes e preferencias</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Plano:</strong> Prometheus gera um plano detalhado com etapas, agentes e estimativas</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Execucao:</strong> Apos aprovacao, /start-work inicia o swarm com o plano como guia</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Melhores cenarios para Prometheus
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Projeto novo:</strong> Quando voce ainda nao tem clareza total do que precisa</li>
+          <li><strong>Tarefa ambigua:</strong> 'Melhorar a performance do app' — Prometheus descobre onde e como</li>
+          <li><strong>Stakeholder externo:</strong> Quando voce esta traduzindo requisitos de um cliente para tarefas tecnicas</li>
+          <li><strong>Exploracao:</strong> Quando quer entender as opcoes antes de decidir a abordagem</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🎯 Categorias de roteamento do Sisyphus</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">Sisyphus</strong> e o orquestrador do OMO — o agente central que analisa cada tarefa e decide qual combinacao de agentes e abordagem usar. Ele categoriza automaticamente as tarefas em quatro categorias: <strong>Visual Engineering</strong> (interfaces, CSS, layouts), <strong>Deep Research</strong> (analise profunda, investigacao de bugs complexos), <strong>Quick Changes</strong> (ajustes rapidos, fixes pontuais) e <strong>UltraBrain</strong> (tarefas que exigem raciocinio complexo e planejamento).
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Cada categoria aciona uma combinacao diferente de agentes e modelos otimizados. Visual Engineering ativa o agente de design com modelo especializado em CSS/HTML. Deep Research ativa o Explorer com modelo de raciocinio forte. Quick Changes usa modelo rapido e barato para mudancas triviais. UltraBrain ativa todos os agentes com o modelo mais potente disponivel. Esse roteamento automatico e o que torna o OMO eficiente — voce nao precisa decidir qual agente usar.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> As quatro categorias
+        </h3>
+        <p class="text-neutral-300 mb-4">Como o Sisyphus classifica e roteia tarefas:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Visual Engineering:</strong> Interfaces, CSS, animacoes, layouts — prioriza agentes visuais</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Deep Research:</strong> Investigacao de bugs, analise de codebase, decisoes arquiteturais — prioriza Explorer e Librarian</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Quick Changes:</strong> Fixes rapidos, typos, ajustes menores — modelo leve e rapido</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>UltraBrain:</strong> Tarefas complexas que exigem raciocinio profundo — todos agentes, modelo potente</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Otimizacao por categoria
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Visual → modelo especializado:</strong> GPT-4o ou Claude com foco em geracao de UI</li>
+          <li><strong>Research → raciocinio forte:</strong> Claude Opus ou GPT-5 para analise profunda</li>
+          <li><strong>Quick → rapido e barato:</strong> GPT-4o-mini ou Haiku para mudancas triviais</li>
+          <li><strong>UltraBrain → sem limites:</strong> Modelo mais potente + todos os agentes em paralelo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">⚙️ Configurando modelos por agente</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma das features mais poderosas do OMO e a capacidade de <strong class="text-blue-400">configurar qual modelo cada agente utiliza</strong> individualmente. O arquivo <code>.opencode/oh-my-opencode.jsonc</code> permite definir que o Sisyphus (orquestrador) use Claude Opus para raciocinio complexo, o Hephaestus (coder) use Codex para geracao de codigo, o Explorer use um modelo gratuito para leitura de arquivos e o Prometheus use Claude Sonnet para planejamento.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Essa configuracao granular permite otimizar drasticamente o custo sem sacrificar qualidade. O orquestrador precisa de raciocinio forte (modelo caro), mas o explorer so precisa ler e resumir arquivos (modelo barato). O coder precisa de geracao de codigo precisa (modelo especializado), mas o librarian so precisa buscar documentacao (modelo gratuito). Na pratica, essa estrategia pode reduzir custos em 60-80% comparado a usar o modelo mais potente para todos os agentes.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Mapa de modelos
+        </h3>
+        <p class="text-neutral-300 mb-4">Configuracao recomendada por agente:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Sisyphus (orquestrador):</strong> Claude Opus ou GPT-5 — precisa de raciocinio forte para delegacao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Hephaestus (coder):</strong> Codex 5.3 ou Claude Sonnet — otimizado para geracao de codigo</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Explorer (leitor):</strong> Modelo gratuito (Big Pickle, minimax) — so precisa ler e resumir</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Prometheus (planejador):</strong> Claude Sonnet — bom equilibrio entre raciocinio e custo</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Impacto no custo
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Todos Opus:</strong> ~US$ 5-10 por tarefa complexa — custo alto mas qualidade maxima</li>
+          <li><strong>Mix otimizado:</strong> ~US$ 0.50-2.00 por tarefa — reducao de 60-80% no custo</li>
+          <li><strong>Modelos gratuitos:</strong> Explorer e Librarian gratuitos via OpenCode Zen — custo zero para leitura</li>
+          <li><strong>ROI:</strong> Qualidade final similar porque cada agente recebe o modelo ideal para seu papel</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🏗️ Projeto completo: landing page do zero</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para demonstrar o OMO em acao, vamos acompanhar a criacao de uma <strong class="text-blue-400">landing page completa</strong> do zero usando o modo Prometheus. O fluxo comeca com a entrevista: Prometheus pergunta sobre o produto, publico-alvo, tom de voz, cores, secoes desejadas e referencias visuais. Com base nas respostas, ele gera um plano detalhado com 5-8 etapas.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Apos aprovacao do plano com <code>/start-work</code>, o Sisyphus assume e executa em paralelo: Explorer mapeia a estrutura do projeto, Hephaestus implementa HTML/CSS/JS, Multimodal Looker analisa screenshots para verificar fidelidade visual, e o ciclo de revisao automatica corrige problemas. Em 10-15 minutos, voce tem uma landing page responsiva, com animacoes, SEO basico e pronta para deploy. Todo o processo e transparente — voce ve cada agente trabalhando em tempo real.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Fluxo do projeto
+        </h3>
+        <p class="text-neutral-300 mb-4">As etapas de ponta a ponta:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Entrevista Prometheus:</strong> 5-10 perguntas sobre produto, design, funcionalidades e restricoes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Plano aprovado:</strong> Estrutura detalhada com HTML, CSS, JS, imagens e animacoes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Execucao paralela:</strong> Multiplos agentes trabalhando simultaneamente em arquivos diferentes</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Revisao automatica:</strong> Auto-correcao de bugs visuais e funcionais antes de entregar</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Resultados tipicos
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Tempo:</strong> 10-15 minutos para landing page completa (vs 4-8 horas manualmente)</li>
+          <li><strong>Qualidade:</strong> Responsivo, com animacoes, SEO basico, acessibilidade — pronto para deploy</li>
+          <li><strong>Custo:</strong> US$ 1-3 com mix de modelos otimizado</li>
+          <li><strong>Iteracao:</strong> Ajustes subsequentes em 1-3 minutos — 'mude a cor do botao para azul' e pronto</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Instalacao e config</strong>
+              <span class="text-neutral-400"> - Setup rapido com Bun e configuracao por agente</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Modo ultrawork</strong>
+              <span class="text-neutral-400"> - Execucao total sem intervencao humana</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Modo Prometheus</strong>
+              <span class="text-neutral-400"> - Entrevista e planejamento antes da execucao</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Roteamento Sisyphus</strong>
+              <span class="text-neutral-400"> - Classificacao automatica em 4 categorias de tarefa</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Modelos por agente</strong>
+              <span class="text-neutral-400"> - Otimizacao granular de custo e desempenho</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Projeto demo end-to-end</strong>
+              <span class="text-neutral-400"> - Landing page completa do zero em 15 minutos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Proximo:</h3>
+          <p class="text-neutral-300">Modulo 2.5 - AutoGen</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-3.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 2.3 - LangGraph
+          </a>
+          <a href="modulo-2-5.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">
+            Modulo 2.5 - AutoGen →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

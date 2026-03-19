@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.2: CrewAI: equipes de agentes | Enxames de Agentes de IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+            <span class="text-2xl">🐝</span>
+            <span class="font-bold text-lg hidden sm:inline">Enxames de Agentes de IA</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1-fundamentos/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Tecnicas</span>
+          </a>
+          <a href="../trilha3-pratica-avancada/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Pratica Avancada</span>
+          </a>
+          <a href="../trilha4-mao-na-massa/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Mao na Massa</span>
+          </a>
+
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400">Modulo 2.2</span>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">
+        MODULO 2.2
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">👥 CrewAI: equipes de agentes</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">
+        Domine o framework mais popular para criar equipes de agentes com papeis definidos, tarefas estruturadas e orquestracao inteligente.
+      </p>
+
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">45</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Interm.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+          <div class="text-xl font-bold text-blue-400">Pratica</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TOPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">👥 CrewAI: o mais popular</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O <strong class="text-blue-400">CrewAI</strong> e o framework de agentes mais popular do ecossistema Python em 2026, com mais de 50 mil stars no GitHub e 100 mil desenvolvedores certificados. Criado por Joao Moura, ele adota uma abordagem <strong>role-based</strong>: voce define agentes como se estivesse montando uma equipe, atribuindo cargo (role), objetivo (goal) e historia (backstory) a cada um. Essa metafora organizacional torna o CrewAI extremamente intuitivo — ate stakeholders nao-tecnicos conseguem entender a arquitetura.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O numero impressiona: mais de <strong>1.1 bilhao de tarefas</strong> ja foram orquestradas pelo CrewAI em producao. O framework oferece suporte a execucao sequencial e paralela, integracao com dezenas de LLMs, ferramentas prontas (busca web, leitura de arquivos, APIs) e um sistema de memoria que persiste conhecimento entre execucoes. Em 2026, o CrewAI Enterprise adiciona governanca, observabilidade e deploy gerenciado para organizacoes.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Pilares do CrewAI
+        </h3>
+        <p class="text-neutral-300 mb-4">Os quatro conceitos fundamentais que organizam o framework:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Agents:</strong> Entidades com role, goal, backstory — cada uma especializada num dominio</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Tasks:</strong> Unidades de trabalho com descricao, agente responsavel e criterio de conclusao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Crews:</strong> Equipes que agrupam agentes e tarefas com processo de execucao definido</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Flows:</strong> Orquestracao avancada com condicoes, loops e ramificacoes de logica de negocio</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Numeros do ecossistema
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>50k+ stars</strong> no GitHub — crescimento explosivo desde 2024</li>
+          <li><strong>100k+ devs certificados</strong> atraves dos cursos oficiais e DeepLearning.AI</li>
+          <li><strong>1.1 bilhao de tarefas</strong> orquestradas em producao ate 2026</li>
+          <li><strong>Integracao nativa</strong> com OpenAI, Anthropic, Google, Ollama, Azure e dezenas de outros providers</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🎭 Definindo agentes com papeis</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        No CrewAI, cada agente e definido com tres campos obrigatorios: <strong class="text-blue-400">role</strong> (o cargo — "Senior Researcher", "Technical Writer"), <strong class="text-blue-400">goal</strong> (o objetivo — "Encontrar as informacoes mais relevantes sobre o topico") e <strong class="text-blue-400">backstory</strong> (a historia — "Voce e um pesquisador com 15 anos de experiencia em IA"). Esses tres campos juntos criam um system prompt rico que guia o comportamento do LLM de forma precisa e consistente.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Alem dos tres campos core, voce pode configurar <strong>tools</strong> (ferramentas disponiveis), <strong>llm</strong> (qual modelo usar), <strong>verbose</strong> (nivel de log), <strong>allow_delegation</strong> (se pode delegar para outros agentes), <strong>max_iter</strong> (numero maximo de iteracoes) e <strong>memory</strong> (se usa memoria de longo prazo). Essa combinacao de simplicidade conceitual com flexibilidade tecnica e o que torna o CrewAI tao produtivo — voce comeca simples e vai adicionando complexidade conforme necessario.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Anatomia de um Agent CrewAI
+        </h3>
+        <p class="text-neutral-300 mb-4">Os campos que definem um agente e seu comportamento:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>role:</strong> Define o cargo e especializacao — influencia fortemente como o LLM se comporta</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>goal:</strong> O objetivo que o agente busca atingir — ancora o raciocinio</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>backstory:</strong> Contexto e experiencia — da profundidade ao comportamento do agente</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>tools:</strong> Lista de ferramentas que o agente pode usar — busca web, leitura de arquivos, APIs customizadas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Melhores praticas
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Role especifico:</strong> 'Senior Python Developer' e melhor que 'Developer' — especificidade melhora resultado</li>
+          <li><strong>Goal mensuravel:</strong> 'Produzir codigo com 100% de cobertura de testes' e melhor que 'Escrever bom codigo'</li>
+          <li><strong>Backstory detalhada:</strong> Quanto mais contexto, mais consistente o comportamento do agente</li>
+          <li><strong>Tools minimas:</strong> De apenas as ferramentas necessarias — muitas tools confundem o modelo</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📋 Tasks e delegacao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Uma <strong class="text-blue-400">Task</strong> no CrewAI e uma unidade de trabalho com definicao clara: <strong>description</strong> (o que fazer), <strong>agent</strong> (quem faz), <strong>expected_output</strong> (como deve ser o resultado) e opcionalmente <strong>context</strong> (tarefas anteriores cujo output alimenta esta). Essa estrutura forca voce a pensar em decomposicao: em vez de "faca tudo", voce define "pesquise X", "analise Y", "escreva Z" — cada uma com responsavel e criterio de sucesso.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O sistema de delegacao do CrewAI permite que um agente passe uma subtarefa para outro agente da crew se determinar que aquele outro e mais qualificado. Quando <code>allow_delegation=True</code>, o agente pode autonomamente decidir delegar. Na pratica, isso cria um comportamento emergente onde a equipe se auto-organiza para resolver problemas complexos — o researcher percebe que precisa de analise tecnica e delega para o developer, que implementa e devolve o resultado.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Estrutura de uma Task
+        </h3>
+        <p class="text-neutral-300 mb-4">Os campos que definem uma tarefa bem estruturada:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>description:</strong> Instrucao detalhada do que precisa ser feito — quanto mais claro, melhor o resultado</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>agent:</strong> O agente responsavel pela execucao — deve ter as skills e tools necessarias</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>expected_output:</strong> Descricao do formato e conteudo esperado — ancora a qualidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>context:</strong> Lista de tarefas anteriores cujo output alimenta esta — cria dependencias explicitas</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Padroes de delegacao
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Sequencial:</strong> Task 1 → Task 2 → Task 3 — cada uma recebe o output da anterior como context</li>
+          <li><strong>Paralelo:</strong> Tasks independentes rodam simultaneamente — reducao drastica de tempo</li>
+          <li><strong>Delegacao automatica:</strong> Agente decide autonomamente passar subtarefa para colega mais qualificado</li>
+          <li><strong>Hierarquica:</strong> Manager agent distribui tasks e sintetiza resultados dos workers</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔧 Tools e integracao</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Agentes sem ferramentas sao apenas chatbots glorificados. No CrewAI, <strong class="text-blue-400">Tools</strong> estendem as capacidades dos agentes para alem da geracao de texto: buscar na web, ler arquivos, consultar APIs, executar codigo, interagir com bancos de dados. O framework oferece dezenas de tools prontas (<code>SerperDevTool</code> para busca, <code>FileReadTool</code> para arquivos, <code>WebsiteSearchTool</code> com RAG) e permite criar tools customizadas com poucas linhas de codigo.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        A integracao com <strong>MCP servers</strong> (Model Context Protocol) abriu um novo universo: em vez de criar tools do zero, voce conecta a MCP servers que ja expeem dezenas de capacidades. Um unico MCP server de banco de dados fornece tools para query, insert, update e delete. Um MCP server de GitHub fornece tools para criar PRs, listar issues, fazer merge. O CrewAI suporta nativamente essa integracao, tornando a conexao com servicos externos trivial.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Ecossistema de Tools
+        </h3>
+        <p class="text-neutral-300 mb-4">As categorias de ferramentas disponiveis:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Tools built-in:</strong> SerperDev (busca), FileRead, DirectoryRead, WebsiteSearch — prontas para usar</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Custom tools:</strong> Criar sua propria tool e tao simples quanto definir uma funcao com @tool decorator</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>MCP integration:</strong> Conectar a qualquer MCP server para acesso a APIs, DBs e servicos</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>LangChain tools:</strong> Compatibilidade com o ecossistema LangChain — centenas de tools disponiveis</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Boas praticas com tools
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Principio do menor privilegio:</strong> Cada agente recebe apenas as tools que precisa — nada mais</li>
+          <li><strong>Docstrings claras:</strong> A descricao da tool e o que o LLM usa para decidir quando usa-la</li>
+          <li><strong>Error handling:</strong> Tools devem retornar mensagens de erro claras — o agente precisa entender o que falhou</li>
+          <li><strong>Rate limiting:</strong> Tools que chamam APIs externas precisam de controle de taxa para evitar bloqueios</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔄 Flows: orquestracao avancada</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Para projetos que vao alem de uma sequencia simples de tarefas, o CrewAI oferece <strong class="text-blue-400">Flows</strong> — um sistema de orquestracao avancada que permite definir workflows complexos com condicoes, loops, ramificacoes e composicao de crews. Com Flows, voce pode criar logica do tipo "se o resultado da pesquisa encontrar mais de 5 fontes, execute a crew de analise profunda; caso contrario, use a crew de resumo rapido".
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Flows utilizam decorators Python para definir o grafo de execucao: <code>@start()</code> marca a funcao inicial, <code>@listen()</code> define que uma funcao executa quando outra termina, e <code>@router()</code> cria bifurcacoes condicionais. Voce pode compor multiplas Crews dentro de um Flow, criando pipelines sofisticados onde o output de uma crew alimenta a proxima. Isso permite construir sistemas reais como pipelines de CI/CD inteligentes, workflows de aprovacao e processos de negocio automatizados.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Componentes de Flows
+        </h3>
+        <p class="text-neutral-300 mb-4">Os building blocks da orquestracao avancada:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>@start():</strong> Marca a funcao de entrada do flow — o ponto inicial da execucao</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>@listen():</strong> Define dependencias — 'execute quando funcao X terminar'</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>@router():</strong> Cria bifurcacoes condicionais — roteia baseado no resultado anterior</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Composicao:</strong> Multiplas crews podem ser orquestradas dentro de um unico flow</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Quando usar Flows
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Logica condicional:</strong> Quando o proximo passo depende do resultado do anterior</li>
+          <li><strong>Multiplas crews:</strong> Quando diferentes equipes precisam colaborar num processo maior</li>
+          <li><strong>Loops de refinamento:</strong> Quando voce precisa iterar ate atingir um criterio de qualidade</li>
+          <li><strong>Processos de negocio:</strong> Workflows com aprovacoes, escalacoes e notificacoes</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📦 Guardrails e memoria</h2>
+      </div>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        Em producao, <strong class="text-blue-400">guardrails</strong> sao essenciais para garantir que agentes se comportem dentro dos limites esperados. O CrewAI oferece guardrails de input (validar o que entra) e output (validar o que sai). Voce pode definir regras como "o output deve ser um JSON valido", "nao pode conter informacoes pessoais" ou "deve incluir pelo menos 3 referencias". Se a validacao falha, o agente e instruido a corrigir e tentar novamente.
+      </p>
+
+      <p class="text-neutral-300 mb-6 leading-relaxed">
+        O sistema de <strong class="text-blue-400">memoria</strong> do CrewAI opera em tres niveis: <strong>short-term memory</strong> (contexto da execucao atual), <strong>long-term memory</strong> (conhecimento que persiste entre execucoes) e <strong>entity memory</strong> (informacoes sobre entidades especificas como clientes, projetos, produtos). A memoria de longo prazo usa embeddings e vector stores para armazenar e recuperar conhecimento relevante, permitindo que a crew "aprenda" com execucoes anteriores e melhore ao longo do tempo.
+      </p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">💡</span> Seguranca e continuidade
+        </h3>
+        <p class="text-neutral-300 mb-4">Os mecanismos que tornam crews confiaveis em producao:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Input guardrails:</strong> Validar dados de entrada antes de passar para o agente — prevenir garbage-in</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Output guardrails:</strong> Validar resultado do agente antes de aceitar — garantir formato e qualidade</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Short-term memory:</strong> Contexto da execucao atual — compartilhado entre tasks da mesma crew</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-blue-400 mt-1">•</span>
+            <span><strong>Long-term memory:</strong> Conhecimento que persiste entre execucoes — a crew fica mais inteligente com o tempo</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Box Dados -->
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center">
+          <span class="mr-2">📊</span> Implementacao na pratica
+        </h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><strong>Guardrails como funcoes:</strong> Defina funcoes Python que recebem o output e retornam True/False + mensagem</li>
+          <li><strong>Retry automatico:</strong> Quando guardrail rejeita, o agente recebe feedback e tenta novamente (ate max_iter)</li>
+          <li><strong>Vector store para memoria:</strong> ChromaDB ou similar armazena embeddings do conhecimento acumulado</li>
+          <li><strong>Entity tracking:</strong> Informacoes sobre entidades sao automaticamente extraidas e indexadas</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span class="mr-3">📚</span> Resumo do Modulo
+        </h2>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">CrewAI: o mais popular</strong>
+              <span class="text-neutral-400"> - Framework role-based com maior comunidade do ecossistema</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Agentes com papeis</strong>
+              <span class="text-neutral-400"> - Role + Goal + Backstory definem comportamento preciso</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Tasks e delegacao</strong>
+              <span class="text-neutral-400"> - Unidades de trabalho com criterio de sucesso e delegacao autonoma</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Tools e integracao</strong>
+              <span class="text-neutral-400"> - Ferramentas que estendem agentes para alem de texto</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Flows: orquestracao avancada</strong>
+              <span class="text-neutral-400"> - Workflows com condicoes, loops e composicao de crews</span>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-blue-400 mt-1">✓</span>
+            <div>
+              <strong class="text-white">Guardrails e memoria</strong>
+              <span class="text-neutral-400"> - Validacao de output e aprendizado entre execucoes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Proximo:</h3>
+          <p class="text-neutral-300">Modulo 2.3 - LangGraph</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">
+            ← Modulo 2.1 - OpenAI Swarm
+          </a>
+          <a href="modulo-2-3.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">
+            Modulo 2.3 - LangGraph →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <a href="../trilha1-fundamentos/index.html" class="text-emerald-400 hover:text-emerald-300">T1 - Fundamentos</a>
+        <a href="../trilha2-tecnicas/index.html" class="text-blue-400 hover:text-blue-300">T2 - Tecnicas</a>
+        <a href="../trilha3-pratica-avancada/index.html" class="text-purple-400 hover:text-purple-300">T3 - Pratica Avancada</a>
+        <a href="../trilha4-mao-na-massa/index.html" class="text-amber-400 hover:text-amber-300">T4 - Mao na Massa</a>
+      </div>
+      <div class="text-center text-neutral-500 text-sm">
+        <p>Enxames de Agentes de IA - 2026 | <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>
